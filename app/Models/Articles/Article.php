@@ -23,6 +23,8 @@ class Article extends Model
 
     protected $cascadeDeletes = ['allTexts', 'comments'];
 
+    public $timestamps = true;
+
     protected $dates = ['deleted_at'];
 
     public function comments()
@@ -30,21 +32,21 @@ class Article extends Model
         return $this->morphMany(Comment::class, 'commentable')->whereNull('parent_id');
     }
 
-    public function texts()
+    public function text()
     {
-        return $this->hasMany(ArticleText::class, 'url', 'url');
+        return $this->hasOne(ArticleText::class);
     }
 
     public function textsOfLang($lang)
     {
-        return $this->hasMany(ArticleText::class, 'url', 'url')
+        return $this->hasMany(ArticleText::class, )
                     ->where('language_id', $lang->id)
                     ->withoutGlobalScope(LanguageScope::class);
     }
 
     public function allTexts()
     {
-        return $this->hasMany(ArticleText::class, 'url', 'url')
+        return $this->hasMany(ArticleText::class, )
             ->withoutGlobalScope(LanguageScope::class);
     }
 

@@ -1,10 +1,10 @@
 @extends('base')
 
-@section('title', 'Editace článku ' . $article->texts()->first()->title)
+@section('title', 'Editace článku ' . $article->text->title)
 @section('description', 'Editor pro editaci článků.')
 
 @section('content')
-    <h1>Editace článku {{ $article->texts()->first()->title }}</h1>
+    <h1>Editace článku {{ $article->title }}</h1>
 
     <form action="{{ route('article.update', ['article' => $article]) }}" method="POST">
         @csrf
