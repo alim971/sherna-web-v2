@@ -9,6 +9,12 @@ use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
+
+    public function __construct()
+    {
+        return $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -35,16 +41,28 @@ class CommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Article $article)
     {
         $comment = new Comment();
         $comment->body = $request->get('comment_body');
         $comment->user()->associate($request->user());
 
-        $article = Article::where('url', $request->get('article_url'))->firstOrFail();
         $article->comments()->save($comment);
         $comment->save();
+        return redirect(route('article.show', ['article' => $article]));
+    }
+
+    public function replyStore(Request $request)
+    {
+        $reply = new Comment();
+        $reply->body = $request->get('comment_body');
+        $reply->user()->associate($request->user());
+        $reply->parent_id = $request->get('comment_id');
+        $article = Article::find($request->get('article_id'));
+        $article->comments()->save($reply);
+        $reply->save();
         return back();
+
     }
 
     /**

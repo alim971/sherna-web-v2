@@ -17,7 +17,15 @@ Route::get('', 'WelcomeController');
 
 
 Route::resource('article', 'ArticleController');
-Route::resource('comment', 'CommentController');
+
+
+//Route::resource('comment', 'CommentController');
+
+Route::post('comment/{article}', 'CommentController@store')->name('comment.store');
+Route::put('comment/{comment}', 'CommentController@update')->name('comment.update');
+Route::put('comment/{comment}', 'CommentController@destroy')->name('comment.destroy');
+Route::put('comment/{comment}/edit', 'CommentController@edit')->name('comment.edit');
+Route::post('comment/reply/store', 'CommentController@replyStore')->name('comment.reply');
 
 Route::get('contact', 'ContactController@show')->name('contact.show');
 Route::post('contact', 'ContactController@send')->name('contact.send');

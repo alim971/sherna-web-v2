@@ -94,7 +94,7 @@ class ArticleController extends Controller
     public function show(Article $article)
     {
 //        $article = Article::where('url', $url)->firstOrFail();
-        return view('article.show', ['article' => $article->text()->first()]);
+        return view('article.show', ['article' => $article]);
     }
 
     /**

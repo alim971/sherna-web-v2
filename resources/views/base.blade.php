@@ -7,6 +7,7 @@
     <title>@yield('title', env('APP_NAME'))</title>
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/style.css')}}" rel="stylesheet">
 
     <script src="{{ asset('js/app.js') }}"></script>
 
