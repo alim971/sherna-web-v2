@@ -32,18 +32,38 @@ class Article extends Model
         return $this->morphMany(Comment::class, 'commentable')->whereNull('parent_id');
     }
 
+    /**
+     * Has One relation using global LanguageScope
+     * Every article has only one text of current language
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function text()
     {
         return $this->hasOne(ArticleText::class);
     }
 
-    public function textsOfLang($lang)
+    /**
+     * Has One relation using where query
+     * Every article has only one text of given language
+     *
+     * @param Language $lang which language you want the text
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function textsOfLang(Language $lang)
     {
-        return $this->hasMany(ArticleText::class, )
+        return $this->hasOne(ArticleText::class, )
                     ->where('language_id', $lang->id)
                     ->withoutGlobalScope(LanguageScope::class);
     }
 
+    /**
+     * Has Many relation
+     * Query without global LanguageScope
+     * Every article has text for every language
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function allTexts()
     {
         return $this->hasMany(ArticleText::class, )
