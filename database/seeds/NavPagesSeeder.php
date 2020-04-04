@@ -13,7 +13,7 @@ class NavPagesSeeder extends Seeder
     {
         \App\Nav\Page::updateOrInsert([
             'id' => 1,
-            'url'   => 'o-sherne',
+            'url'   => 'about',
             'name'   => 'O Sherne',
             'language_id' => 1,
             'order' => 1,
@@ -21,18 +21,36 @@ class NavPagesSeeder extends Seeder
             'dropdown' => true
         ]);
         \App\Nav\Page::updateOrInsert([
-            'id' => 2,
-            'url'   => 'blog',
-            'name'   => 'Blog',
-            'language_id' => 1,
-            'order' => 2,
+            'id' => 1,
+            'url'   => 'about',
+            'name'   => 'About Sherna',
+            'language_id' => 2,
+            'order' => 1,
             'public' => false,
             'dropdown' => true
         ]);
         \App\Nav\Page::updateOrInsert([
+            'id' => 2,
+            'url'   => 'admin/user',
+            'name'   => 'Uzivatelia',
+            'language_id' => 1,
+            'order' => 2,
+            'public' => false,
+            'dropdown' => false
+        ]);
+        \App\Nav\Page::updateOrInsert([
+            'id' => 2,
+            'url'   => 'admin/user',
+            'name'   => 'Users',
+            'language_id' => 2,
+            'order' => 2,
+            'public' => false,
+            'dropdown' => false
+        ]);
+        \App\Nav\Page::updateOrInsert([
             'id' => 3,
-            'url'   => 'rezervace',
-            'name'   => 'Rezervace',
+            'url'   => 'admin/role',
+            'name'   => 'Rola',
             'language_id' => 1,
             'order' => 3,
             'public' => false,
@@ -40,8 +58,8 @@ class NavPagesSeeder extends Seeder
         ]);
         \App\Nav\Page::updateOrInsert([
             'id' => 3,
-            'url'   => 'reservation',
-            'name'   => 'Reservation',
+            'url'   => 'admin/role',
+            'name'   => 'Role',
             'language_id' => 2,
             'order' => 3,
             'public' => false,
@@ -49,16 +67,43 @@ class NavPagesSeeder extends Seeder
         ]);
         \App\Nav\Page::updateOrInsert([
             'id' => 4,
-            'url'   => 'fotogalerie',
-            'name'   => 'Forogalerie',
+            'url'   => 'admin/permission',
+            'name'   => 'Prava',
             'language_id' => 1,
             'order' => 4,
             'public' => false,
             'dropdown' => false
         ]);
+        \App\Nav\Page::updateOrInsert([
+            'id' => 4,
+            'url'   => 'admin/permission',
+            'name'   => 'Permissions',
+            'language_id' => 2,
+            'order' => 4,
+            'public' => false,
+            'dropdown' => false
+        ]);
+        \App\Nav\Page::updateOrInsert([
+            'id' => 5,
+            'url'   => 'rezervace',
+            'name'   => 'Rezervace',
+            'language_id' => 1,
+            'order' => 5,
+            'public' => false,
+            'dropdown' => false
+        ]);
+        \App\Nav\Page::updateOrInsert([
+            'id' => 5,
+            'url'   => 'reservation',
+            'name'   => 'Reservation',
+            'language_id' => 2,
+            'order' => 5,
+            'public' => false,
+            'dropdown' => false
+        ]);
         \App\Nav\SubPage::updateOrInsert([
             'id' => 1,
-            'url'   => 'about/clenove',
+            'url'   => 'clenove',
             'name'   => 'Clenove',
             'nav_page_id' => 1,
             'language_id' => 1,
@@ -67,7 +112,7 @@ class NavPagesSeeder extends Seeder
         ]);
         \App\Nav\SubPage::updateOrInsert([
             'id' => 2,
-            'url'   => 'about/vyrocni-spravy',
+            'url'   => 'vyrocni-spravy',
             'name'   => 'Vyrocni spravy',
             'nav_page_id' => 1,
             'language_id' => 1,
@@ -76,7 +121,7 @@ class NavPagesSeeder extends Seeder
         ]);
         \App\Nav\SubPage::updateOrInsert([
             'id' => 3,
-            'url'   => 'blog/hry',
+            'url'   => 'hry',
             'name'   => 'Hry',
             'nav_page_id' => 2,
             'language_id' => 1,
