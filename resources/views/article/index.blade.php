@@ -42,7 +42,7 @@
                 </td>
             </tr>
         @endforelse
-        @if($users->hasPages())
+        @if($articles->hasPages())
             <tr>
                 <td align="center" colspan="5">{{ $articles->links() }}</td>
             </tr>
