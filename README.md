@@ -7,6 +7,80 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
 </p>
 
+# Getting started
+
+## Installation
+
+Please check the official laravel installation guide for server requirements before you start. [Official Documentation](https://laravel.com/docs/5.4/installation#installation)
+
+### Steps
+
+Clone the repository
+
+    git clone https://github.com/SHernaSH/sherna-web-v2.git
+
+Switch to the repo folder
+
+    cd sherna-web-v2
+
+Install all the dependencies using composer
+
+    composer install
+
+Copy the example env file and make the required configuration changes in the .env file
+
+    cp .env.example .env
+
+Generate a new application key
+
+    php artisan key:generate
+    
+Create the database with the right name and credentials (**Set the database connection in .env before migrating**)
+
+    current db name is laravel_cms, username is root, and password is empty
+    
+Run the database migrations
+
+    php artisan migrate
+
+Start the local development server
+
+    php artisan serve
+
+You can now access the server at http://localhost:8000
+
+**TL;DR command list**
+
+    git clone git@github.com:gothinkster/laravel-realworld-example-app.git
+    cd laravel-realworld-example-app
+    composer install
+    cp .env.example .env
+    php artisan key:generate
+    
+**Make sure you set the correct database connection information before running the migrations** [Environment variables](#environment-variables)
+
+    php artisan migrate
+    php artisan serve
+
+## Database seeding
+
+**Populate the database with seed data with relationships which includes users, articles, comments, tags, favorites and follows. This can help you to quickly start testing the api or couple a frontend and start using it with ready content.**
+
+Run the database seeder and you're done
+
+    php artisan db:seed
+
+***Note*** : It's recommended to have a clean database before seeding. You can refresh your migrations at any point to clean the database by running the following command
+
+    php artisan migrate:refresh
+
+## About project
+
+SHerna is a project under student club Silicon Hill located at Strahov dormitories. The project is currently located in two rooms, first one at block 4 between 3rd and 4th floor and the second at block 6 - 3rd mezzanine (currently under reconstruction). These rooms can be used for free by Silicon Hill members. The only condition is to have active network membership. In these rooms you can find Play Station 4 Pro (Virtual reality, controllers and movement controllers), Xbox 360 and Play Station 2. A computer with emulators for DOC games is available as well. You can find more info on the [current web](https://sherna.siliconhill.cz/).
+
+## New web
+Goal of this project is to redesing the architecture of the current web, and to implement new functionalities, as well as improving the current features.
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
