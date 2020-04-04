@@ -60,8 +60,13 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
-    public function assingRole(Role $role) {
+    public function assignRole(Role $role) {
         $this->role()->associate($role);
+    }
+
+    public function assignRoleName(string $name) {
+        $role = Role::where('name', $name)->first();
+        $this->assignRole($role);
     }
 
 //    /**

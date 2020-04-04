@@ -14,6 +14,7 @@ class PermissionTableSeeder extends Seeder
      */
     public function run()
     {
+        $permission_ids_for_guest = [2, 3, 6, 33, 34, 36, 37, 44, 45, 46, 47];
         $permission_ids = []; // an empty array of stored permission IDs
         // iterate though all routes
         foreach (Route::getRoutes()->getRoutes() as $key => $route) {
@@ -42,5 +43,7 @@ class PermissionTableSeeder extends Seeder
         $admin_role = Role::where('name', 'super_admin')->first();
         // atache all permissions to admin role
         $admin_role->permissions()->attach($permission_ids);
+        $guest_role = Role::where('name', 'guest')->first();
+        $guest_role ->permissions()->attach($permission_ids_for_guest);
     }
 }

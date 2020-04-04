@@ -21,7 +21,7 @@ class RolesAuth
         if(auth()->user()) {
             $role = Role::findOrFail(auth()->user()->role_id);
         } else {
-            $role = Role::findOrFail(4);
+            $role = Role::where('name', 'guest')->first();
         }
         $permissions = $role->permissions;
         // get requested action
@@ -39,6 +39,6 @@ class RolesAuth
             }
         }
         // none authorized request
-        return response('Unauthorized Action', 403);
+        return abort(403, 'Unauthorized Action');
     }
 }
