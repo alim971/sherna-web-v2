@@ -9,7 +9,7 @@
         <tr>
             <th>Titulek</th>
             <th>Popisek</th>
-            <th>Datum vytvssoření</th>
+            <th>Datum vytvoření</th>
             <th>Datum poslední změny</th>
             <th></th>
         </tr>
@@ -18,18 +18,18 @@
         @forelse ($articles as $article)
             <tr>
                 <td>
-                    <a href="{{ route('article.show', ['article' => $article->url]) }}">
-                        {{ $article->url }}
+                    <a href="{{ route('article.show', ['article' => $article]) }}">
+                        {{ $article->text->title }}
                     </a>
                 </td>
-                <td>{{ $article->description }}</td>
+                <td>{{ $article->text->description }}</td>
                 <td>{{ $article->created_at->isoFormat('LLL') }}</td>
                 <td>{{ $article->updated_at->isoFormat('LLL') }}</td>
                 <td>
-                    <a href="{{ route('article.edit', ['article' => $article->url]) }}">Editovat</a>
+                    <a href="{{ route('article.edit', ['article' => $article]) }}">Editovat</a>
                     <a href="#" onclick="event.preventDefault(); $('#article-delete-{{ $article->url }}').submit();">Odstranit</a>
 
-                    <form action="{{ route('article.destroy', ['article' => $article->url]) }}" method="POST" id="article-delete-{{ $article->url }}" class="d-none">
+                    <form action="{{ route('article.destroy', ['article' => $article]) }}" method="POST" id="article-delete-{{ $article->url }}" class="d-none">
                         @csrf
                         @method('DELETE')
                     </form>
@@ -42,6 +42,11 @@
                 </td>
             </tr>
         @endforelse
+        @if($users->hasPages())
+            <tr>
+                <td align="center" colspan="5">{{ $articles->links() }}</td>
+            </tr>
+        @endif
         </tbody>
     </table>
 

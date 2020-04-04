@@ -14,13 +14,15 @@ class ArticlesTableSeeder extends Seeder
     public function run()
     {
         \App\Article::updateOrInsert([
+            'id' => 1,
             'url' => 'uvod',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
             ]);
 
         \App\ArticleText::updateOrInsert([
-            'url' => 'uvod',
+            'id' => 1,
+            'article_id' => 1,
             'title' => 'Uvod',
             'description' => 'Uvodna stranka',
             'content' => '<p>Vítejte na našem webu!</p><p>Tento web je postaven na <strong>jednoduchém redakčním
@@ -31,7 +33,7 @@ systému v Laravel frameworku</strong>. Toto je úvodní článek, načtený z d
         ]);
         \App\ArticleText::updateOrInsert([
             'id' => 2,
-            'url' => 'uvod',
+            'article_id' => 1,
             'title' => 'Welcome',
             'description' => 'Welcome page',
             'content' => '<p>Welcome</p><p>Tento web je postaven na <strong>jednoduchém redakčním

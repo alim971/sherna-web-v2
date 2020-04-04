@@ -15,15 +15,15 @@ class CreateAnotherArticlesTable extends Migration
     {
         $this->down();
         Schema::create('articles', function (Blueprint $table) {
-            //$table->bigIncrements('id');
-            $table->string('url')->primary();
+            $table->bigIncrements('id');
+            $table->string('url')->unique();
             $table->nullableTimestamps();
             $table->softDeletes();
         });
 
         Schema::create('articles_text', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('url');
+            $table->unsignedBigInteger('article_id');
             $table->string('title');
             $table->string('description');
             //$table->string('category'); //TODO Add this
@@ -33,9 +33,9 @@ class CreateAnotherArticlesTable extends Migration
 
             $table->foreign('language_id')->references('id')->on('languages')
                 ->onDelete('cascade');;
-            $table->foreign('url')->references('url')
+            $table->foreign('article_id')->references('id')
                 ->on('articles')->onDelete('cascade');
-            $table->unique(['url', 'language_id']);
+            $table->unique(['article_id', 'language_id']);
             $table->softDeletes();
         });
     }

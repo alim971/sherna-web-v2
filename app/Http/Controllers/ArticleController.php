@@ -24,7 +24,7 @@ class ArticleController extends Controller
 //        $fullArticles = Article::latest()->join('articles_text', function ($join) {
 //                $join->on('articles.url', '=', 'articles_text.url');
 //            })->select('articles_text.*')
-        $articles = ArticleText::latest()->paginate();
+        $articles = Article::latest()->paginate(1);
         return view('article.index', ['articles' => $articles]);
     }
 
@@ -91,10 +91,10 @@ class ArticleController extends Controller
      * @param Article $article
      * @return Response
      */
-    public function show($url)
+    public function show(Article $article)
     {
-        $article = Article::where('url', $url)->firstOrFail();
-        return view('article.show', ['article' => $article->texts()->first()]);
+//        $article = Article::where('url', $url)->firstOrFail();
+        return view('article.show', ['article' => $article]);
     }
 
     /**
@@ -103,10 +103,10 @@ class ArticleController extends Controller
      * @param Article $article
      * @return Response
      */
-    public function edit($url)
+    public function edit(Article $article)
     {
         //
-        $article = Article::where('url', $url)->firstOrFail();
+//        $article = Article::where('url', $url)->firstOrFail();
         return view('article.edit', [
             'article' => $article,
             'texts' => $article->allTexts()->get(),
@@ -142,11 +142,10 @@ class ArticleController extends Controller
      * @param Article $article
      * @return Response
      */
-    public function destroy($url)
+    public function destroy(Article $article)
     {
         //
         try {
-            $article = Article::where('url', $url)->firstOrFail();
             $article->delete();
         } catch (\Exception $exception) {
             return redirect()->back()->withErrors(["Nedošlo k odstránenie"]);

@@ -15,15 +15,9 @@ class CreateRolesTable extends Migration
     {
         Schema::create('roles', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
-            $table->string('slug', 64)->unique();
+            $table->string('name')->unique();
+            $table->string('description')->nullable();
             $table->timestamps();
-            $table->unsignedInteger('language_id')->default('1');
-
-            $table->foreign('language_id')->references('id')->on('languages')
-                ->onDelete('cascade');;
-            $table->softDeletes();
-
         });
     }
 

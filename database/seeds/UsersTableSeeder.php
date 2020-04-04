@@ -23,7 +23,6 @@ class UsersTableSeeder extends Seeder
             'password' => Hash::make('password'),
             'email_verified_at' => Carbon::now(),
         ]);
-        $admin->assignRoles(['admin']);
 
         User::updateOrCreate([
             'name' => 'user',

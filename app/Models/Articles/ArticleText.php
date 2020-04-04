@@ -19,6 +19,6 @@ class ArticleText extends LanguageModel
 
     public function page()
     {
-        return $this->belongsTo(Article::class, 'url'); //id?
+        return $this->belongsTo(Article::class, 'article_id');
     }
 }

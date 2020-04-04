@@ -17,10 +17,12 @@ class CreateCommentsTable extends Migration
             $table->bigIncrements('id');
             $table->integer('user_id')->unsigned();
             $table->integer('parent_id')->nullable();
+            $table->integer('limit')->default(5);
             $table->text('body');
             $table->string('commentable_id');
             $table->string('commentable_type');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
