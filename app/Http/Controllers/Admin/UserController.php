@@ -55,7 +55,7 @@ class UserController extends Controller
         $user->name = $request->get('name');
         $user->email = $request->get('email');
         $role = Role::findOrFail($request->get('role'));
-        $user->assingRole($role);
+        $user->assignRole($role);
         $user->save();
 
         return redirect()->route('user.index');

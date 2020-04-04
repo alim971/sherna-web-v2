@@ -82,7 +82,12 @@ class RoleController extends Controller
     {
         $role->name = $request->get('name');
         $role->description = $request->get('description');
-        $role->permissions()->attach($request->get('permissions'));
+
+        $ids = $request->get('permissions');
+        $newPermissions = Permission::whereIn('id', $ids)->pluck('id')->toArray();
+        $rolePermissions = $role->permissions()->pluck('id')->toArray();
+        $role->permissions()->detach(array_diff($rolePermissions, $newPermissions));
+        $role->permissions()->attach(array_diff($newPermissions, $rolePermissions));
         $role->save();
 
         return redirect()->route('role.index');

@@ -19,7 +19,7 @@
             </tr>
         </thead>
         <tbody>
-        @foreach(\App\Permission::all() as $permission)
+        @foreach($role->permissions as $permission)
             <tr>
                 <td>{{ $permission->name }}</td>
                 <td>{{ $permission->description }}</td>
