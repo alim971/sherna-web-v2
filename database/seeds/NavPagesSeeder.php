@@ -101,6 +101,24 @@ class NavPagesSeeder extends Seeder
             'public' => false,
             'dropdown' => false
         ]);
+        \App\Nav\Page::updateOrInsert([
+            'id' => 6,
+            'url'   => 'article',
+            'name'   => 'Blog',
+            'language_id' => 1,
+            'order' => 6,
+            'public' => false,
+            'dropdown' => true
+        ]);
+        \App\Nav\Page::updateOrInsert([
+            'id' => 6,
+            'url'   => 'article',
+            'name'   => 'Blog',
+            'language_id' => 2,
+            'order' => 6,
+            'public' => false,
+            'dropdown' => true
+        ]);
         \App\Nav\SubPage::updateOrInsert([
             'id' => 1,
             'url'   => 'clenove',
@@ -121,10 +139,19 @@ class NavPagesSeeder extends Seeder
         ]);
         \App\Nav\SubPage::updateOrInsert([
             'id' => 3,
-            'url'   => 'hry',
-            'name'   => 'Hry',
-            'nav_page_id' => 2,
+            'url'   => '',
+            'name'   => 'Novinky',
+            'nav_page_id' => 6,
             'language_id' => 1,
+            'order' => 1,
+            'public' => false,
+        ]);
+        \App\Nav\SubPage::updateOrInsert([
+            'id' => 3,
+            'url'   => '',
+            'name'   => 'News',
+            'nav_page_id' => 6,
+            'language_id' => 2,
             'order' => 1,
             'public' => false,
         ]);
