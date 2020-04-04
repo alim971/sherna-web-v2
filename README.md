@@ -27,6 +27,10 @@ Install all the dependencies using composer
 
     composer install
 
+Sometimes you also need to call another composer function in order to avoid problems with autoload
+
+    composer dumpauto
+
 Copy the example env file and make the required configuration changes in the .env file
 
     cp .env.example .env
@@ -54,6 +58,7 @@ You can now access the server at http://localhost:8000
     git clone https://github.com/SHernaSH/sherna-web-v2.git
     cd sherna-web-v2
     composer install
+    composer dumpauto
     cp .env.example .env
     php artisan key:generate
     
