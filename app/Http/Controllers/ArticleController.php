@@ -24,7 +24,7 @@ class ArticleController extends Controller
 //        $fullArticles = Article::latest()->join('articles_text', function ($join) {
 //                $join->on('articles.url', '=', 'articles_text.url');
 //            })->select('articles_text.*')
-        $articles = Article::latest()->paginate();
+        $articles = Article::latest()->paginate(1);
         return view('article.index', ['articles' => $articles]);
     }
 

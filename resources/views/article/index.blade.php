@@ -9,7 +9,7 @@
         <tr>
             <th>Titulek</th>
             <th>Popisek</th>
-            <th>Datum vytvssoření</th>
+            <th>Datum vytvoření</th>
             <th>Datum poslední změny</th>
             <th></th>
         </tr>
@@ -42,6 +42,11 @@
                 </td>
             </tr>
         @endforelse
+        @if($users->hasPages())
+            <tr>
+                <td align="center" colspan="5">{{ $articles->links() }}</td>
+            </tr>
+        @endif
         </tbody>
     </table>
 
