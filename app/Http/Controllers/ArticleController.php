@@ -24,7 +24,7 @@ class ArticleController extends Controller
 //        $fullArticles = Article::latest()->join('articles_text', function ($join) {
 //                $join->on('articles.url', '=', 'articles_text.url');
 //            })->select('articles_text.*')
-        $articles = Article::latest()->paginate(1);
+        $articles = Article::latest()->paginate();
         return view('article.index', ['articles' => $articles]);
     }
 
@@ -109,7 +109,6 @@ class ArticleController extends Controller
 //        $article = Article::where('url', $url)->firstOrFail();
         return view('article.edit', [
             'article' => $article,
-            'texts' => $article->allTexts()->get(),
         ]);
     }
 
@@ -123,11 +122,11 @@ class ArticleController extends Controller
     public function update(UpdateRequest $request, Article $article)
     {
         //
-        foreach ($article->allTexts()->get() as $text) {
-            $lang = $text->language->id;
-            $text->title = $request->input('title-' . $lang);
-            $text->description = $request->input('description-' . $lang);
-            $text->content = $request->input('content-' . $lang);
+        foreach (Language::all() as $lang) {
+            $text = $article->text->ofLang($lang)->first();
+            $text->title = $request->input('title-' . $lang->id);
+            $text->description = $request->input('description-' . $lang->id);
+            $text->content = $request->input('content-' . $lang->id);
             $text->save();
         }
         $article->save();

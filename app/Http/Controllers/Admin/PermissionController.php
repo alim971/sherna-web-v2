@@ -56,7 +56,7 @@ class PermissionController extends Controller
     {
         $permission->name = $request->get('name');
         $permission->description = $request->get('description');
-        $permission->save();
+        $permission->update();
         return redirect()->route('permission.index');
 
     }

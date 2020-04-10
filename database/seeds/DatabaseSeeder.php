@@ -17,5 +17,8 @@ class DatabaseSeeder extends Seeder
         $this->call(ArticlesTableSeeder::class);
         $this->call(NavPagesSeeder::class);
         $this->call(PermissionTableSeeder::class);
+        $this->call(LocationStatusSeeder::class);
+        $this->call(LocationSeeder::class);
+        $this->call(ReservationsTableSeeder::class);
     }
 }

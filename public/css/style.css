@@ -2,6 +2,14 @@ span.show {
     display: inline!important;
 }
 
+
+.note-editable {
+    height: 350px;
+}
 #permission {
     height: 550px;
+}
+
+.modal-dialog {
+    width: auto!important;
 }

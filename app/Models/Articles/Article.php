@@ -44,20 +44,6 @@ class Article extends Model
     }
 
     /**
-     * Has One relation using where query
-     * Every article has only one text of given language
-     *
-     * @param Language $lang which language you want the text
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function textsOfLang(Language $lang)
-    {
-        return $this->hasOne(ArticleText::class, )
-                    ->where('language_id', $lang->id)
-                    ->withoutGlobalScope(LanguageScope::class);
-    }
-
-    /**
      * Has Many relation
      * Query without global LanguageScope
      * Every article has text for every language
@@ -66,7 +52,7 @@ class Article extends Model
      */
     public function allTexts()
     {
-        return $this->hasMany(ArticleText::class, )
+        return $this->hasMany(ArticleText::class)
             ->withoutGlobalScope(LanguageScope::class);
     }
 

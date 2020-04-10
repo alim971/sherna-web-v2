@@ -2,13 +2,16 @@
 
 namespace App\Nav;
 
+use App\Http\Scopes\LanguageScope;
+use App\Http\Traits\CompositePrimaryKeyTrait;
 use App\LanguageModel;
+use Iatstuti\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SubPage extends LanguageModel
 {
-    use SoftDeletes;
+
 
     /**
      * The table associated with the model.
@@ -17,8 +20,21 @@ class SubPage extends LanguageModel
      */
     protected $table = 'nav_subpages';
 
-    public function pageText()
+    public function text()
     {
-        return $this->hasMany(SubPageText::class, 'nav_subpage_id');
+        return $this->hasOne(SubPageText::class, 'nav_subpage_id', 'id')
+            ->withoutGlobalScope(LanguageScope::class);
     }
+
+
+    public function page()
+    {
+        return $this->belongsTo(Page::class, 'nav_page_id', 'id');
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'url';
+    }
+
 }

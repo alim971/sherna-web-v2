@@ -8,12 +8,16 @@
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/style.css')}}" rel="stylesheet">
+    <!-- include summernote css/js -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
 
     <script src="{{ asset('js/app.js') }}"></script>
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.js"></script>
+
 </head>
 <body>
 
@@ -29,14 +33,14 @@
                 @foreach($nav_subpages as $sub_nav)
                     @if($sub_nav->nav_page_id == $nav->id)
                         <li>
-                            <a class="p-2 text-dark" href="{{url($nav->url . '/' . $sub_nav->url)}}">{{$sub_nav->name}}</a>
+                            <a class="p-2 text-dark" href="{{url('/pages/' . $nav->url . '/' . $sub_nav->url)}}">{{$sub_nav->name}}</a>
                         </li>
                     @endif
                 @endforeach
                     </ul>
                 </span>
             @else
-                <a class="p-2 text-dark" href="{{url($nav->url)}}">{{$nav->name}}</a>
+                <a class="p-2 text-dark" href="{{url('/pages/' . $nav->url)}}">{{$nav->name}}</a>
             @endif
         @endforeach
         @guest

@@ -130,10 +130,10 @@ class NavPagesSeeder extends Seeder
         ]);
         \App\Nav\SubPage::updateOrInsert([
             'id' => 2,
-            'url'   => 'vyrocni-spravy',
-            'name'   => 'Vyrocni spravy',
+            'url'   => 'clenove',
+            'name'   => 'Members',
             'nav_page_id' => 1,
-            'language_id' => 1,
+            'language_id' => 2,
             'order' => 2,
             'public' => false,
         ]);
@@ -147,7 +147,7 @@ class NavPagesSeeder extends Seeder
             'public' => false,
         ]);
         \App\Nav\SubPage::updateOrInsert([
-            'id' => 3,
+            'id' => 4,
             'url'   => '',
             'name'   => 'News',
             'nav_page_id' => 6,

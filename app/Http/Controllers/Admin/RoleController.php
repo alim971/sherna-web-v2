@@ -88,7 +88,7 @@ class RoleController extends Controller
         $rolePermissions = $role->permissions()->pluck('id')->toArray();
         $role->permissions()->detach(array_diff($rolePermissions, $newPermissions));
         $role->permissions()->attach(array_diff($newPermissions, $rolePermissions));
-        $role->save();
+        $role->update();
 
         return redirect()->route('role.index');
     }
