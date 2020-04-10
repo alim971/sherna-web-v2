@@ -18,6 +18,7 @@ Route::middleware('authenticate')->group(function () {
     Route::get('', 'WelcomeController');
 
 
+
     Route::resource('article', 'ArticleController');
     Route::resource('admin/role', 'Admin\RoleController');
     Route::resource('admin/user', 'Admin\UserController',['only' => [
@@ -27,6 +28,24 @@ Route::middleware('authenticate')->group(function () {
     Route::resource('admin/permission', 'Admin\PermissionController',['only' => [
         'index', 'show', 'edit', 'update'
     ]]);
+    Route::resource('admin/location', 'Admin\LocationController');
+    Route::resource('admin/status', 'Admin\LocationStatusController');
+
+    Route::get('pages/{page}/{subpage?}', 'User\PagesController@show')->name("pages.show");
+
+    Route::get('admin/navigation/{navigation}/public', 'Admin\NavigationController@public')
+        ->name('navigation.public');
+    Route::resource('admin/navigation', 'Admin\NavigationController', ['only' => [
+        'index', 'create', 'store', 'edit', 'update', 'destroy',
+    ]]);
+
+    Route::get('admin/subnavigation/{subnavigation}/public', 'Admin\SubpageController@public')
+        ->name('subnavigation.public');
+    Route::resource('admin/subnavigation', 'Admin\SubpageController', ['only' => [
+       'index', 'store', 'create', 'edit', 'update', 'destroy',
+    ]]);
+
+    Route::resource('reservation', 'User\ReservationController');
 
 
 //Route::resource('comment', 'CommentController');

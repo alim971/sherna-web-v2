@@ -37,6 +37,9 @@ class PermissionTableSeeder extends Seeder
                 $permission->save();
                 // add stored permission id in array
                 $permission_ids[] = $permission->id;
+            } else if(in_array($permission_check->id, $permission_ids_for_guest)) {
+                $key = array_search($permission_check->id, $permission_ids_for_guest);
+                unset($permission_ids_for_guest[$key]);
             }
         }
         // find admin role.
@@ -44,6 +47,6 @@ class PermissionTableSeeder extends Seeder
         // atache all permissions to admin role
         $admin_role->permissions()->attach($permission_ids);
         $guest_role = Role::where('name', 'guest')->first();
-        $guest_role ->permissions()->attach($permission_ids_for_guest);
+//        $guest_role ->permissions()->attach($permission_ids_for_guest);
     }
 }
