@@ -63,11 +63,11 @@ class NavigationController extends Controller
     {
         foreach (Language::all() as $lang) {
             $page = Page::where('id', $id)->ofLang($lang)->firstOrFail();
-            $page->public = !$page->public;
+            $page->public = $page->public ? 0 : 1;
             $page->save();
             if($page->dropdown) {
                 foreach ($page->subpages()->ofLang($lang)->get() as $subpage) {
-                    $subpage->public = !$page->public;
+                    $subpage->public = $page->public;
                     $subpage->save();
                 }
             }

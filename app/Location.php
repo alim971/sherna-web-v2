@@ -32,20 +32,6 @@ class Location extends LanguageModel
     }
 
     /**
-     * Has One relation using where query
-     * Every article has only one text of given language
-     *
-     * @param Language $lang which language you want the text
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function statusOfLang(Language $lang)
-    {
-        return $this->belongsTo(LocationStatus::class, 'status_id', 'id')
-            ->where('language_id', $lang->id)
-            ->withoutGlobalScope(LanguageScope::class);
-    }
-
-    /**
      * Has Many relation
      * Query without global LanguageScope
      * Every article has text for every language

@@ -17,9 +17,10 @@ class CreateReservationsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedInteger('location_id');
             $table->unsignedBigInteger('user_id');
-            $table->dateTime('start_time');
-            $table->dateTime('end_time');
-            $table->dateTime('cancelled_at')->nullable();
+            $table->dateTime('start');
+            $table->dateTime('end');
+            $table->boolean('vr')->default(false);
+//            $table->dateTime('cancelled_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

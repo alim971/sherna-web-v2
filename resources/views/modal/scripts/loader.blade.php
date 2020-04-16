@@ -1,13 +1,13 @@
 <script type="text/javascript">
     $(document).ready(function(){
 
-        $(document).on('click', '#{{$id}}', function(e){
+        $(document).on('click', '.click-modal', function(e){
 
             e.preventDefault();
             e.stopImmediatePropagation();
             var url = $(this).data('url');
-            var content = '#dynamic-content-{{$id}}';
-            var loader = '#modal-loader-{{$id}}';
+            var content = '.dynamic-content';
+            var loader = '.modal-loader';
 
             $(content).html(''); // leave it blank before ajax call
             $(loader).show();      // load ajax loader
