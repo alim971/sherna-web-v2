@@ -18,12 +18,25 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote.min.js"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/smalot-bootstrap-datetimepicker/2.4.4/js/bootstrap-datetimepicker.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/smalot-bootstrap-datetimepicker/2.4.4/css/bootstrap-datetimepicker.min.css">
+
 </head>
 <body>
 
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
     <h5 class="my-0 mr-md-auto font-weight-normal">{{ env('APP_NAME') }}</h5>
     <nav class="my-2 my-md-0 mr-md-3">
+        <a class="p-2 text-dark" href="{{route('user.index')}}">Uzivatelia</a>
+        <a class="p-2 text-dark" href="{{route('role.index')}}">Rola</a>
+        <a class="p-2 text-dark" href="{{route('permission.index')}}">Prava</a>
+        <a class="p-2 text-dark" href="{{route('location.index')}}">Location</a>
+        <a class="p-2 text-dark" href="{{route('status.index')}}">Location Status</a>
+        <a class="p-2 text-dark" href="{{route('article.index')}}">Articles</a>
+        <a class="p-2 text-dark" href={{route('reservation.index')}}>Rezervace</a>
         @foreach($nav_pages as $nav)
             @if($nav->dropdown)
                 <span>

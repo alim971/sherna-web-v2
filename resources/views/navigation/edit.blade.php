@@ -22,6 +22,7 @@
                 <label for="dropdown">Is dropdown</label>
                 <input type="checkbox" name="dropdown" id="dropdown" onclick="myFunction()" class="form-control" {{(( session()->get( 'is_dropdown', false ) || $page->dropdown) || !empty(old('dropdown'))) ? "checked" : "" }} />
             </div>
+            @include('modal.modal-form', ['title' => 'Podstranka'])
             <ul class="nav nav-tabs" style="margin-bottom: 3%">
                 @foreach(\App\Language::all() as $language)
                     <li class="{{($language->id==$page->language->id ? "active":"")}}">
@@ -70,5 +71,6 @@
 
 @push('scripts')
     @include('article.partials.tinymce_partial')
-    @include('navigation.partials.scripts.script')
+    @include('navigation.partials.scripts.dropdown')
+    @include('navigation.partials.scripts.delete')
 @endpush

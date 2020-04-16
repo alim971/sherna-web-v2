@@ -44,5 +44,4 @@
             <button type="submit" class="btn btn-primary">Uložit podstranku</button>
         </div>
     </form>
-
     @include('article.partials.summernote')

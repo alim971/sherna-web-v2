@@ -15,9 +15,7 @@
     @forelse($subpages as $sub)
         <tr>
             <td>
-                <a href="{{ route('subnavigation.show', ['subnavigation' => $sub->url]) }}">
-                    {{ $sub->name }}
-                </a>
+                {{ $sub->name }}
             </td>
             <td>{{ $sub->url }}</td>
             <td>{{ $sub->order }}</td>
@@ -25,8 +23,7 @@
             {{--                                    <td>{{ $sub->created_at->isoFormat('LLL') }}</td>--}}
             {{--                                    <td>{{ $sub->updated_at->isoFormat('LLL') }}</td>--}}
             <td>
-                <a href="#" data-toggle="modal" data-target="#view-modal"
-                   id="modal-{{$lang_id}}"
+                <a href="#" class="click-modal" data-toggle="modal" data-target="#view-modal"
                    data-url="{{ route('subnavigation.edit', ['subnavigation' => $sub->url])}}">Editovat</a>
                 <a href="{{ route('subnavigation.public', ['subnavigation' => $sub->url])}}">Make public</a>
                 <a href="#" class="delete" data-url="{{route('subnavigation.destroy', ['subnavigation' => $sub->url]) }}">Odstranit</a>
@@ -41,32 +38,8 @@
     @endforelse
     </tbody>
 </table>
-@include('navigation.partials.modal-form', ['id' => $lang_id, 'route' => route('subnavigation.create'), 'btnText' => 'Pridaj podstranku'])
-@push('scripts')
-    <script type="text/javascript">
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': "{{csrf_token()}}"
-            }
-        });
+@include('modal.button-modal', [
+    'route' => route('subnavigation.create'),
+    'btnText' => 'Pridaj podstranku',
+    ])
 
-        var clickHandler = function(e) {
-
-            var url = $(this).data('url');
-            // alert(id);
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: {_method: 'DELETE'},
-                dataType: 'html'
-            })
-                .done(function(){
-                    location.reload();
-                })
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            return false;
-        };
-        $('.delete').one('click', clickHandler);
-    </script>
-@endpush

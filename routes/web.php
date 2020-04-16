@@ -45,6 +45,9 @@ Route::middleware('authenticate')->group(function () {
        'index', 'store', 'create', 'edit', 'update', 'destroy',
     ]]);
 
+    Route::get('admin/settings', 'Admin\SettingController@index')->name('settings.index');
+    Route::put('admin/settings', 'Admin\SettingController@update')->name('settings.update');
+
     Route::resource('reservation', 'User\ReservationController');
 
 
