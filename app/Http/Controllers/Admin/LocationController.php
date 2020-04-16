@@ -18,7 +18,9 @@ class LocationController extends Controller
     public function index()
     {
         $locations = Location::latest()->paginate();
-        return view('location.index', ['locations' => $locations]);
+        $statuses = LocationStatus::latest()->paginate();
+        return view('admin.locations.index', ['locations' => $locations,
+            'statuses' => $statuses]);
     }
 
     /**
@@ -28,7 +30,7 @@ class LocationController extends Controller
      */
     public function create()
     {
-        return view('location.create');
+        return view('admin.locations.create');
 
     }
 
@@ -77,7 +79,8 @@ class LocationController extends Controller
     public function edit(int $id)
     {
         $location = Location::where('id', $id)->firstOrFail();
-        return view('location.edit', ['location' => $location]);
+
+        return view('admin.locations.edit', ['location' => $location]);
     }
 
     /**
