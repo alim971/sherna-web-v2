@@ -3,11 +3,19 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\ReservationService;
 use App\Reservation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReservationController extends Controller
 {
+
+    public function __construct(ReservationService $reservationService)
+    {
+        $this->reservationService = $reservationService;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +23,9 @@ class ReservationController extends Controller
      */
     public function index()
     {
-        //
+        $reservations = Reservation::latest()->paginate();
+        return view('reservation.index', ['reservations' => $reservations]);
+
     }
 
     /**
@@ -25,7 +35,7 @@ class ReservationController extends Controller
      */
     public function create()
     {
-        //
+        return view('reservation.create')->render();
     }
 
     /**
@@ -36,7 +46,11 @@ class ReservationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if(Auth::guest())
+            return abort('403', 'You must be logged in to create reservation!');
+        $this->reservationService->makeReservation($request, Auth::user());
+
+        return redirect()->route('reservation.index');
     }
 
     /**
@@ -58,7 +72,7 @@ class ReservationController extends Controller
      */
     public function edit(Reservation $reservation)
     {
-        //
+        return view('reservation.edit')->render();
     }
 
     /**
@@ -70,7 +84,9 @@ class ReservationController extends Controller
      */
     public function update(Request $request, Reservation $reservation)
     {
-        //
+        $this->reservationService->updateReservation($request, $reservation,  Auth::user());
+        return redirect()->route('reservation.index');
+
     }
 
     /**
@@ -81,6 +97,9 @@ class ReservationController extends Controller
      */
     public function destroy(Reservation $reservation)
     {
-        //
+        $this->reservationService->deleteReservation($reservation ,Auth::user());
+        return redirect()->route('reservation.index');
+
+
     }
 }

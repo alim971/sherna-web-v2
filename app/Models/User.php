@@ -69,6 +69,10 @@ class User extends Authenticatable
         $this->assignRole($role);
     }
 
+    public function reservations() {
+        return $this->hasMany(Reservation::class);
+    }
+
 //    /**
 //     * Získej všechny role uživatele.
 //     *

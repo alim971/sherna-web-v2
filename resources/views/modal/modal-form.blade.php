@@ -1,4 +1,4 @@
-<div id="view-modal-{{$id}}" class="modal fade"
+<div id="view-modal" class="modal fade"
      tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel"
      aria-hidden="true" style="display: none;">
@@ -6,24 +6,24 @@
         <div class="modal-content">
 
             <div class="modal-header">
+                <h4 class="modal-title">
+                    {{$title}}
+                </h4>
                 <button type="button" class="close"
                         data-dismiss="modal"
                         aria-hidden="true">
                     ×
                 </button>
-                <h4 class="modal-title">
-                    Podstranka
-                </h4>
             </div>
             <div class="modal-body">
 
-                <div id="modal-loader-{{$id}}"
+                <div id="modal-loader"
                      style="display: none; text-align: center;">
                     <img src="{{asset('ajax-loader.gif')}}">
                 </div>
 
                 <!-- content will be load here -->
-                <div id="dynamic-content-modal-{{$id}}"></div>
+                <div class="dynamic-content"></div>
 
             </div>
             <div class="modal-footer">
@@ -38,12 +38,8 @@
     </div>
 </div><!-- /.modal -->
 
-<button data-toggle="modal" data-target="#view-modal-{{$id}}"
-        id="modal-{{$id}}" class="btn btn-sm btn-info"
-        data-url="{{ $route }}">
-    {{$btnText}}
-</button>
+
 @push('scripts')
-    @include('navigation.partials.scripts.loader', ['id' => 'modal-' . $id])
+    @include('modal.scripts.loader')
 @endpush
 

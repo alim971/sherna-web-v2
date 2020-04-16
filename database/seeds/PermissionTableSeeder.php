@@ -42,6 +42,25 @@ class PermissionTableSeeder extends Seeder
                 unset($permission_ids_for_guest[$key]);
             }
         }
+        if(!Permission::where(['name' => 'vr'])->first()) {
+            $vr = new Permission();
+            $vr->controller = 'vr';
+            $vr->method = 'vr';
+            $vr->description = 'Can use vr';
+            $vr->name = 'vr';
+            $vr->save();
+            $permission_ids[] = $vr->id;
+        }
+
+        if(!Permission::where(['name' => 'Reservation Manager'])->first()) {
+            $reservationManager = new Permission();
+            $reservationManager->controller = 'Reservation';
+            $reservationManager->method = 'Manager';
+            $reservationManager->description = 'Can use edit reservations';
+            $reservationManager->name = 'Reservation Manager';
+            $reservationManager->save();
+            $permission_ids[] = $reservationManager->id;
+        }
         // find admin role.
         $admin_role = Role::where('name', 'super_admin')->first();
         // atache all permissions to admin role

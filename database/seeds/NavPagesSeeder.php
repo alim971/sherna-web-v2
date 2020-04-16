@@ -29,96 +29,7 @@ class NavPagesSeeder extends Seeder
             'public' => false,
             'dropdown' => true
         ]);
-        \App\Nav\Page::updateOrInsert([
-            'id' => 2,
-            'url'   => 'admin/user',
-            'name'   => 'Uzivatelia',
-            'language_id' => 1,
-            'order' => 2,
-            'public' => false,
-            'dropdown' => false
-        ]);
-        \App\Nav\Page::updateOrInsert([
-            'id' => 2,
-            'url'   => 'admin/user',
-            'name'   => 'Users',
-            'language_id' => 2,
-            'order' => 2,
-            'public' => false,
-            'dropdown' => false
-        ]);
-        \App\Nav\Page::updateOrInsert([
-            'id' => 3,
-            'url'   => 'admin/role',
-            'name'   => 'Rola',
-            'language_id' => 1,
-            'order' => 3,
-            'public' => false,
-            'dropdown' => false
-        ]);
-        \App\Nav\Page::updateOrInsert([
-            'id' => 3,
-            'url'   => 'admin/role',
-            'name'   => 'Role',
-            'language_id' => 2,
-            'order' => 3,
-            'public' => false,
-            'dropdown' => false
-        ]);
-        \App\Nav\Page::updateOrInsert([
-            'id' => 4,
-            'url'   => 'admin/permission',
-            'name'   => 'Prava',
-            'language_id' => 1,
-            'order' => 4,
-            'public' => false,
-            'dropdown' => false
-        ]);
-        \App\Nav\Page::updateOrInsert([
-            'id' => 4,
-            'url'   => 'admin/permission',
-            'name'   => 'Permissions',
-            'language_id' => 2,
-            'order' => 4,
-            'public' => false,
-            'dropdown' => false
-        ]);
-        \App\Nav\Page::updateOrInsert([
-            'id' => 5,
-            'url'   => 'rezervace',
-            'name'   => 'Rezervace',
-            'language_id' => 1,
-            'order' => 5,
-            'public' => false,
-            'dropdown' => false
-        ]);
-        \App\Nav\Page::updateOrInsert([
-            'id' => 5,
-            'url'   => 'reservation',
-            'name'   => 'Reservation',
-            'language_id' => 2,
-            'order' => 5,
-            'public' => false,
-            'dropdown' => false
-        ]);
-        \App\Nav\Page::updateOrInsert([
-            'id' => 6,
-            'url'   => 'article',
-            'name'   => 'Blog',
-            'language_id' => 1,
-            'order' => 6,
-            'public' => false,
-            'dropdown' => true
-        ]);
-        \App\Nav\Page::updateOrInsert([
-            'id' => 6,
-            'url'   => 'article',
-            'name'   => 'Blog',
-            'language_id' => 2,
-            'order' => 6,
-            'public' => false,
-            'dropdown' => true
-        ]);
+
         \App\Nav\SubPage::updateOrInsert([
             'id' => 1,
             'url'   => 'clenove',
@@ -137,24 +48,6 @@ class NavPagesSeeder extends Seeder
             'order' => 2,
             'public' => false,
         ]);
-        \App\Nav\SubPage::updateOrInsert([
-            'id' => 3,
-            'url'   => '',
-            'name'   => 'Novinky',
-            'nav_page_id' => 6,
-            'language_id' => 1,
-            'order' => 1,
-            'public' => false,
-        ]);
-        \App\Nav\SubPage::updateOrInsert([
-            'id' => 4,
-            'url'   => '',
-            'name'   => 'News',
-            'nav_page_id' => 6,
-            'language_id' => 2,
-            'order' => 1,
-            'public' => false,
-        ]);
         \App\Nav\SubPageText::updateOrInsert([
             'id' => 1,
             'title'   => 'Clenove',
@@ -170,19 +63,5 @@ class NavPagesSeeder extends Seeder
             'content' => '2 Example example 2'
         ]);
 
-        \App\Nav\PageText::updateOrInsert([
-            'id' => 1,
-            'title'   => 'Rezervacia',
-            'nav_page_id' => 2,
-            'language_id' => 1,
-            'content' => '2 Example example 2'
-        ]);
-        \App\Nav\PageText::updateOrInsert([
-            'id' => 2,
-            'title'   => 'Reservation',
-            'nav_page_id' => 2,
-            'language_id' => 2,
-            'content' => 'En EN En Example example En'
-        ]);
     }
 }
