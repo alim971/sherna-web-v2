@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-	
+
 	<div class="row">
 		<div class="col-md-12">
 			<div class="x_panel">
@@ -10,7 +10,6 @@
 					<div class="clearfix"></div>
 				</div>
 				<div class="x_content">
-					
 					<table class="table">
 						<thead>
 						<tr>
@@ -18,121 +17,102 @@
 							<th>Name</th>
 							<th>Surname</th>
 							<th>Email</th>
-							<th width="30%">Badges</th>
-							@if(Auth::user()->isSuperAdmin())
-								<th>Level</th>
-							@endif
+{{--							@if(Auth::user()->isSuperAdmin())--}}
+								<th>Role</th>
+{{--							@endif--}}
 							<th></th>
 						</tr>
 						</thead>
 						<tbody>
 						<tr>
-							<td></td>
-							<td>
-								<form class="form-inline" method="post"
-									  action="{{action('Admin\UsersController@filterName')}}">
-									{!! csrf_field() !!}
-									<div class="input-group input-group-xs">
-										<input name="name" type="text" class="form-control input-xs"
-											   value="{{($name==null) ? "" : $name}}">
-										<span class="input-group-btn">
+                            <form class="form-inline" method="get" action="{{ route('user.filter') }}">
+                                @csrf
+                                <td>Search:</td>
+                                <td>
+                                    <div class="input-group input-group-xs">
+                                        <input name="name" type="text" class="form-control input-xs"
+                                               value="{{ old('name', $filters['name']) }}">
+                                    </div>
+                                </td>
+                                <td>
+                                    <input name="surname" type="text" class="form-control input-xs"
+                                           value="{{ old('surname', $filters['surname']) }}">
+                                </td>
+                                <td>
+                                    <input name="email" type="text" class="form-control input-xs"
+                                           value="{{ old('email', $filters['email']) }}">
+                                </td>
+                                <td>
+                                    <select name="role_id">
+                                        <option selected value> -- none -- </option>
+                                        @foreach(\App\Role::all() as $role)
+                                            <option value="{{$role->id}}" {{ $role->id == $filters['role_id'] ? "selected" : "" }} >
+                                                {{$role->name}}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                                <td>
+                                    <span class="input-group-btn">
                                             <button class="btn btn-default" type="submit"><i
-														class="fa fa-search"></i>
+                                                    class="fa fa-search"></i>
                                             </button>
                                         </span>
-									</div>
-								</form>
-							</td>
-							<td>
-								<form class="form-inline" method="post"
-									  action="{{action('Admin\UsersController@filterSurname')}}">
-									{!! csrf_field() !!}
-									<div class="input-group input-group-xs">
-										<input name="surname" type="text" class="form-control input-xs"
-											   value="{{($surname==null) ? "" : $surname}}">
-										<span class="input-group-btn">
-                                            <button class="btn btn-default" type="submit"><i
-														class="fa fa-search"></i>
-                                            </button>
-                                        </span>
-									</div>
-								</form>
-							</td>
-							<td>
-								<form class="form-inline" method="post"
-									  action="{{action('Admin\UsersController@filterEmail')}}">
-									{!! csrf_field() !!}
-									<div class="input-group input-group-xs">
-										<input name="email" type="text" class="form-control input-xs"
-											   value="{{($email==null) ? "" : $email}}">
-										<span class="input-group-btn">
-                                            <button class="btn btn-default" type="submit"><i
-														class="fa fa-search"></i>
-                                            </button>
-                                        </span>
-									</div>
-								</form>
-							</td>
-							<td></td>
-							<td></td>
+                                </td>
+                            </form>
 						</tr>
-						@foreach($users as $user)
+						@forelse($users as $user)
 							<tr>
 								<td><a target="_blank" rel="noopener"
 									   href="https://is.sh.cvut.cz/users/{{$user->uid}}">{{$user->uid}}</a></td>
 								<td>{{$user->name}}</td>
 								<td>{{$user->surname}}</td>
 								<td><a href="mailto:{{$user->email}}">{{$user->email}}</a></td>
-								<td>
-									@foreach($user->badges as $badge)
-										<span class="label label-primary">{{$badge->name}}</span>&nbsp;
-									@endforeach
-								</td>
-								@if(Auth::user()->isSuperAdmin())
+{{--								@if(Auth::user()->isSuperAdmin())--}}
 									<td>
-										<form action="{{action('Admin\AdminsController@store')}}" class="form-inline"
+										<form action="{{ route('user.role', ['user' => $user])}}" class="form-inline"
 											  method="post">
-											{!! csrf_field() !!}
-											<input type="hidden" name="uid" value="{{$user->uid}}">
-											<input type="hidden" name="redirect" value="users">
-											
+											@csrf
+                                            @method('PUT')
+
 											<div class="form-group">
-												<select name="role" class="form-control user_roles">
-													<option value="uzivatel" {{$user->role()=='uzivatel'?'selected':''}}>
-														User
-													</option>
-													<option value="admin" {{$user->role()=='admin'?'selected':''}}>
-														Admin
-													</option>
-													<option value="super_admin" {{$user->role()=='super_admin'?'selected':''}}>
-														Super admin
-													</option>
+												<select name="role" id="roles" class="form-control user_roles">
+                                                    @foreach(\App\Role::all() as $role)
+                                                        <option value="{{$role->id}}" {{ $role->id == $user->role->id ? 'selected' : ''}}>
+                                                            {{$role->name}}
+                                                        </option>
+                                                    @endforeach
 												</select>
 											</div>
 										</form>
 									</td>
-								@endif
+{{--								@endif--}}
 								<td>
-									@if(Auth::user()->isSuperAdmin())
+{{--									@if(Auth::user()->isSuperAdmin())--}}
 										@if(!$user->banned)
 											<a class="btn btn-danger"
-											   href="{{action('Admin\UsersController@ban',$user->id)}}"><i
+											   href="{{ route('user.ban',['user' => $user]) }}"><i
 														class="fa fa-ban"></i></a>
 										@else
 											<a class="btn btn-success"
-											   href="{{action('Admin\UsersController@unban',$user->id)}}"><i
+											   href="{{ route('user.ban',['user' => $user]) }}"><i
 														class="fa fa-eraser"></i></a>
 										@endif
-									@endif
-									<a class="btn btn-primary"
-									   href="{{action('Admin\UsersController@editBadges',$user->id)}}"><i
-												class="fa fa-id-badge"></i></a>
+{{--									@endif--}}
 								</td>
 							</tr>
-						@endforeach
-						</tbody>
-					</table>
-					{{$users->render()}}
+                         @empty
+                                <tr>
+                                    <td class="text-center" colspan="7">No users</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                        @if($users->hasPages())
+                            <tr>
+                                <td class="text-center" colspan="6">{{ $users->links() }}</td>
+                            </tr>
+                        @endif
+                    </table>
 				</div>
 			</div>
 		</div>
@@ -140,14 +120,14 @@
 
 @endsection
 
-@section('scripts')
-	
+@push('scripts')
+
 	<script type="text/javascript">
 
-		$(document).on('change', '.user_roles', function (ev) {
+		$(document).on('change', '#roles', function (ev) {
 			$(ev.target).closest('form').submit();
 		});
-	
+
 	</script>
 
-@endsection
+@endpush

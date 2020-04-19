@@ -5,15 +5,15 @@
 @endsection
 
 @section('content')
-	
+
 	<div class="container">
-		
+
 		<div class="row">
 			<div class="col-md-12 col-xs-12">
 				@if(count($activeReservations)>=0)
 					<h2>{{trans('reservations.active_reservations')}}</h2>
 					<div class="row">
-						
+
 						@foreach(\App\Models\Location::get() as $location)
 							@php
 								$activeReservation = $activeReservations->where('location_id',$location->id)->first();
@@ -22,7 +22,7 @@
 								<div class="col-md-6">
 									<div class="twPc-div">
 										<a class="twPc-bg twPc-block"></a>
-										
+
 										<div>
 											<a title="{{$activeReservation->owner->name}} {{$activeReservation->owner->surname}}"
 											   target="_blank" rel="noopener"
@@ -32,7 +32,7 @@
 													 src="{{$activeReservation->owner->image}}"
 													 class="twPc-avatarImg">
 											</a>
-											
+
 											<div class="twPc-divUser">
 												<div class="twPc-divName">
 													<a href="https://is.sh.cvut.cz/users/{{$activeReservation->owner->uid}}"
@@ -43,7 +43,7 @@
                                             <a href="mailto:{{$activeReservation->owner->email}}"><span>{{$activeReservation->owner->email}}</span></a>
                                         </span>
 											</div>
-											
+
 											<div class="twPc-divStats">
 												<ul class="twPc-Arrange">
 													<li class="twPc-ArrangeSizeFit">
@@ -86,13 +86,13 @@
 					</div>
 					<hr>
 				@endif
-				
+
 				<div class="row">
 					<div class="col-md-12">
 						<h2>{{trans('reservations.your_reservations')}}</h2>
 					</div>
 				</div>
-				
+
 				<div class="table-responsive">
 					<table class="table table-striped">
 						<thead>
@@ -108,7 +108,7 @@
 						@foreach($reservations as $reservation)
 							<tr data-reservation-id="{{$reservation->id}}">
 								<td>{{date('d.m.Y H:i',strtotime($reservation->start))}}</td>
-								<td class="end-date">{{date('d.m.Y H:i',strtotime($reservation->end))}}</td>
+								<td class="end-date">{{date('d.m.Y H:i',strtotime($reservation->end_at))}}</td>
 								<td>{{$reservation->location->name}}</td>
 								<td>{{$reservation->canceled_at == null ? '-' : date('d.m.Y H:i',strtotime($reservation->canceled_at))}}</td>
 								<td>
@@ -124,12 +124,12 @@
 						</tbody>
 					</table>
 				</div>
-				
+
 				{!! $reservations->render() !!}
 			</div>
 		</div>
 	</div>
-	
+
 	<div class="modal fade" id="updateReservationModal" tabindex="-1" role="dialog"
 		 aria-labelledby="updateReservationModalLabel">
 		<div class="modal-dialog" role="document">
@@ -142,7 +142,7 @@
 							id="updateReservationModalLabel">{{trans('reservation-modal.renew-title')}}</h4>
 					</div>
 					<div class="modal-body">
-						
+
 						<div class="row">
 							<div class="form-group">
 								<div class="col-md-6">

@@ -58,7 +58,7 @@
         @endforelse
         @if($pages->hasPages())
             <tr>
-                <td align="center" colspan="5">{{ $pages->links() }}</td>
+                <td class="text-center" colspan="5">{{ $pages->links() }}</td>
             </tr>
         @endif
         </tbody>

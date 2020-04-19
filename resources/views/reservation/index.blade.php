@@ -23,8 +23,8 @@
                     {{ $reservation->user->name }}
                 </td>
                 <td>{{ $reservation->location->name }}</td>
-                <td>{{ $reservation->start->isoFormat('LLL') }}</td>
-                <td>{{ $reservation->end->isoFormat('LLL') }}</td>
+                <td>{{ $reservation->start_at->isoFormat('LLL') }}</td>
+                <td>{{ $reservation->end_at->isoFormat('LLL') }}</td>
                 <td>{{ $reservation->duration() }}</td>
                 <td>{{ $reservation->vr }}</td>
                 <td>

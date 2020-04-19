@@ -3,12 +3,19 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\UserService;
 use App\Role;
 use App\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -16,20 +23,26 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::latest()->paginate();
-        return view('user.index', ['users' => $users]);
+        $filters = [
+            'name' => '',
+            'surname' => '',
+            'email' => '',
+            'role_id' => ''
+        ];
+        $users = $this->userService->getAllUsers();
+        return view('admin.users.index', ['users' => $users, 'filters' => $filters]);
     }
 
+    public function indexFilter() {
+        $filters = [
+            'name' => request()->get('name'),
+            'surname' => request()->get('surname'),
+            'email' => request()->get('email'),
+            'role_id' => request()->get('role_id')
+        ];
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function show(User $user)
-    {
-        return view('user.show', ['user' => $user]);
+        $users = $this->userService->getUsersFiltered($filters);
+        return view('admin.users.index', ['users' => $users, 'filters' => $filters]);
     }
 
     /**
@@ -40,26 +53,9 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('user.edit', ['user' => $user]);
+        return view('admin.users.edit', ['user' => $user]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, User $user)
-    {
-        $user->name = $request->get('name');
-        $user->email = $request->get('email');
-        $role = Role::findOrFail($request->get('role'));
-        $user->assignRole($role);
-        $user->save();
-
-        return redirect()->route('user.index');
-    }
 
     /**
      * Remove the specified resource from storage.
@@ -67,8 +63,38 @@ class UserController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function ban(User $user)
     {
-        $user->delete();
+        if($this->userService->changeBanStatus($user)) {
+            flash('User was ' . ($user->banned ? 'banned.' : 'unbanned'))->success();
+        } else {
+            flash('Action was not completed.')->error();
+        }
+
+        return redirect()->back();
+    }
+
+    public function updateRole(User $user) {
+        $role = Role::find(request()->get('role'));
+        if($this->userService->changeUserRole($user, $role)) {
+            flash('User role was successfully changed.')->success();
+        } else {
+            flash('Action was not completed.')->error();
+        }
+
+        return redirect()->back();
+    }
+
+    public function auto() {
+        return $this->autocomplete($_GET['term']);
+    }
+
+    private function autocomplete(string $term) {
+
+        $categories = User::where('name', 'like', "%$term%")
+            ->orWhere('id', 'like', "%$term%")
+            ->select('name', 'id')->get();
+
+        return response()->json($categories);
     }
 }

@@ -4,12 +4,12 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	
+
 	<!-- CSRF Token -->
 	<meta name="csrf-token" content="{{ csrf_token() }}">
-	
+
 	<title>Admin | {{ config('app.name') }}</title>
-	
+
 	<link rel="apple-touch-icon" sizes="57x57" href="{{asset('favicon/apple-icon-57x57.png')}}">
 	<link rel="apple-touch-icon" sizes="60x60" href="{{asset('favicon/apple-icon-60x60.png')}}">
 	<link rel="apple-touch-icon" sizes="72x72" href="{{asset('favicon/apple-icon-72x72.png')}}">
@@ -27,19 +27,20 @@
 	<meta name="msapplication-TileColor" content="#ffffff">
 	<meta name="msapplication-TileImage" content="{{asset('favicon/ms-icon-144x144.png')}}">
 	<meta name="theme-color" content="#ffffff">
-	
+
 	<!-- Styles -->
 	<link href="{{mix('css/admin.css')}}" rel="stylesheet">
 	<link href="{{asset('gentellela/custom.css')}}" rel="stylesheet">
-	
+
 	<!-- Scripts -->
-	<script>
-		window.Laravel = {!! json_encode([
-            'csrfToken' => csrf_token(),
-        ]) !!};
-	</script>
-	
-	@yield('styles')
+{{--	<script>--}}
+{{--		window.Laravel = {!! json_encode([--}}
+{{--            'csrfToken' => csrf_token(),--}}
+{{--        ]) !!};--}}
+{{--	</script>--}}
+
+{{--	@yield('styles')--}}
+    @stack('styles')
 </head>
 
 <?php
@@ -50,23 +51,23 @@ $controllerMethod = str_replace('App\\Http\\Controllers\\', '', substr(Route::cu
 <body class="nav-md">
 <div class="nprogress-mask"></div>
 <div class="container body">
-	
+
 	<div class="main_container">
 		<div class="col-md-3 left_col menu_fixed">
 			@include('admin.partials.left_navbar')
 		</div>
-		
+
 		<!-- top navigation -->
 		<div class="top_nav">
 			@include('admin.partials.top_navbar')
 		</div>
 		<!-- /top navigation -->
-		
+
 		<!-- page content -->
-		<div class="right_col" role="main">
-			@include('admin.partials.flash')
+		<main class="right_col">
+            @include('flash::message')
 			@yield('content')
-		</div>
+		</main>
 		<!-- footer content -->
 		<footer>
 			<div class="pull-right">
@@ -84,19 +85,19 @@ $controllerMethod = str_replace('App\\Http\\Controllers\\', '', substr(Route::cu
 <script type="text/javascript">
 	var locale                       = "{{Session::get('lang')}}";
 	var pickerLocale                 = "{{Config::get('app.locale') =='cz' ? 'cs' : Config::get('app.locale')}}";
-	var userUrl                      = "{{action('Client\ClientController@postUserData')}}";
-	var createEventUrl               = "{{action('Client\ClientController@postCreateEvent')}}";
-	var updateEventUrl               = "{{action('Client\ClientController@postUpdateEvent')}}";
-	var deleteEventUrl               = "{{action('Client\ClientController@postDeleteEvent')}}";
-	var eventDataUrl                 = "{{action('Client\ClientController@postEvent')}}";
-	var eventsUrl                    = "{{action('Client\ClientController@postEvents')}}";
-	var myReservationColor           = '{{config('calendar.my-reservation.color')}}';
-	var myReservationBorderColor     = '{{config('calendar.my-reservation.border-color')}}';
-	var myReservationBackgroundColor = '{{config('calendar.my-reservation.background-color')}}';
-	var reservationarea              = '{{config('calendar.reservation-area')}}';
-	var durationforedit              = parseInt('{{config('calendar.duration-for-edit')}}');
-	var maxeventduration             = parseInt('{{config('calendar.max-duration')}}');
-	var consolesURL                  = '{{action('Client\ClientController@postConsoles')}}';
+	var userUrl                      = "";
+	var createEventUrl               = "";
+	var updateEventUrl               = "";
+	var deleteEventUrl               = "";
+	var eventDataUrl                 = "";
+	var eventsUrl                    = "";
+	var myReservationColor           = "";
+	var myReservationBorderColor     = "";
+	var myReservationBackgroundColor = "";
+	var reservationarea              = "";
+	var durationforedit              = "";
+	var maxeventduration             = "";
+	var consolesURL                  = "";
 </script>
 <script src="{{asset('js/app.js')}}"></script>
 <script src="{{asset('gentellela/vendors/switchery/dist/switchery.min.js')}}"></script>
@@ -104,6 +105,6 @@ $controllerMethod = str_replace('App\\Http\\Controllers\\', '', substr(Route::cu
 <script src="{{asset('gentellela/vendors/nprogress/nprogress.js')}}"></script>
 <script src="{{asset('gentellela/custom.js')}}"></script>
 
-@yield('scripts')
+@stack('scripts')
 </body>
 </html>

@@ -44,9 +44,9 @@ mix.combine([
     'resources/assets/js/jquery.js',
     'resources/assets/js/bootstrap.js',
     'resources/assets/js/jquery-ui.min.js',
-    'resources/assets/gentellela/vendors/moment/min/moment.min.js',
-    'resources/assets/gentellela/vendors/fullcalendar/dist/fullcalendar.min.js',
-    'resources/assets/gentellela/vendors/fullcalendar/dist/locale-all.js',
+    'resources/assets/gentelella/vendors/moment/min/moment.min.js',
+    'resources/assets/gentelella/vendors/fullcalendar/dist/fullcalendar.min.js',
+    'resources/assets/gentelella/vendors/fullcalendar/dist/locale-all.js',
     'resources/assets/js/datetimepicker/js/bootstrap-datetimepicker.js',
     'resources/assets/js/datetimepicker/js/locales/bootstrap-datetimepicker.sk.js',
     'resources/assets/js/datetimepicker/js/locales/bootstrap-datetimepicker.cs.js',
@@ -59,3 +59,25 @@ mix.combine([
 if (mix.config.inProduction) {
     mix.version();
 }
+mix.
+    // gentelella
+    copy('resources/assets/gentelella/build/css/custom.css', 'public/gentellela/custom.css').
+    copy('resources/assets/gentelella/build/js/custom.js', 'public/gentellela/custom.js').
+    copy('resources/assets/gentelella/vendors/fullcalendar/dist/fullcalendar.min.css',
+    'public/gentellela/vendors/fullcalendar/dist/fullcalendar.min.css').
+    copy('resources/assets/gentelella/vendors/fullcalendar/dist/fullcalendar.print.css',
+    'public/gentellela/vendors/fullcalendar/dist/fullcalendar.print.css').
+    copy('resources/assets/gentelella/vendors/switchery/dist/switchery.min.js',
+    'public/gentellela/vendors/switchery/dist/switchery.min.js').
+    copy('resources/assets/gentelella/vendors/switchery/dist/switchery.min.css',
+    'public/gentellela/vendors/switchery/dist/switchery.min.css').
+    copy('resources/assets/gentelella//vendors/nprogress/nprogress.js',
+    'public/gentellela/vendors/nprogress/nprogress.js').
+    copy('resources/assets/gentelella/vendors/jquery.tagsinput/dist/jquery.tagsinput.min.css',
+    'public/gentellela/jquery.tagsinput.min.css').
+    copy('resources/assets/gentelella/vendors/jquery.tagsinput/src/jquery.tagsinput.js',
+    'public/gentellela/jquery.tagsinput.js');
+
+mix.
+    // sortable
+    copy('resources/js/jquery-sortable.js', 'public/js/jquery-sortable.js');

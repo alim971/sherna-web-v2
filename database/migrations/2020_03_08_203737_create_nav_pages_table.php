@@ -28,6 +28,7 @@ class CreateNavPagesTable extends Migration
                 ->onDelete('cascade');
             $table->primary(['id', 'language_id']);
             $table->unique(['url', 'language_id']);
+            $table->unique(['order', 'language_id']);
 
 
         });
@@ -48,6 +49,7 @@ class CreateNavPagesTable extends Migration
             $table->foreign('nav_page_id')->references('id')
                 ->on('nav_pages')->onDelete('cascade');
             $table->unique(['nav_page_id', 'language_id', 'url']);
+            $table->unique(['order', 'language_id']);
 
 
         });

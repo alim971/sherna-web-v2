@@ -1,3 +1,22 @@
+.d-none {
+  display: none !important;
+}
+.modal-dialog {
+  width: auto!important;
+}
+@media (min-width: 992px) {
+  .modal-lg {
+    max-width: 800px;
+  }
+  .modal-xl {
+    max-width: 1140px;
+  }
+}
+@media (min-width: 1200px) {
+  .modal-xl {
+    max-width: 1140px;
+  }
+}
 .left_col.menu_fixed {
   /* Safari */
   transition: width 0.5s;
@@ -12,7 +31,7 @@ textarea.form-control {
   resize: vertical;
 }
 #sidebar-menu {
-  height: 90%;
+  height: 95%;
   overflow-x: scroll;
 }
 .nprogress-busy .nprogress-mask {

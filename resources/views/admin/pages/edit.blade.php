@@ -6,8 +6,9 @@
 
 @section('content')
 
-    <form action="{{action('Admin\PagesController@update',$page->id)}}" class="form-horizontal" method="post">
-        {!! csrf_field() !!}
+    <form action="{{ route('page.update', ['page' => $page->id, 'type' => $type]) }}" class="form-horizontal" method="post">
+        @csrf
+        @method('PUT')
         <div class="row">
             <div class="col-md-12">
                 @include('admin.partials.form_errors')
@@ -17,36 +18,41 @@
                         <h2>Edit page</h2>
                         <div class="pull-right">
                             <button type="submit" class="btn btn-success"><i class="fa fa-floppy-o"></i></button>
-                            <a href="{{action('Admin\PagesController@index')}}" class="btn btn-danger"><i class="fa fa-times"></i></a>
+                            <a href="{{ redirect()->back() }}" class="btn btn-danger"><i class="fa fa-times"></i></a>
                         </div>
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
                         <ul class="nav nav-tabs" style="margin-bottom: 3%">
-                            @foreach($lang as $key=>$value)
-                                <li class="{{($key==1 ? "active":"")}}">
-                                    <a href="#{{$key}}" data-toggle="tab">{{$value}}</a>
+                            @foreach(\App\Language::all() as $language)
+                                <li class="{{($language->id==$page->language->id ? "active":"")}}">
+                                    <a href="#{{$language->id}}" data-toggle="tab">{{$language->name}}</a>
                                 </li>
                             @endforeach
                         </ul>
                         <div id="myTabContent" class="tab-content">
-                            @foreach(\App\Models\Language::all() as $lang)
-                                <div class="tab-pane fade {{($lang->id==1 ? "active":"")}} in" id="{{$lang->id}}">
-                                    <div class="form-group">
-                                        <label class="col-sm-2 control-label" for="content">Názov:</label>
-                                        <div class="col-sm-10">
-                                            <input type="text" name="name-{{$lang->id}}" class="form-control" value="{{$page->pageText()->ofLang($lang->code)->first()->name}}">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-2 control-label" for="content">Obsah:</label>
-                                        <div class="col-sm-10">
-                                            <input type="hidden" name="content-{{$lang->id}}" value="{{$page->pageText()->ofLang($lang->code)->first()->content}}" class="input-info" data-langID="{{$lang->id}}">
-                                            <div class="summernote" data-langID="{{$lang->id}}">
-
+                            @foreach(\App\Language::all() as $language)
+                                @php
+                                    $text = gettype($page->text()->ofLang($language)->first());
+                                @endphp
+                                <div class=" tab-pane fade {{($language->id==$page->language->id ? "active":"")}} in" id="{{$language->id}}">
+                                        <p>{{ $text }}</p>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label" for="name-{{$language->id}}">Name:</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" id="name-{{$language->id}}" name="name-{{$language->id}}" class="form-control" value="{{ old('name-' . $language->id) }}">
                                             </div>
                                         </div>
-                                    </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label" for="content-{{$language->id}}">Content:</label>
+                                            <div class="col-sm-10">
+                                                <input type="hidden" id="content-{{$language->id}}" name="content-{{$language->id}}"
+                                                       value="{{ old('content-' . $language->id) }}" class="input-info" data-langID="{{$language->id}}">
+                                                <div class="summernote" data-langID="{{$language->id}}">
+
+                                                </div>
+                                            </div>
+                                        </div>
                                 </div>
                             @endforeach
                         </div>
@@ -58,36 +64,4 @@
 
 @endsection
 
-@section('scripts')
-    <script src="{{asset('summernote/summernote.js')}}"></script>
-    <script type="text/javascript">
-
-		var imageUploadUrlSum = "{{action('Admin\AdminController@saveImage')}}";
-
-		$('.summernote').summernote({
-			height: 400,
-			lang: 'sk-SK'
-		});
-
-		// Initialize summernote plugin
-		$('.summernote').on('summernote.change', function (we, contents, $editable) {
-			$(".input-info[data-langID='" + $(we.target).attr('data-langID') + "']").val(contents);
-		});
-
-		$('.summernote').summernote({
-			callbacks: {
-				onPaste: function (e) {
-					var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
-					e.preventDefault();
-					document.execCommand('insertText', false, bufferText);
-				}
-			}
-		});
-
-        @foreach(\App\Models\Language::all() as $lang)
-		if ($(".input-info[data-langID='{{$lang->id}}']").val() != '') {
-			$(".summernote[data-langID='{{$lang->id}}']").summernote('code', $(".input-info[data-langID='{{$lang->id}}']").val());
-		}
-        @endforeach
-    </script>
-@endsection
+@include('admin.assets.summernote')

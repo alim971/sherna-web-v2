@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Scopes\LanguageScope;
 use App\Language;
 use App\Nav\Page;
 use App\Nav\SubPage;
@@ -18,9 +19,11 @@ class SubpageController extends Controller
             foreach (Session::get('subpages-' . $language->id, []) as &$sub) {
                 if ($sub->url == $url) {
                     $sub->public = !$sub->public;
+                    $sub->save();
                 }
             }
         }
+        return redirect()->back();
     }
 
     /**
@@ -31,7 +34,7 @@ class SubpageController extends Controller
     public function create()
     {
         Session::reflash();
-        return view('navigation.partials.subpages.create')->render();
+        return view('admin.navigation.subpages.create')->render();
     }
 
     /**
@@ -85,7 +88,7 @@ class SubpageController extends Controller
             }
         }
         Session::reflash();
-        return view('navigation.partials.subpages.edit', ['subpages' => $subpages])->render();;
+        return view('admin.navigation.subpages.edit', ['subpages' => $subpages])->render();;
 
     }
 
@@ -116,15 +119,20 @@ class SubpageController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  string  $url
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($url)
     {
         foreach (Language::all() as $language) {
             $subs = Session::get('subpages-' . $language->id);
-            if (($index = array_search($id, $subs->pluck('url')->toArray())) !== false) {
+            if (($index = array_search($url, $subs->pluck('url')->toArray())) !== false) {
                 if(count($subs) != 1) {
+                    foreach ($subs as $sub) {
+                        if($sub->order > $subs[$index]->order) {
+                            $sub->order -= 1;
+                        }
+                    }
                     unset($subs[$index]);
                 } else {
                     $subs->pop();
@@ -134,5 +142,36 @@ class SubpageController extends Controller
 
         }
         Session::reflash();
+    }
+
+    public function reorder() {
+        $url = $_POST['url'];
+        $oldIndex = $_POST['oldIndex'];
+        $newIndex = $_POST['newIndex'];
+        $this->reorderNavigation( $url, $oldIndex + 1, $newIndex + 1);
+//            flash('Navigations were successfully reordered')->success();
+//        } else {
+//            flash('Navigations were not reordered')->error();
+//
+//        }
+        Session::reflash();
+    }
+
+    private function reorderNavigation($url, $oldIndex, $newIndex) {
+        foreach (Language::all() as $language) {
+            foreach (Session::get('subpages-' . $language->id, []) as &$sub) {
+                if ($sub->url == $url) {
+                    if($sub->order != $oldIndex)
+                        return false;
+                    $sub->order = $newIndex;
+                } else if($sub->order < $oldIndex && $sub->order >= $newIndex) {
+                    $sub->order += 1;
+                } else if($sub->order > $oldIndex && $sub->order <= $newIndex) {
+                    $sub->order -= 1;
+                }
+            }
+        }
+        return true;
+
     }
 }

@@ -20,27 +20,34 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($pages as $page)
+                        @forelse($pages as $page)
                             <tr>
-                                <td>{{$page->pageText()->ofLang('cz')->first()->name}}</td>
+                                <td>{{$page->name}}</td>
                                 <td><span class="label label-{{$page->public ? 'success':'warning'}}">{{$page->public ? 'Public':'In prepare'}}</span></td>
                                 <td>
-                                    <a class="btn btn-warning" href="{{action('Admin\PagesController@edit',$page->id)}}"><i
+                                    <form action="{{ route('page.destroy', ['page' => $page->id, 'type' => $type]) }}" class="inline" method="post">
+                                        @csrf
+                                        @method('DELETE')
+                                        <a class="btn btn-warning" href="{{ route('page.edit' ,['page' => $page->id, 'type' => $type]) }}"><i
                                                 class="fa fa-pencil"></i></a>
-                                    @if($page->code!='domu')
-                                        @if($page->public)
-                                            <a href="{{action('Admin\PagesController@unvisible',$page->id)}}" class="btn btn-primary"><i
-                                                        class="fa fa-eye-slash"></i></a>
-                                        @else
-                                            <a href="{{action('Admin\PagesController@visible',$page->id)}}" class="btn btn-danger"><i class="fa fa-eye"></i></a>
-                                        @endif
-                                    @endif
+                                        <a href="{{ route('page.public', ['page' => $page->id, 'type' => $type]) }}" class="btn btn-{{$page->public ? "danger" : "primary"}} primary"><i
+                                                class="fa {{$page->public ? "fa-eye-slash" : "fa-eye"}} "></i></a>
+                                        <button class="btn btn-danger" type="submit"><i class="fa fa-trash"></i></button>
+                                    </form>
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td class="text-center" colspan="3">No page yet</td>
+                            </tr>
+                        @endforelse
+                        @if($pages->hasPages())
+                            <tr>
+                                <td class="text-center" colspan="3">{{ $pages->links() }}</td>
+                            </tr>
+                        @endif
                         </tbody>
                     </table>
-                    {{$pages->render()}}
                 </div>
             </div>
         </div>

@@ -17,22 +17,9 @@ class PermissionController extends Controller
     public function index()
     {
         $permissions = Permission::latest()->paginate();
-        return view('permission.index', ['permissions' => $permissions]);
+        return view('admin.permissions.index', ['permissions' => $permissions]);
     }
 
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Permission  $permission
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Permission $permission)
-    {
-        return view('permission.show', ['permission' => $permission]);
-
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -42,7 +29,7 @@ class PermissionController extends Controller
      */
     public function edit(Permission $permission)
     {
-        return view('permission.edit', ['permission' => $permission]);
+        return view('admin.permissions.edit', ['permission' => $permission]);
     }
 
     /**
@@ -57,12 +44,38 @@ class PermissionController extends Controller
         $permission->name = $request->get('name');
         $permission->description = $request->get('description');
         $permission->update();
+
+        flash('Permission successfully updated')->success();
+
         return redirect()->route('permission.index');
 
     }
 
+    /**
+     * Show the form for deleting the specified resource.
+     *
+     * @param  \App\Permission  $permission
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Permission $permission)
+    {
+        try {
+            $permission->delete();
+        } catch (\Exception $exception) {
+            flash("Deletion of permission was not successful.")->error();
+            return redirect()->back();
+        }
+
+        flash('Permission was successfully deleted.')->success();
+        return redirect()->route('permission.index');
+    }
+
+
     public function generate() {
         Artisan::call('db:seed', ['--class' => 'PermissionTableSeeder']);
+
+        flash('Permissions successfully generated')->success();
+
         return redirect()->route('permission.index');
     }
 

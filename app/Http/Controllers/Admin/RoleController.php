@@ -17,7 +17,7 @@ class RoleController extends Controller
     public function index()
     {
         $roles = Role::latest()->paginate();
-        return view('role.index', ['roles' => $roles]);
+        return view('admin.roles.index', ['roles' => $roles]);
     }
 
     /**
@@ -27,7 +27,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        return view('role.create');
+        return view('admin.roles.create');
     }
 
     /**
@@ -48,16 +48,6 @@ class RoleController extends Controller
         return redirect()->route('role.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Role  $role
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Role $role)
-    {
-        return view('role.show', ['role' => $role]);
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -67,7 +57,7 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        return view('role.edit', ['role' => $role]);
+        return view('admin.roles.edit', ['role' => $role]);
 
     }
 

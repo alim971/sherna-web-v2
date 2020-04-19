@@ -14,15 +14,30 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('name');
-            $table->string('email')->unique();
+//            $table->bigIncrements('id');
+//            $table->string('name');
+//            $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->unsignedBigInteger('role_id')->index()->default(1);
-            $table->foreign('role_id')->references('id')->on('roles');
+//            $table->unsignedBigInteger('role_id')->index()->default(1);
+//            $table->foreign('role_id')->references('id')->on('roles');
             $table->string('password');
             $table->rememberToken();
+//            $table->timestamps();
+
+//            $table->bigIncrements('id');
+            $table->uuid('id')->primary();
+            $table->string('name');
+            $table->string('surname');
+            $table->string('email')->unique();
+
+            $table->integer('block_number')->nullable();
+            $table->boolean('banned')->default(false);
             $table->timestamps();
+
+            $table->unsignedBigInteger('role_id')->index()->default(1);
+            $table->foreign('role_id')->references('id')->on('roles');
+
+            $table->softDeletes();
         });
     }
 

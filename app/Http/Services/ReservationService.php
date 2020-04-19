@@ -15,6 +15,15 @@ use Illuminate\Support\Facades\Auth;
 
 class ReservationService
 {
+
+    public function getReservation(int $perPage = 15) {
+        return Reservation::latest()->paginate($perPage);
+    }
+
+    public function getAllReservation(int $perPage = 15) {
+        return Reservation::withTrashed()->latest()->paginate($perPage);
+    }
+
     public function makeReservation($request, $user) {
         $reservation = $this->createReservation($request, $user);
         if($this->validate($user, $reservation)) {
@@ -84,8 +93,8 @@ class ReservationService
     }
 
     private function overlap($reservation) {
-        $start = $reservation->start;
-        $end = $reservation->end;
+        $start = $reservation->start_at;
+        $end = $reservation->end_at;
         $rangeCount = Reservation::where('location_id', $reservation->location_id)->where(function ($query) use ($start, $end) {
             $query->where(function ($query) use ($start, $end) {
                 $query->where('start', '<=', $start)
@@ -118,8 +127,8 @@ class ReservationService
     private function update($request, Reservation $reservation) {
         $location = Location::where('id' , $request->get('location'))->firstOrFail();
         $reservation->location()->associate($location);
-        $reservation->start = Carbon::createFromFormat('d.m.Y - H:i', $request->get('start'));
-        $reservation->end = Carbon::createFromFormat('d.m.Y - H:i', $request->get('end'));
+        $reservation->start_at = Carbon::createFromFormat('d.m.Y - H:i', $request->get('start'));
+        $reservation->end_at = Carbon::createFromFormat('d.m.Y - H:i', $request->get('end_at'));
         $reservation->vr = $request->get('vr', false) ? 1 : 0;
         return $reservation;
     }
@@ -132,7 +141,7 @@ class ReservationService
             return false;
         }
         if($reservation->getOriginal('start')->minusMinutes(15)->isPast()) {
-            if($reservation->start != $reservation->getOriginal('start')) {
+            if($reservation->start_at != $reservation->getOriginal('start_at')) {
                 return false;
             }
             if($reservation->location_id != $reservation->getOriginal('location_id')) {

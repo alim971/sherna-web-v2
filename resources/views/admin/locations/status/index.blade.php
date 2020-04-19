@@ -20,7 +20,7 @@
                 <tbody>
                 @forelse($statuses as $status)
                     <tr>
-                        <td>{{$status->name}}</td>
+                        <td>{{$status->status}}</td>
                         <td>
                             <span class="label label-{{$status->opened ? 'success':'danger'}}">{{$status->opened ? 'Opened':'Closed'}}</span>
                         </td>

@@ -4,11 +4,14 @@ namespace App;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Reservation extends Model
 {
 
-    protected $dates = ['start', 'end'];
+    use SoftDeletes;
+
+    protected $dates = ['start_at', 'end_at', 'entered_at'];
 
     //
     public function user() {

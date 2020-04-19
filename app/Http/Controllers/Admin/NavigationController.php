@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Scopes\LanguageScope;
+use App\Http\Services\PageService;
 use App\Language;
 use App\Nav\Page;
 use App\Nav\PageText;
@@ -13,6 +15,13 @@ use Illuminate\Support\Facades\Session;
 
 class NavigationController extends Controller
 {
+
+
+    public function __construct(PageService $pageService)
+    {
+        $this->pageService = $pageService;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -21,7 +30,7 @@ class NavigationController extends Controller
     public function index()
     {
         $pages = Page::orderBy('order')->paginate();
-        return view('navigation.index', ['pages' => $pages]);
+        return view('admin.navigation.index', ['navigations' => $pages]);
     }
 
     /**
@@ -49,7 +58,7 @@ class NavigationController extends Controller
      */
     public function store(Request $request)
     {
-        $this->storeAll($request);
+        $this->pageService->storeWholePage($request);
         return redirect()->route('navigation.index');
     }
 
@@ -59,19 +68,10 @@ class NavigationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function public($id)
+    public function public(int $id)
     {
-        foreach (Language::all() as $lang) {
-            $page = Page::where('id', $id)->ofLang($lang)->firstOrFail();
-            $page->public = $page->public ? 0 : 1;
-            $page->save();
-            if($page->dropdown) {
-                foreach ($page->subpages()->ofLang($lang)->get() as $subpage) {
-                    $subpage->public = $page->public;
-                    $subpage->save();
-                }
-            }
-        }
+        $this->pageService->setPagePublic($id);
+
         return redirect()->route('navigation.index');
     }
 
@@ -94,7 +94,7 @@ class NavigationController extends Controller
         if(Session::get('page_id') == $page->id) {
             Session::reflash();
         }
-        return view('navigation.edit', ['page' => $page]);
+        return view('admin.navigation.edit', ['navigation' => $page]);
     }
 
     /**
@@ -106,7 +106,7 @@ class NavigationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->storeAll($request, $id);
+        $this->pageService->storeWholePage($request, $id);
 
         return redirect()->route('navigation.index');
     }
@@ -119,91 +119,38 @@ class NavigationController extends Controller
      */
     public function destroy($id)
     {
-        foreach (Language::all() as $lang) {
-            try {
-                $page = Page::where('id', $id)->ofLang($lang)->firstOrFail();
-                $page->delete();
-            } catch (\Exception $exception) {
-                return redirect()->back()->withErrors(["Nedošlo k odstránenie"]);
-            }
+        if($this->pageService->deletePage($id)) {
+            flash('Page was successfully deleted.')->success();
+        } else {
+            flash('Page deletion was unsuccessful.')->error();
         }
 
         Session::reflash();
         return redirect()->route('navigation.index');
     }
 
-    private function storeAll($request , $id = null)
-    {
-        $next_id = \DB::table('nav_pages')->max('id') + 1;
-        foreach (Language::all() as $lang) {
-            if (isset($id)) {
-                $page = Page::where('id', $id)->ofLang($lang)->firstOrFail();
-            } else {
-                $page = $this->setNewPage($request, $next_id, $lang);
+    public function reorder() {
+        $url = $_POST['url'];
+        $newIndex = $_POST['newIndex'];
+        $pages = Page::withoutGlobalScope(LanguageScope::class)->where('url', $url)->get();
+        $this->reorderNavigation($pages, $newIndex + 1);
+        flash('Navigations were successfully reordered')->success();
+    }
+
+    private function reorderNavigation($pages, $newIndex) {
+        $oldIndex = $pages[0]->order;
+        foreach ($pages as $page) {
+            $page->order = $newIndex;
+            $page->save();
+        }
+        foreach (Page::withoutGlobalScope(LanguageScope::class)->where('url', '!=', $pages[0]->url)->get() as $page) {
+            if($page->order < $oldIndex && $page->order >= $newIndex) {
+                $page->order += 1;
+            } else if($page->order > $oldIndex && $page->order <= $newIndex) {
+                $page->order -= 1;
             }
-            $this->storePage($request, $page, $lang);
-            if($page->dropdown) {
-                $this->storeSubPage($request, $page, $lang);
-            } else {
-                $this->storePageText($request, $page, $lang);
-            }
+            $page->save();
         }
     }
 
-    private function setNewPage($request, $id, Language $lang) {
-        $page = new Page();
-        $page->id =$id;
-        $page->url = $request->get('url');;
-        $page->language()->associate($lang);
-        return $page;
-    }
-
-    private function storePage($request, Page $page, Language $lang) {
-        $page->name = $request->get('name-' . $lang->id);
-        $page->order = $request->get('order');
-        $page->public = $request->get('public', false) ? 1 : 0;
-        $page->dropdown = $request->get('dropdown', false) ? 1 : 0;
-        $page->save();
-    }
-        private function storeSubPage($request, Page $page, Language $lang) {
-            $subpages = Session::get('subpages-' . $lang->id);
-            $origSubpages = $page->subpages()->ofLang($lang)->get();
-            foreach ($origSubpages->diff($subpages) as $toDelete) {
-                $toDelete->delete();
-            }
-            foreach ($subpages as $subpage) {
-                /** @var SubPageText $text */
-                $text = $subpage->text;
-                unset($subpage->text);
-                $subpage->page()->associate($page);
-                $subpage->save();
-                $this->storeSubText($text, $subpage);
-            }
-            if($page->text()->ofLang($lang)->first() != null) {
-                $page->text()->ofLang($lang)->delete();
-            }
-        }
-
-        private function storeSubText(SubPageText $text, SubPage $subpage) {
-            $text->page()->associate($subpage);
-            $text->save();
-        }
-
-        private function storePageText($request, Page $page, Language $lang) {
-
-            if($page->text()->ofLang($lang)->first() != null) {
-                $text = $page->text()->ofLang($lang);
-            } else {
-                $text = new PageText();
-                $text->language()->associate($lang);
-                $text->page()->associate($page);
-
-            }
-            $text->title = $page->name;
-            $text->content = $request->get('content-' . $lang->id);
-            $text->save();
-            foreach ($page->subpages()->ofLang($lang)->get() as $subpage) {
-                $subpage->delete();
-            }
-        }
 }

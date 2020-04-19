@@ -1,3 +1,25 @@
+.d-none{display:none!important}
+
+.modal-dialog {
+    width: auto!important;
+}
+
+@media (min-width: 992px) {
+    .modal-lg {
+        max-width: 800px;
+    }
+
+    .modal-xl {
+        max-width: 1140px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .modal-xl {
+        max-width: 1140px;
+    }
+}
+
 .left_col.menu_fixed {
   -webkit-transition: width .5s; /* Safari */
   transition: width .5s;
@@ -18,12 +40,16 @@
   display: none;
 }
 
+//main {
+//    min-height: 825px;
+//}
+
 textarea.form-control {
   resize: vertical;
 }
 
 #sidebar-menu {
-  height: 90%;
+  height: 95%;
   overflow-x: scroll;
 }
 

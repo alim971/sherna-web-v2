@@ -56,6 +56,11 @@ class Article extends Model
             ->withoutGlobalScope(LanguageScope::class);
     }
 
+    public function categories() {
+        return $this->belongsToMany(ArticleCategory::class, 'article_category', 'category_id', 'article_id' );
+
+    }
+
     public function getRouteKeyName()
     {
         return 'url';

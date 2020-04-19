@@ -1,4 +1,19 @@
 {
     "/js/app.js": "/js/app.js",
-    "/css/app.css": "/css/app.css"
+    "/../resources/assets/css/bootstrap.css": "/../resources/assets/css/bootstrap.css",
+    "/../resources/assets/css/admin.css": "/../resources/assets/css/admin.css",
+    "/../resources/assets/css/client.css": "/../resources/assets/css/client.css",
+    "/css/app.css": "/css/app.css",
+    "/css/admin.css": "/css/admin.css",
+    "/css/client.css": "/css/client.css",
+    "/gentellela/custom.css": "/gentellela/custom.css",
+    "/gentellela/custom.js": "/gentellela/custom.js",
+    "/gentellela/vendors/fullcalendar/dist/fullcalendar.min.css": "/gentellela/vendors/fullcalendar/dist/fullcalendar.min.css",
+    "/gentellela/vendors/fullcalendar/dist/fullcalendar.print.css": "/gentellela/vendors/fullcalendar/dist/fullcalendar.print.css",
+    "/gentellela/vendors/switchery/dist/switchery.min.js": "/gentellela/vendors/switchery/dist/switchery.min.js",
+    "/gentellela/vendors/switchery/dist/switchery.min.css": "/gentellela/vendors/switchery/dist/switchery.min.css",
+    "/gentellela/vendors/nprogress/nprogress.js": "/gentellela/vendors/nprogress/nprogress.js",
+    "/gentellela/jquery.tagsinput.min.css": "/gentellela/jquery.tagsinput.min.css",
+    "/gentellela/jquery.tagsinput.js": "/gentellela/jquery.tagsinput.js",
+    "/js/jquery-sortable.js": "/js/jquery-sortable.js"
 }
