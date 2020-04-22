@@ -15,5 +15,7 @@
     "/gentellela/vendors/nprogress/nprogress.js": "/gentellela/vendors/nprogress/nprogress.js",
     "/gentellela/jquery.tagsinput.min.css": "/gentellela/jquery.tagsinput.min.css",
     "/gentellela/jquery.tagsinput.js": "/gentellela/jquery.tagsinput.js",
+    "/gentellela/fullcalendar.js": "/gentellela/fullcalendar.js",
+    "/gentellela/fullcalendar-locale.js": "/gentellela/fullcalendar-locale.js",
     "/js/jquery-sortable.js": "/js/jquery-sortable.js"
 }
