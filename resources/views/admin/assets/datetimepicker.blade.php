@@ -5,9 +5,11 @@
 @push('scripts')
     <script src="{{asset('assets_admin/js/datetimepicker/js/bootstrap-datetimepicker.js')}}"></script>
 
+    @include('assets.datepicker_locale')
+
     <script type="text/javascript">
         var formDate = $(".form_datetime").datetimepicker({
-            language      : pickerLocale,
+            language      : '{{Session::get('lang')}}',
             format        : "dd.mm.yyyy hh:ii:00",
             autoclose     : true,
             startDate     : moment().add(durationforedit, 'm').format('YYYY-MM-DD HH:mm'),
@@ -20,7 +22,7 @@
 
 
         var toDate = $(".to_datetime").datetimepicker({
-            language      : pickerLocale,
+            language      : '{{Session::get('lang')}}',
             format        : "dd.mm.yyyy hh:ii:00",
             autoclose     : true,
             startDate     : moment().add(durationforedit * 2, 'm').format('YYYY-MM-DD HH:mm'),

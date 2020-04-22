@@ -72,6 +72,27 @@ class NavPagesSeeder extends Seeder
             'special_code' => 'reservation'
         ]);
 
+        \App\Nav\Page::updateOrInsert([
+            'id' => 4,
+            'url'   => 'inventory',
+            'name'   => 'Vybaveni',
+            'language_id' => 1,
+            'order' => 4,
+            'public' => false,
+            'dropdown' => false,
+            'special_code' => 'inventory'
+        ]);
+        \App\Nav\Page::updateOrInsert([
+            'id' => 4,
+            'url'   => 'inventory',
+            'name'   => 'Inventory',
+            'language_id' => 2,
+            'order' => 4,
+            'public' => false,
+            'dropdown' => false,
+            'special_code' => 'inventory'
+        ]);
+
         \App\Nav\PageText::updateOrInsert([
             'id' => 1,
             'title'   => 'Rezervace',
@@ -100,6 +121,22 @@ class NavPagesSeeder extends Seeder
             'id' => 4,
             'title'   => 'Home',
             'nav_page_id' => 2,
+            'language_id' => 2,
+            'content' => 'Welcome exapmle'
+        ]);
+
+        \App\Nav\PageText::updateOrInsert([
+            'id' => 5,
+            'title'   => 'Vybavenie',
+            'nav_page_id' => 4,
+            'language_id' => 1,
+            'content' => 'Vitajte exapmle'
+        ]);
+
+        \App\Nav\PageText::updateOrInsert([
+            'id' => 6,
+            'title'   => 'Inventory',
+            'nav_page_id' => 4,
             'language_id' => 2,
             'content' => 'Welcome exapmle'
         ]);

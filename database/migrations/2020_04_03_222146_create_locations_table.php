@@ -17,6 +17,8 @@ class CreateLocationsTable extends Migration
             $table->unsignedInteger('id');
             $table->string('name')->unique();
             $table->unsignedInteger('status_id');
+            $table->string('reader_uid')->nullable();
+            $table->string('location_uid')->nullable();
             $table->unsignedInteger('language_id')->default('1');
             $table->timestamps();
             $table->softDeletes();

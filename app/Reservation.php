@@ -11,7 +11,7 @@ class Reservation extends Model
 
     use SoftDeletes;
 
-    protected $dates = ['start_at', 'end_at', 'entered_at'];
+    protected $dates = ['start', 'end', 'entered_at'];
 
     //
     public function user() {
@@ -25,5 +25,28 @@ class Reservation extends Model
     public function duration() {
 
         return $this->end->floatDiffInHours($this->start);
+    }
+
+    public function scopeActiveReservation( $query )
+    {
+        return $query->where(function ( $q ) {
+            $q->where('start', '<=', date('Y-m-d H:i:s'))->where('end', '>=', date('Y-m-d H:i:s'));
+        });
+    }
+
+    public function scopeFutureReservations( $query )
+    {
+        return $query->where(function ( $q ) {
+            $q->where('start', '>=', date('Y-m-d H:i:s'));
+        });
+    }
+
+    public function scopeFutureActiveReservations( $query )
+    {
+        return $query->where(function ( $q ) {
+            $q->where('start', '>=', date('Y-m-d H:i:s'))->orWhere(function ($q) {
+                $q->where('start', '<=', date('Y-m-d H:i:s'))->where('end', '>=', date('Y-m-d H:i:s'));
+            });
+        });
     }
 }

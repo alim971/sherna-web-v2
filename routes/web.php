@@ -36,7 +36,7 @@ Route::middleware('authenticate')->group(function () {
         'as' => 'inventory',
     ]);
 
-    Route::get('', 'WelcomeController');
+    Route::get('', 'User\PagesController@home');
 
     Route::get('admin/page/standalone', 'Admin\PageController@standalone')
         ->name('page.standalone');
@@ -115,6 +115,9 @@ Route::middleware('authenticate')->group(function () {
     Route::get('admin/settings', 'Admin\SettingController@index')->name('settings.index');
     Route::put('admin/settings', 'Admin\SettingController@update')->name('settings.update');
 
+
+    Route::post('reservations', 'User\ReservationController@getReservations')
+        ->name('getReservations');
     Route::resource('reservation', 'User\ReservationController');
 
 

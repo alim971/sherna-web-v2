@@ -14,6 +14,7 @@ return [
 	'renew-title'    => 'Prodloužení rezervace',
 	'note'           => 'Poznámka',
 	'cancel'         => 'Zrušit',
+    'update'         => 'Zmenit',
 	'delete'         => 'Smazat',
 	'visitors_count' => 'Počet účastníků',
 	'required_order' => 'Vytvořením rezervace souhlasíš s provozním řádem.',
