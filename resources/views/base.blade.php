@@ -84,7 +84,7 @@
                     <a href="#" class="p-2 text-dark dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">{{$active_lang}}</a>
                     <ul class="dropdown-menu">
-                @foreach($languages as $lang)
+                        @foreach($languages as $lang)
                         <li>
                             <a class="p-2 text-dark" href="{{route('language', [$lang->code])}}">{{$lang->code}}</a>
                         </li>

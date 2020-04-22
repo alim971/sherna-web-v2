@@ -5,8 +5,10 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\Services\ReservationService;
 use App\Reservation;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
 
 class ReservationController extends Controller
 {
@@ -15,6 +17,24 @@ class ReservationController extends Controller
     {
         $this->reservationService = $reservationService;
     }
+
+    public function getReservations( Request $request )
+    {
+        $reservations = Reservation::where('location_id', $request->get('location'))->get(['id', 'start', 'end', 'visitors_count', 'location_id', 'note', 'user_id']);
+        foreach ($reservations as $reservation) {
+            $owner = $reservation->user;
+
+            $reservation->title = trans('reservations.reservation_for') . $owner->name . ' ' . $owner->surname;
+
+
+            if (Auth::check() && $reservation['user_id'] == Auth::user()->id) {
+                $reservations->editable = !$reservation->start->addMinutes(-1 * 10)->isPast();
+            }
+        }
+
+        return Response::json($reservations);
+    }
+
 
     /**
      * Display a listing of the resource.
@@ -46,8 +66,7 @@ class ReservationController extends Controller
      */
     public function store(Request $request)
     {
-        if(Auth::guest())
-            return abort('403', 'You must be logged in to create reservation!');
+
         $this->reservationService->makeReservation($request, Auth::user());
 
         return redirect()->route('reservation.index');
