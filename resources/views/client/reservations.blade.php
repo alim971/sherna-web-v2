@@ -108,7 +108,7 @@
 						@foreach($reservations as $reservation)
 							<tr data-reservation-id="{{$reservation->id}}">
 								<td>{{date('d.m.Y H:i',strtotime($reservation->start))}}</td>
-								<td class="end-date">{{date('d.m.Y H:i',strtotime($reservation->end_at))}}</td>
+								<td class="end-date">{{date('d.m.Y H:i',strtotime($reservation->end))}}</td>
 								<td>{{$reservation->location->name}}</td>
 								<td>{{$reservation->canceled_at == null ? '-' : date('d.m.Y H:i',strtotime($reservation->canceled_at))}}</td>
 								<td>

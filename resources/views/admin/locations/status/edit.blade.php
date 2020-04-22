@@ -34,7 +34,7 @@
                                     <div class="form-group">
                                         <label for="name-{{$language->id}}" class="col-sm-4 control-label">Name</label>
                                         <div class="col-sm-8">
-                                            <input type="text" name="name-{{$language->id}}" id="name-{{$language->id}}" class="form-control" value="{{$stat->status ?: old('name-' . $language->id) }}" required minlength="3" maxlength="80" />
+                                            <input type="text" name="name-{{$language->id}}" id="name-{{$language->id}}" class="form-control" value="{{$stat->name ?: old('name-' . $language->id) }}" required minlength="3" maxlength="80" />
                                         </div>
                                     </div>
                                 </div>

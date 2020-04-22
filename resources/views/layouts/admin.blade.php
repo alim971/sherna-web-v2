@@ -83,21 +83,10 @@ $controllerMethod = str_replace('App\\Http\\Controllers\\', '', substr(Route::cu
 
 
 <script type="text/javascript">
-	var locale                       = "{{Session::get('lang')}}";
-	var pickerLocale                 = "{{Config::get('app.locale') =='cz' ? 'cs' : Config::get('app.locale')}}";
-	var userUrl                      = "";
-	var createEventUrl               = "";
-	var updateEventUrl               = "";
-	var deleteEventUrl               = "";
-	var eventDataUrl                 = "";
-	var eventsUrl                    = "";
-	var myReservationColor           = "";
-	var myReservationBorderColor     = "";
-	var myReservationBackgroundColor = "";
-	var reservationarea              = "";
-	var durationforedit              = "";
-	var maxeventduration             = "";
-	var consolesURL                  = "";
+
+            var reservationarea              =  "9999999";
+            var durationforedit              =  "9999999";
+            var maxeventduration             =  "9999999";
 </script>
 <script src="{{asset('js/app.js')}}"></script>
 <script src="{{asset('gentellela/vendors/switchery/dist/switchery.min.js')}}"></script>

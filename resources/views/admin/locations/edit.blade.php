@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <form action="{{ route('location.edit', ['location' => $location->id]) }}" class="form-horizontal" method="post">
+    <form action="{{ route('location.update', ['location' => $location->id]) }}" class="form-horizontal" method="post">
         @csrf
         @method('PUT')
         <div class="row">
@@ -48,13 +48,13 @@
                                 <div class="form-group">
                                     <label for="location" class="col-sm-4 control-label">Location UID</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="location_uid" name="location_uid" required value="{{$location->uid ?: old('location_uid')}}">
+                                        <input type="text" class="form-control" id="location_uid" name="location_uid" required value="{{$location->location_uid ?: old('location_uid')}}">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="reader_uid" class="col-sm-4 control-label">Reader UID</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="reader_uid" name="reader_uid" required value="{{$location->uid ?: old('reader_uid')}}">
+                                        <input type="text" class="form-control" id="reader_uid" name="reader_uid" required value="{{$location->reader_uid ?: old('reader_uid')}}">
                                     </div>
                                 </div>
                                 <div class="form-group">

@@ -47,4 +47,11 @@ class Location extends LanguageModel
         return $this->hasMany(Reservation::class, 'location_id', 'id')
             ->withoutGlobalScope(LanguageScope::class);
     }
+
+    public function scopeOpened( $query )
+    {
+        return $query->whereHas('status', function ( $q ) {
+            $q->where('opened', true);
+        });
+    }
 }

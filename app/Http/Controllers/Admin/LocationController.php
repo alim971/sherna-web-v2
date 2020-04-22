@@ -44,9 +44,13 @@ class LocationController extends Controller
     {
         $next_id = \DB::table('locations')->max('id') + 1;
         $status = LocationStatus::where('id', $request->input('status'))->firstOrFail();
+        $uid = $request->input('location_id');
+        $reader = $request->input('reader_uid');
         foreach (Language::all() as $lang) {
             $loc = new Location();
             $loc->id = $next_id;
+            $location->location_uid = $uid;
+            $location->reader_uid = $reader;
             $loc->name = $request->input('name-' . $lang->id);
             $loc->status()->associate($status);
             $loc->language()->associate($lang);
@@ -93,13 +97,13 @@ class LocationController extends Controller
     public function update(Request $request, int $id)
     {
         $status = LocationStatus::where('id', $request->input('status'))->firstOrFail();
-        $uid = $request->input('location_uid');
+        $uid = $request->input('location_id');
         $reader = $request->input('reader_uid');
         foreach (Language::all() as $lang) {
             $location = Location::where('id', $id)->ofLang($lang)->firstOrFail();
             $location->name = $request->input('name-' . $lang->id);
-            $location->uid = $uid;
-            $location->reader = $reader;
+            $location->location_uid = $uid;
+            $location->reader_uid = $reader;
             $location->status()->associate($status);
             $location->save();
         }

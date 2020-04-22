@@ -14,6 +14,7 @@ return [
     'renew-title'    => 'Renew reservation',
     'note'           => 'Note',
     'cancel'         => 'Cancel',
+    'update'         => 'Update',
     'delete'         => 'Delete',
     'visitors_count' => 'Visitors count',
 	'required_order' => 'By creating a reservation, you agree with the operating order.',

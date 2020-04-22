@@ -2,19 +2,20 @@
 
 
 @section('content')
-	
+
 	<div class="jumbotron sherna-jumbotron">
 		<img class="img-reponsive" src="{{asset('assets_client/img/sherna_dash.png')}}" alt="Banner image">
 	</div>
-	
+
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12 col-xs-12">
-				{!! $page->pageText()->ofLang(Config::get('app.locale'))->first()->content !!}
+                <h1>{{$page->title}}</h1>
+				{!! $page->content !!}
 			</div>
 		</div>
 	</div>
-	
+
 	<div class="container">
 		<div class="row text-center">
 			<div class="col-md-12">

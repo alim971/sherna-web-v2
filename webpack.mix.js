@@ -45,13 +45,13 @@ mix.combine([
     'resources/assets/js/bootstrap.js',
     'resources/assets/js/jquery-ui.min.js',
     'resources/assets/gentelella/vendors/moment/min/moment.min.js',
-    'resources/assets/gentelella/vendors/fullcalendar/dist/fullcalendar.min.js',
-    'resources/assets/gentelella/vendors/fullcalendar/dist/locale-all.js',
+    // 'resources/assets/gentelella/vendors/fullcalendar/dist/fullcalendar.min.js',
+    // 'resources/assets/gentelella/vendors/fullcalendar/dist/locale-all.js',
     'resources/assets/js/datetimepicker/js/bootstrap-datetimepicker.js',
     'resources/assets/js/datetimepicker/js/locales/bootstrap-datetimepicker.sk.js',
     'resources/assets/js/datetimepicker/js/locales/bootstrap-datetimepicker.cs.js',
-    'resources/assets/js/reservation.js',
-    'resources/assets/js/renew-reservation.js',
+    // 'resources/assets/js/reservation.js',
+    // 'resources/assets/js/renew-reservation.js',
     'resources/assets/js/app.js',
     'resources/assets/js/trans.js'
 ], 'public/js/app.js');
@@ -76,7 +76,11 @@ mix.
     copy('resources/assets/gentelella/vendors/jquery.tagsinput/dist/jquery.tagsinput.min.css',
     'public/gentellela/jquery.tagsinput.min.css').
     copy('resources/assets/gentelella/vendors/jquery.tagsinput/src/jquery.tagsinput.js',
-    'public/gentellela/jquery.tagsinput.js');
+    'public/gentellela/jquery.tagsinput.js').
+    copy('resources/assets/gentelella/vendors/fullcalendar/dist/fullcalendar.min.js',
+    'public/gentellela/fullcalendar.js').
+    copy('resources/assets/gentelella/vendors/fullcalendar/dist/lang/cs.js',
+    'public/gentellela/fullcalendar-locale.js');
 
 mix.
     // sortable

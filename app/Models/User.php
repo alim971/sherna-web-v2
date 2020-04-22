@@ -45,7 +45,11 @@ class User extends Authenticatable
     }
 
     public function isSuperAdmin() {
-        return $this->role->name == "super_admin";
+        return strtolower($this->role->name) == "super_admin";
+    }
+
+    public function isAdmin() {
+        return $this->isSuperAdmin() || strtolower($this->role->name) == "admin";
     }
 
     public function reservations() {
