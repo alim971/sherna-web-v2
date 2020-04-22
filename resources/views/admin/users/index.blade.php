@@ -29,10 +29,8 @@
                                 @csrf
                                 <td>Search:</td>
                                 <td>
-                                    <div class="input-group input-group-xs">
-                                        <input name="name" type="text" class="form-control input-xs"
+                                    <input name="name" type="text" class="form-control input-xs"
                                                value="{{ old('name', $filters['name']) }}">
-                                    </div>
                                 </td>
                                 <td>
                                     <input name="surname" type="text" class="form-control input-xs"

@@ -20,6 +20,7 @@
                             <th>Name</th>
                             <th>Url</th>
                             <th>Public</th>
+                            <th>Categories</th>
                             <th>Created at</th>
                             <th>Updated at</th>
                             <th>Created by</th>
@@ -27,11 +28,19 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($articles as $article)
+                        @forelse($articles as $article)
                             <tr>
                                 <td>{{ $article->text->title }}</td>
                                 <td>{{ $article->url }}</td>
                                 <td><span class="label label-{{$article->public ? 'success':'warning'}}">{{$article->public ? 'Public':'In prepare'}}</span></td>
+                                <td>
+                                    @forelse($article->categories as $category)
+                                        <span class="label label-info ">{{ $category->detail->name }}</span>
+                                    @empty
+                                        <span class="label label-warning "> No categories </span>
+                                    @endforelse
+
+                                </td>
                                 <td>{{ $article->created_at->isoFormat('LLL') }}</td>
                                 <td>{{ $article->updated_at->isoFormat('LLL') }}</td>
 {{--                                <td>{{ $article->user->name }}</td>--}}
@@ -48,10 +57,14 @@
                                     </form>
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td class="text-center" colspan="8"> No articles yet </td>
+                            </tr>
+                        @endforelse
                         @if($articles->hasPages())
                             <tr>
-                                <td class="text-center" colspan="7">{{ $articles->links() }}</td>
+                                <td class="text-center" colspan="8">{{ $articles->links() }}</td>
                             </tr>
                         @endif
                         </tbody>

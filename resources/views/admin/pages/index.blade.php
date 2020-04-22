@@ -30,9 +30,13 @@
                                         @method('DELETE')
                                         <a class="btn btn-warning" href="{{ route('page.edit' ,['page' => $page->id, 'type' => $type]) }}"><i
                                                 class="fa fa-pencil"></i></a>
-                                        <a href="{{ route('page.public', ['page' => $page->id, 'type' => $type]) }}" class="btn btn-{{$page->public ? "danger" : "primary"}} primary"><i
-                                                class="fa {{$page->public ? "fa-eye-slash" : "fa-eye"}} "></i></a>
-                                        <button class="btn btn-danger" type="submit"><i class="fa fa-trash"></i></button>
+                                        @if($page->special_code != 'home')
+                                            <a href="{{ route('page.public', ['page' => $page->id, 'type' => $type]) }}" class="btn btn-{{$page->public ? "danger" : "primary"}} primary"><i
+                                                    class="fa {{$page->public ? "fa-eye-slash" : "fa-eye"}} "></i></a>
+                                        @endif
+                                        @if(!isset($page->special_code))
+                                            <button class="btn btn-danger" type="submit"><i class="fa fa-trash"></i></button>
+                                        @endif
                                     </form>
                                 </td>
                             </tr>

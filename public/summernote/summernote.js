@@ -1886,7 +1886,7 @@
 
 	var dialog = renderer.create('<div class="modal" aria-hidden="false"/>', function ($node, options) {
 		$node.html([
-			'<div class="modal-dialog">',
+			'<div class="modal-dialog modal-lg">',
 			'  <div class="modal-content">',
 			(options.title ?
 					'    <div class="modal-header">' +

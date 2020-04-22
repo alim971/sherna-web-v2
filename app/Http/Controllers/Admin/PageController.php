@@ -23,12 +23,13 @@ class PageController extends Controller
      */
     public function standalone()
     {
-        //
+        $pages = Page::whereNotNull('special_code')->orderBy('order')->paginate();
+        return view('admin.pages.index', ['pages' => $pages, 'type' => 'page']);
     }
 
     public function navigation()
     {
-        $pages = Page::where('dropdown', false)->orderBy('order')->paginate();
+        $pages = Page::where('dropdown', false)->whereNull('special_code')->orderBy('order')->paginate();
         return view('admin.pages.index', ['pages' => $pages, 'type' => 'page']);
     }
 
@@ -70,6 +71,9 @@ class PageController extends Controller
             $page = SubPage::where('id', $id)->firstOrFail();
         }
         $this->pageService->storeText($request, $page);
+
+        return redirect()->route('page.' . ($type == 'page' ? 'navigation' : 'subnavigation'));
+
     }
 
     /**
@@ -86,6 +90,8 @@ class PageController extends Controller
         } else if($type == 'subpage') {
             $this->pageService->deleteSubPage($id);
         }
+        return redirect()->back();
+
     }
 
     public function public(int $id, string $type) {
@@ -95,5 +101,6 @@ class PageController extends Controller
         } else if($type == 'subpage') {
             $this->pageService->setSubpagePublic($id);
         }
+        return redirect()->back();
     }
 }

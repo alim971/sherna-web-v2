@@ -33,7 +33,7 @@ class LocationStatusController extends Controller
             'opened' => 'required',
         ]);
 
-        $next_id = \DB::table('locations')->max('id') + 1;
+        $next_id = \DB::table('location_statuses')->max('id') + 1;
         $opened = $request->input('opened');
         foreach (Language::all() as $lang) {
             $status = new LocationStatus();
@@ -107,7 +107,7 @@ class LocationStatusController extends Controller
         }
         flash()->message('Location status deleted successfully')->success();
 
-        return redirect()->route('locations.index');
+        return redirect()->route('location.index');
     }
 
     /**

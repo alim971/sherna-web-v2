@@ -16,12 +16,13 @@ class CreateArticleCategoriesTable extends Migration
         Schema::create('article_categories', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('article_categories_details', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('category_id');
-            $table->string('name');
+            $table->string('name')->unique();
             $table->timestamps();
             $table->unsignedInteger('language_id')->default('1');
 
@@ -30,12 +31,13 @@ class CreateArticleCategoriesTable extends Migration
             $table->foreign('category_id')->references('id')
                 ->on('article_categories')->onDelete('cascade');
             $table->unique(['category_id', 'language_id']);
-//            $table->softDeletes();
+            $table->softDeletes();
         });
 
         Schema::create('article_category', function (Blueprint $table) {
             $table->unsignedBigInteger('article_id');
             $table->unsignedBigInteger('category_id');
+            $table->nullableTimestamps();
             $table->foreign('article_id')
                 ->references('id')
                 ->on('articles')

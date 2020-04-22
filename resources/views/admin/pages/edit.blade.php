@@ -33,21 +33,21 @@
                         <div id="myTabContent" class="tab-content">
                             @foreach(\App\Language::all() as $language)
                                 @php
-                                    $text = gettype($page->text()->ofLang($language)->first());
+                                    $text = $page->text()->ofLang($language)->first();
                                 @endphp
                                 <div class=" tab-pane fade {{($language->id==$page->language->id ? "active":"")}} in" id="{{$language->id}}">
-                                        <p>{{ $text }}</p>
                                         <div class="form-group">
                                             <label class="col-sm-2 control-label" for="name-{{$language->id}}">Name:</label>
                                             <div class="col-sm-10">
-                                                <input type="text" id="name-{{$language->id}}" name="name-{{$language->id}}" class="form-control" value="{{ old('name-' . $language->id) }}">
+                                                <input type="text" id="name-{{$language->id}}" name="name-{{$language->id}}" class="form-control"
+                                                       value="{{ old('name-' . $language->id, $text->title) }}">
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-sm-2 control-label" for="content-{{$language->id}}">Content:</label>
                                             <div class="col-sm-10">
                                                 <input type="hidden" id="content-{{$language->id}}" name="content-{{$language->id}}"
-                                                       value="{{ old('content-' . $language->id) }}" class="input-info" data-langID="{{$language->id}}">
+                                                       value="{{ old('content-' . $language->id, $text->content) }}" class="input-info" data-langID="{{$language->id}}">
                                                 <div class="summernote" data-langID="{{$language->id}}">
 
                                                 </div>
@@ -56,6 +56,9 @@
                                 </div>
                             @endforeach
                         </div>
+                        @if(isset($page->special_code))
+                             @include('admin.pages.special_pages.'. $page->special_code)
+                        @endif
                     </div>
                 </div>
             </div>

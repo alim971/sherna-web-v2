@@ -6,7 +6,7 @@
     <script src="{{asset('summernote/summernote.js')}}"></script>
     <script type="text/javascript">
 
-        var imageUploadUrlSum = "";//"action('Admin\AdminController@saveImage')";
+        var imageUploadUrlSum = "{{ route('image.save') }}";
 
         $('.summernote').summernote({
             height: 400,

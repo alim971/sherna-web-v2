@@ -21,6 +21,8 @@ class DatabaseSeeder extends Seeder
         $this->call(LocationSeeder::class);
         $this->call(ReservationsTableSeeder::class);
         $this->call(SettingSeeder::class);
-//        $this->call(ArticleCategorySeeder::class);
+        $this->call(ConsolesSeeder::class);
+        $this->call(GamesSeeder::class);
+        $this->call(InventorySeeder::class);
     }
 }

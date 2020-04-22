@@ -8,7 +8,7 @@
                 <div class="x_title">
                     <h2>Games</h2>
                     <div class="pull-right">
-                        <a class="btn btn-primary" href="{{action('Admin\GamesController@create')}}"><i class="fa fa-plus"></i></a>
+                        <a class="btn btn-primary" href="{{ route('game.create') }}"><i class="fa fa-plus"></i></a>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -19,28 +19,37 @@
                         <tr>
                             <th>Name</th>
                             <th>Max possible players</th>
-                            <th>Console type</th>
+                            <th>Console</th>
                             <th></th>
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($games as $game)
+                        @forelse($games as $game)
                             <tr>
                                 <td>{{$game->name}}</td>
                                 <td>{{$game->possible_players}}</td>
-                                <td>{{$game->consoleType->name}}</td>
+                                <td>{{$game->console->name}}</td>
                                 <td>
-                                    <form action="{{action('Admin\GamesController@delete',$game->id)}}" class="inline" method="post">
-                                        {!! csrf_field() !!}
-                                        <a class="btn btn-warning" href="{{action('Admin\GamesController@edit',$game->id)}}"><i class="fa fa-pencil"></i></a>
+                                    <form action="{{ route('game.destroy', ['game' => $game]) }}" class="inline" method="post">
+                                        @csrf
+                                        @method('DELETE')
+                                        <a class="btn btn-warning" href="{{ route('game.edit', ['game' => $game]) }}"><i class="fa fa-pencil"></i></a>
                                         <button class="btn btn-danger" type="submit"><i class="fa fa-trash"></i></button>
                                     </form>
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td class="text-center" colspan="4"> No games yet </td>
+                            </tr>
+                        @endforelse
+                        @if($games->hasPages())
+                            <tr>
+                                <td class="text-center" colspan="4">{{ $games->links() }}</td>
+                            </tr>
+                        @endif
                         </tbody>
                     </table>
-                    {{$games->render()}}
                 </div>
             </div>
         </div>

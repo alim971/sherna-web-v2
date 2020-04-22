@@ -8,7 +8,7 @@
                 <div class="x_title">
                     <h2>Consoles</h2>
                     <div class="pull-right">
-                        <a class="btn btn-primary" href="{{action('Admin\ConsolesController@create')}}"><i class="fa fa-plus"></i></a>
+                        <a class="btn btn-primary" href="{{ route('console.create') }}"><i class="fa fa-plus"></i></a>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -24,7 +24,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($consoles as $console)
+                        @forelse($consoles as $console)
                             <tr>
                                 <td>
                                     {{$console->name}}
@@ -36,55 +36,30 @@
                                     {{$console->location->name}}
                                 </td>
                                 <td>
-                                    <form action="{{action('Admin\ConsolesController@delete',$console->id)}}" class="inline" method="post">
-                                        {!! csrf_field() !!}
-                                        <a class="btn btn-warning" href="{{action('Admin\ConsolesController@edit',$console->id)}}"><i
+                                    <form action="{{ route('console.destroy', ['console' => $console]) }}" class="inline" method="post">
+                                        @csrf
+                                        @method('DELETE')
+                                        <a class="btn btn-warning" href="{{ route('console.edit', ['console' => $console])}}"><i
                                                     class="fa fa-pencil"></i></a>
                                         <button class="btn btn-danger" type="submit"><i class="fa fa-trash"></i></button>
                                     </form>
                                 </td>
                             </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                    {{$consoles->render()}}
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="x_panel">
-                <div class="x_title">
-                    <h2>Consoles types</h2>
-                    <div class="pull-right">
-                        <a class="btn btn-primary" href="{{action('Admin\ConsolesController@createConsoleType')}}"><i class="fa fa-plus"></i></a>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="x_content">
-
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($consolesTypes as $consolesType)
+                        @empty
                             <tr>
-                                <td>{{$consolesType->name}}</td>
-                                <td>
-                                    <a class="btn btn-warning" href="{{action('Admin\ConsolesController@editConsoleType',$consolesType->id)}}"><i
-                                                class="fa fa-pencil"></i></a>
-                                </td>
+                                <td class="text-center" colspan="4"> No consoles yet </td>
                             </tr>
-                        @endforeach
+                        @endforelse
+                        @if($consoles->hasPages())
+                            <tr>
+                                <td class="text-center" colspan="4">{{ $consoles->links() }}</td>
+                            </tr>
+                        @endif
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
+        @include('admin.consoles.types.index', ['consoleTypes' => $consoleTypes])
     </div>
-
 @endsection

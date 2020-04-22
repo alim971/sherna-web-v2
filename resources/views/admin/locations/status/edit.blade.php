@@ -43,14 +43,11 @@
                         <div class="row">
                            <div class="col-md-6">
                                 <div class="form-group">
-                                    <div class="col-sm-offset-4 col-sm-8">
                                         <div class="checkbox">
-                                            <label>
-                                                <input type="hidden" name="opened" value="0">
-                                                <input type="checkbox" name="opened" value="1" {{$status->opened ? 'checked':''}}> Opened
-                                            </label>
+                                            <label class="col-sm-4 control-label" for="opened" >Opened</label>
+                                            <input type="hidden" name="opened" value="0">
+                                            <input type="checkbox" id="opened" class="js-switch" name="opened" value="1" {{$status->opened ? 'checked':''}}>
                                         </div>
-                                    </div>
                                 </div>
                              </div>
 
@@ -62,3 +59,5 @@
     </form>
 
 @endsection
+
+@include('admin.assets.switchery')

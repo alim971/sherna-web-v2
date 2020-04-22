@@ -49,11 +49,15 @@
                                     <form action="{{ route('navigation.destroy', ['navigation' => $navigation->id]) }}" class="inline" method="post">
                                         @csrf
                                         @method('DELETE')
-                                        <a class="btn btn-warning" href="{{ route('navigation.edit' ,['navigation' => $navigation->id]) }}"><i
+                                        @if(!isset($navigation->special_code))
+                                            <a class="btn btn-warning" href="{{ route('navigation.edit' ,['navigation' => $navigation->id]) }}"><i
                                                 class="fa fa-pencil"></i></a>
-                                        <a href="{{ route('navigation.public', ['navigation' => $navigation->id]) }}" class="btn btn-{{$navigation->public ? "danger" : "primary"}} primary"><i
+                                            <button class="btn btn-danger" type="submit"><i class="fa fa-trash"></i></button>
+                                        @endif
+                                        @if($navigation->special_code != 'home')
+                                             <a href="{{ route('navigation.public', ['navigation' => $navigation->id]) }}" class="btn btn-{{$navigation->public ? "danger" : "primary"}} primary"><i
                                                 class="fa {{$navigation->public ? "fa-eye-slash" : "fa-eye"}} "></i></a>
-                                        <button class="btn btn-danger" type="submit"><i class="fa fa-trash"></i></button>
+                                        @endif
                                     </form>
                                 </td>
                             </tr>

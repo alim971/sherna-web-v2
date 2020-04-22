@@ -18,7 +18,7 @@
             <tr>
                 <td>
                     <a href="{{ route('status.show', ['status' => $status->id]) }}">
-                        {{ $status->status }}
+                        {{ $status->name }}
                     </a>
                 </td>
                 <td>{{ $status->created_at->isoFormat('LLL') }}</td>

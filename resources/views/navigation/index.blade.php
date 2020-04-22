@@ -39,8 +39,12 @@
 {{--                <td>{{ $page->created_at->isoFormat('LLL') }}</td>--}}
 {{--                <td>{{ $page->updated_at->isoFormat('LLL') }}</td>--}}
                 <td>
-                    <a href="{{ route('navigation.edit', ['navigation' => $page->id]) }}">Editovat</a>
-                    <a href="{{ route('navigation.public', ['navigation' => $page->id]) }}">Make public</a>
+                    @if(isset($page->special_code))
+                         <a href="{{ route('navigation.edit', ['navigation' => $page->id]) }}">Editovat</a>
+                    @endif
+                    @if($page->special_code != 'home')
+                        <a href="{{ route('navigation.public', ['navigation' => $page->id]) }}">Make public</a>
+                    @endif
                     <a href="#" onclick="event.preventDefault(); $('#navigation-delete-{{ $page->url }}').submit();">Odstranit</a>
 
                     <form action="{{ route('navigation.destroy', ['navigation' => $page->id]) }}" method="POST" id="navigation-delete-{{ $page->url }}" class="d-none">

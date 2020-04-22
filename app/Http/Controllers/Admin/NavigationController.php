@@ -46,7 +46,7 @@ class NavigationController extends Controller
             Session::flash('creating');
         }
 
-        return view('navigation.create');
+        return view('admin.navigation.create');
 
     }
 
@@ -84,7 +84,12 @@ class NavigationController extends Controller
     public function edit($id)
     {
         $page = Page::where('id', $id)->firstOrFail();
-        foreach (Language::all() as $lang) {
+        if($this->pageService->isSpecialPage($page)) {
+            flash('Edition not allowed.')->error();
+            return redirect()->back();
+        }
+
+            foreach (Language::all() as $lang) {
             $subpagesOfLang = $page->subpages()->ofLang($lang)->get();
             if(!Session::exists('subpages-' . $lang->id)) {
                 Session::flash('subpages-' . $lang->id, $subpagesOfLang);

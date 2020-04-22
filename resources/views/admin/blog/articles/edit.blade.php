@@ -23,13 +23,10 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="url">Categories:</label>
                             <div class="col-sm-10">
-                                <input name="tags" value="
-                                @forelse($article->categories as $category)
+                                <input name="tags" value="{{ old('tags') }}
+                                @foreach($article->categories as $category)
                                     {{$category->detail->name}}
-                                @empty
-                                {{ old('tags') }}
-                                @endforelse
-                                    " id="tags"/>
+                                @endforeach" id="tags"/>
                             </div>
                         </div>
 
@@ -56,7 +53,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label" for="name-{{$language->id}}">Name:</label>
                                         <div class="col-sm-10">
-                                            <input type="text" id="name-{{$language->id}}" name="name-{{$language->id}}" class="form-control" value="{{ $text->title ?: old('title-' . $language->id) }}">
+                                            <input type="text" id="name-{{$language->id}}" name="name-{{$language->id}}" class="form-control" value="{{ $text->title ?: old('name-' . $language->id) }}">
                                         </div>
                                     </div>
                                     <div class="form-group">

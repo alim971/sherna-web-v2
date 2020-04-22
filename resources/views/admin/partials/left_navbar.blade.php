@@ -46,7 +46,7 @@
                                     class="fa fa-fw fa-list"></i> Categories</a></li>
                     </ul>
                 </li>
-                <li><a href="#"><i class="fa fa-fw fa-file"></i> Documents</a>
+                <li><a href="{{ route('document.index') }}"><i class="fa fa-fw fa-file"></i> Documents</a>
                 </li>
                 <li><a href="{{ route('admin.reservation.index') }}"><i class="fa fa-fw fa-calendar"></i>
                         Reservations</a></li>
@@ -75,17 +75,19 @@
                         Permissions</a></li>
                 <li><a><i class="fa fa-fw fa-cubes"></i> Inventory <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                        {{--						<li>--}}
-                        {{--							<a href="{{action('Admin\InventoryController@indexCategories')}}"><i class="fa fa-fw fa-cubes"></i>--}}
-                        {{--								Inventory categories</a>--}}
-                        {{--						</li>--}}
-                        {{--						<li>--}}
-                        {{--							<a href="{{action('Admin\InventoryController@index')}}"><i class="fa fa-fw fa-cubes"></i>--}}
-                        {{--								Inventory items</a>--}}
-                        {{--						</li>--}}
+                        						<li>
+                        							<a href="{{ route('inventory.category.index') }}"><i class="fa fa-fw fa-cubes"></i>
+                        								Inventory categories</a>
+                        						</li>
+                        						<li>
+                        							<a href="{{ route('inventory.index') }}"><i class="fa fa-fw fa-cubes"></i>
+                        								Inventory items</a>
+                        						</li>
                         {{--						--}}
-                        {{--						<li><a href="{{action('Admin\ConsolesController@index')}}"><i class="fa fa-fw fa-gamepad"></i>--}}
-                        {{--								Consoles</a></li>--}}
+                        <li><a href="{{ route('game.index') }}"><i class="fa fa-fw fa-desktop"></i>
+                                Games</a></li>
+                        						<li><a href="{{ route('console.index') }}"><i class="fa fa-fw fa-gamepad"></i>
+                        								Consoles</a></li>
                     </ul>
                 </li>
                 {{--<li><a href="{{action('Admin\ContestController@index')}}"><i class="fa fa-fw fa-sitemap"></i>--}}

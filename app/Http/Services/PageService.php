@@ -4,6 +4,7 @@
 namespace App\Http\Services;
 
 
+use App\Http\Scopes\LanguageScope;
 use App\Language;
 use App\Nav\Page;
 use App\Nav\PageText;
@@ -19,6 +20,9 @@ class PageService
         foreach (Language::all() as $lang) {
             if (isset($id)) {
                 $page = Page::where('id', $id)->ofLang($lang)->firstOrFail();
+                if($this->isSpecialPage($page)) {
+                    return false;
+                }
             } else {
                 $page = $this->setNewPage($request, $next_id, $lang);
             }
@@ -29,6 +33,7 @@ class PageService
                 $this->savePageText($request, $page, $lang);
             }
         }
+        return true;
     }
 
     public function storeText($request, $page)
@@ -42,6 +47,9 @@ class PageService
 
         foreach (Language::all() as $language) {
             $page = Page::where('id', $id)->ofLang($language)->firstOrFail();
+            if($this->isSpecialPage($page) && $page->special_code == 'home') {
+                return false;
+            }
             $page->public = !$page->public;
             $page->save();
             foreach ($page->subpages()->ofLang($language)->get() as $subpage) {
@@ -61,6 +69,9 @@ class PageService
         foreach (Language::all() as $lang) {
             try {
                 $page = Page::where('id', $id)->ofLang($lang)->firstOrFail();
+                if($this->isSpecialPage($page)) {
+                    return false;
+                }
                 $order = $page->order;
                 $page->delete();
 
@@ -84,7 +95,7 @@ class PageService
                 $order = $page->order;
                 $page->delete();
 
-                foreach (Page::ofLang($lang)->get() as $pa) {
+                foreach (SubPage::ofLang($lang)->get() as $pa) {
                     if($pa->order > $order) {
                         $pa->order -= 1;
                         $pa->save();
@@ -97,6 +108,10 @@ class PageService
         return true;
     }
 
+    public function isSpecialPage($page) {
+        return isset($page->special_code);
+    }
+
     private function changeSubpagePublic(Subpage $page) {
         $page->public = !$page->public;
         $page->save();
@@ -104,7 +119,7 @@ class PageService
 
     private function setText($request, $page, Language $lang) {
         if($page->text()->ofLang($lang)->first() != null) {
-            $text = $page->text()->ofLang($lang);
+            $text = $page->text()->ofLang($lang)->firstOrFail();
         } else {
            return false;
 
@@ -137,8 +152,16 @@ class PageService
         foreach ($origSubpages->diff($subpages) as $toDelete) {
             $toDelete->delete();
         }
+        $next_id = \DB::table('nav_subpages')->max('id') + 1;
         if($subpages != null) {
             foreach ($subpages as $subpage) {
+                $check = SubPage::withoutGlobalScope(LanguageScope::class)->where('url', $subpage->url)->first();
+                if($check) {
+                    $subpage->id = $check->id;
+                } else {
+                    $subpage->id = $next_id;
+                    $next_id++;
+                }
                 /** @var SubPageText $text */
                 $text = $subpage->text;
                 unset($subpage->text);
@@ -160,7 +183,7 @@ class PageService
     private function savePageText($request, Page $page, Language $lang) {
 
         if($page->text()->ofLang($lang)->first() != null) {
-            $text = $page->text()->ofLang($lang);
+            $text = $page->text()->ofLang($lang)->firstOrFail();
         } else {
             $text = new PageText();
             $text->language()->associate($lang);
@@ -174,4 +197,6 @@ class PageService
             $subpage->delete();
         }
     }
+
+
 }

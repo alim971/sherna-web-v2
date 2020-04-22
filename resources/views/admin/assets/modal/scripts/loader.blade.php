@@ -15,6 +15,12 @@
             $.ajax({
                 url: url,
                 type: 'GET',
+                data: {
+                    'url' : document.getElementById('url').value,
+                    'order' : document.getElementById('order').value,
+                    'name-1' : document.getElementById('name-1').value,
+                    'name-2' : document.getElementById('name-2').value
+                },
                 dataType: 'html'
             })
                 .done(function(data){

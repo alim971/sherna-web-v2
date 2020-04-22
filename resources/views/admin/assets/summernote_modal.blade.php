@@ -3,7 +3,7 @@
     //     height: 400,
     //     lang: 'sk-SK'
     // });
-    var imageUploadUrlSum = "";//"action('Admin\AdminController@saveImage')";
+    var imageUploadUrlSum = "{{ route('image.save') }}";
 
     $('.summernote_modal').summernote({
         height: 400,

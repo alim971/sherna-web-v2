@@ -2,6 +2,16 @@
 <form action="{{ route('subnavigation.store') }}" method="POST">
     @csrf
     <div>
+        <input type="hidden" name="url" value="{{ $url }}">
+        <input type="hidden" name="order" value="{{ $order }}">
+        @foreach(\App\Language::all() as $language)
+            <input type="hidden" name="name-{{ $language->id }}" value="{{ $name[$language->id] }}">
+        @endforeach
+        <div class="form-group">
+            <label for="sub_url">Url</label>
+            <input type="text" name="sub_url" id="sub_url" class="form-control" value="{{ old('sub_url') }}"/>
+        </div>
+
         <div class="form-group">
             <label for="sub_order">Order</label>
             <input type="number" min="1" name="sub_order" id="sub_order" class="form-control" value="{{ old('sub_order') }}"/>
@@ -45,3 +55,4 @@
     </div>
 </form>
 @include('admin.assets.summernote_modal')
+

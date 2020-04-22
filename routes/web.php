@@ -15,6 +15,27 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('authenticate')->group(function () {
 
+    Route::group(['prefix' =>'summernote'], function (){
+        Route::get('/getImage/{name}', 'Admin\ImageController@getImage')->name('image.get');
+        Route::post('/saveImage', 'Admin\ImageController@saveImage')->name('image.save');
+    });
+
+    Route::group(['prefix' => 'documents'], function () {
+        Route::get('/', 'Admin\DocumentController@index')->name('document.index');
+        Route::post('/upload', 'Admin\DocumentController@upload')->name('document.upload');;
+        Route::get('/{path}', 'Admin\DocumentController@delete')->name('document.delete');;
+    });
+
+    Route::resource('admin/game', 'Admin\GameController');
+    Route::resource('admin/console', 'Admin\ConsoleController');
+    Route::resource('admin/console/type', 'Admin\ConsoleTypeController');
+    Route::resource('admin/inventory', 'Admin\InventoryController', ['only' => [
+        'index', 'create', 'store', 'edit', 'update', 'destroy'
+    ]]);
+    Route::resource('admin/inventory/category', 'Admin\InventoryCategoryController', [
+        'as' => 'inventory',
+    ]);
+
     Route::get('', 'WelcomeController');
 
     Route::get('admin/page/standalone', 'Admin\PageController@standalone')

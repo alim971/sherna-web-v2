@@ -53,7 +53,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label" for="name-{{$language->id}}">Name:</label>
                                         <div class="col-sm-10">
-                                            <input type="text" id="name-{{$language->id}}" name="name-{{$language->id}}" class="form-control" value="{{ old('title-' . $language->id) }}">
+                                            <input type="text" id="name-{{$language->id}}" name="name-{{$language->id}}" class="form-control" value="{{ old('name-' . $language->id) }}">
                                         </div>
                                     </div>
                                     <div class="form-group">

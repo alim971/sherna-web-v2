@@ -16,9 +16,8 @@ class Location extends LanguageModel
 
     protected $primaryKey = ['id', 'language_id'];
     public $incrementing = false;
-//    protected $cascadeDeletes = ['reservations'];
+    protected $cascadeDeletes = ['reservations'];
 
-    public $timestamps = true;
 
     /**
      * Has One relation using global LanguageScope

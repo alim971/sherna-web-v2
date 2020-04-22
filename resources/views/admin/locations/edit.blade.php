@@ -63,7 +63,7 @@
                                         <select name="status" id="status" class="form-control">
                                             @foreach(\App\LocationStatus::all() as $status)
                                                 <option value="{{$status->id}}" {{ $status->id == $location->status->id ? 'selected' : ''}}>
-                                                    {{$status->status}}
+                                                    {{$status->name}}
                                                 </option>
                                             @endforeach
                                         </select>

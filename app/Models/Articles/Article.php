@@ -21,7 +21,7 @@ class Article extends Model
         'title', 'url', 'description', 'content',
     ];
 
-    protected $cascadeDeletes = ['allTexts', 'comments'];
+    protected $cascadeDeletes = ['texts', 'comments'];
 
     public $timestamps = true;
 
@@ -50,14 +50,14 @@ class Article extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function allTexts()
+    public function texts()
     {
         return $this->hasMany(ArticleText::class)
             ->withoutGlobalScope(LanguageScope::class);
     }
 
     public function categories() {
-        return $this->belongsToMany(ArticleCategory::class, 'article_category', 'category_id', 'article_id' );
+        return $this->belongsToMany(ArticleCategory::class, 'article_category', 'article_id', 'category_id' );
 
     }
 

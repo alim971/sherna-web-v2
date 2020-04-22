@@ -5,6 +5,6 @@
 
 @section('content')
     <main>
-        <h1>{{ $status->status }}</h1>
+        <h1>{{ $status->name }}</h1>
     </main>
 @endsection
