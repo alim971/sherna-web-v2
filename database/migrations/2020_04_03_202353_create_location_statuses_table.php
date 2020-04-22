@@ -15,7 +15,8 @@ class CreateLocationStatusesTable extends Migration
     {
         Schema::create('location_statuses', function (Blueprint $table) {
             $table->unsignedInteger('id');
-            $table->string('status')->unique();
+            $table->string('name')->unique();
+            $table->boolean('opened')->default(false);
             $table->timestamps();
             $table->unsignedInteger('language_id')->default('1');
 

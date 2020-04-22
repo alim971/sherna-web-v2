@@ -35,7 +35,7 @@
                 <select id="status" name="status">
                     @foreach(\App\reservationStatus::all() as $status)
                         <option value="{{$status->id}}" {{ $status->id == $reservation->status->id ? 'selected' : ''}}>
-                            {{$status->status}}
+                            {{$status->name}}
                         </option>
                     @endforeach
                 </select>

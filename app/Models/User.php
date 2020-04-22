@@ -28,32 +28,7 @@ class User extends Authenticatable
 //        });
     }
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name', 'email', 'password', 'role',
-    ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
 
     public function role()
     {
@@ -67,6 +42,10 @@ class User extends Authenticatable
     public function assignRoleName(string $name) {
         $role = Role::where('name', $name)->first();
         $this->assignRole($role);
+    }
+
+    public function isSuperAdmin() {
+        return $this->role->name == "super_admin";
     }
 
     public function reservations() {

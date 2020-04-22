@@ -31,7 +31,7 @@
                 <select id="status" name="status">
                     @foreach(\App\LocationStatus::all() as $status)
                         <option value="{{$status->id}}">
-                            {{$status->status}}
+                            {{$status->name}}
                         </option>
                     @endforeach
                 </select>

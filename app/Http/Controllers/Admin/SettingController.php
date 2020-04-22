@@ -19,9 +19,7 @@ class SettingController extends Controller
     public function index()
     {
         $settings = Setting::all();
-        $a = new ReservationService();
-        $a->makeReservation(Reservation::all()->first(), User::all()->first());
-        return view('settings.index', ['settings' => $settings]);
+        return view('admin.settings.index', ['settings' => $settings]);
     }
 
 
@@ -38,6 +36,8 @@ class SettingController extends Controller
             $setting->value = $request->get('value-' . $setting->id);
             $setting->save();
         }
+        flash('Settings successfully updated')->success();
+
         return redirect()->route('settings.index');
     }
 

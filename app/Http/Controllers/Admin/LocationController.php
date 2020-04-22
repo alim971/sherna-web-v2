@@ -18,7 +18,9 @@ class LocationController extends Controller
     public function index()
     {
         $locations = Location::latest()->paginate();
-        return view('location.index', ['locations' => $locations]);
+        $statuses = LocationStatus::latest()->paginate();
+        return view('admin.locations.index', ['locations' => $locations,
+            'statuses' => $statuses]);
     }
 
     /**
@@ -28,7 +30,7 @@ class LocationController extends Controller
      */
     public function create()
     {
-        return view('location.create');
+        return view('admin.locations.create');
 
     }
 
@@ -77,26 +79,32 @@ class LocationController extends Controller
     public function edit(int $id)
     {
         $location = Location::where('id', $id)->firstOrFail();
-        return view('location.edit', ['location' => $location]);
+
+        return view('admin.locations.edit', ['location' => $location]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Location  $location
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         $status = LocationStatus::where('id', $request->input('status'))->firstOrFail();
+        $uid = $request->input('location_uid');
+        $reader = $request->input('reader_uid');
         foreach (Language::all() as $lang) {
-            $location = \App\Location::where('id', $id)->ofLang($lang)->firstOrFail();
+            $location = Location::where('id', $id)->ofLang($lang)->firstOrFail();
             $location->name = $request->input('name-' . $lang->id);
+            $location->uid = $uid;
+            $location->reader = $reader;
             $location->status()->associate($status);
             $location->save();
         }
 
+        flash("Successfully updated.")->error();
         return redirect()->route('location.index');
     }
 
@@ -110,12 +118,14 @@ class LocationController extends Controller
     {
         foreach (Language::all() as $lang) {
             try {
-                $location = \App\Location::where('id', $id)->ofLang($lang)->firstOrFail();
+                $location = Location::where('id', $id)->ofLang($lang)->firstOrFail();
                 $location->delete();
             } catch (\Exception $exception) {
-                return redirect()->back()->withErrors(["Nedošlo k odstránenie"]);
+                flash("Deletion was unsuccessful.")->error();
+                return redirect()->back();
             }
         }
+        flash("Deletion was successful.")->success();
 
         return redirect()->route('location.index');
     }

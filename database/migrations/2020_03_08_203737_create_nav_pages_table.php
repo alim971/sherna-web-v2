@@ -21,6 +21,7 @@ class CreateNavPagesTable extends Migration
             $table->unsignedInteger('order');
             $table->boolean('public')->default(false);
             $table->boolean('dropdown')->default(false);
+            $table->string('special_code')->nullable();
             $table->timestamps();
             $table->unsignedInteger('language_id')->default('1');
 
@@ -28,13 +29,14 @@ class CreateNavPagesTable extends Migration
                 ->onDelete('cascade');
             $table->primary(['id', 'language_id']);
             $table->unique(['url', 'language_id']);
+//            $table->unique(['order', 'language_id']);
 
 
         });
 
 
         Schema::create('nav_subpages', function (Blueprint $table) {
-            $table->increments('id');
+            $table->unsignedInteger('id');
             $table->unsignedInteger('nav_page_id');
             $table->unsignedInteger('order');
             $table->boolean('public')->default(false);
@@ -47,7 +49,9 @@ class CreateNavPagesTable extends Migration
                 ->onDelete('cascade');
             $table->foreign('nav_page_id')->references('id')
                 ->on('nav_pages')->onDelete('cascade');
-            $table->unique(['nav_page_id', 'language_id', 'url']);
+            $table->primary(['id', 'language_id']);
+
+//            $table->unique(['order', 'language_id']);
 
 
         });

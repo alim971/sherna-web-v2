@@ -17,7 +17,9 @@ class UsersTableSeeder extends Seeder
     {
         /** @var User $admin */
         $admin = User::updateOrCreate([
+            'id' => 1,
             'name' => 'admin',
+            'surname' => 'Admin',
             'email' => 'admin@localhost',
             'role_id' => 5,
         ], [
@@ -28,7 +30,9 @@ class UsersTableSeeder extends Seeder
 
         /** @var User $superAdmin */
         $superAdmin = User::updateOrCreate([
-            'name' => 'Super Admin',
+            'id' => 2,
+            'name' => 'Super',
+            'surname' => 'Admin',
             'email' => 'super_admin@localhost',
             'role_id' => 5,
         ], [
@@ -39,7 +43,9 @@ class UsersTableSeeder extends Seeder
 
         /** @var User $user */
         $user = User::updateOrCreate([
+            'id' => 3,
             'name' => 'user',
+            'surname' => 'User',
             'email' => 'user@localhost',
             'role_id' => 1,
         ], [

@@ -16,11 +16,11 @@
             </div>
             <div class="form-group">
                 <label for="start">Start</label>
-                <input name="start" class="form-control form_datetime" id="start" type="text" required readonly>
+                <input autocomplete="off" name="start" class="form-control form_datetime" id="start" type="text" required readonly>
             </div>
             <div class="form-group">
                 <label for="end">End</label>
-                <input name="end" class="form-control form_datetime" id="end" type="text" required readonly>
+                <input autocomplete="off" name="end" class="form-control form_datetime" id="end" type="text" required readonly>
             </div>
             @auth
                 @if(\Auth::user()->role->hasPermissionByName("vr"))

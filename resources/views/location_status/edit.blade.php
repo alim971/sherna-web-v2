@@ -1,6 +1,6 @@
 @extends('base')
 
-@section('title', 'Editace statusu ' . $status->status)
+@section('title', 'Editace statusu ' . $status->name)
 @section('description', 'Editor pro editaci statusu.')
 
 @section('content')

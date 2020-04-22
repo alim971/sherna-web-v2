@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class SubPage extends LanguageModel
 {
 
+    use CompositePrimaryKeyTrait;
 
     /**
      * The table associated with the model.
@@ -19,11 +20,11 @@ class SubPage extends LanguageModel
      * @var string
      */
     protected $table = 'nav_subpages';
+    protected $primaryKey = ['id', 'language_id'];
 
     public function text()
     {
-        return $this->hasOne(SubPageText::class, 'nav_subpage_id', 'id')
-            ->withoutGlobalScope(LanguageScope::class);
+        return $this->hasOne(SubPageText::class, 'nav_subpage_id', 'id');
     }
 
 

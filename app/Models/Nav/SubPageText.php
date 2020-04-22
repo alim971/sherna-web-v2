@@ -19,8 +19,7 @@ class SubPageText extends LanguageModel
 
     public function page()
     {
-        return $this->belongsTo(SubPage::class, 'nav_subpage_id', 'id')
-            ->withoutGlobalScope(LanguageScope::class);
+        return $this->belongsTo(SubPage::class, 'nav_subpage_id', 'id');
     }
 
 

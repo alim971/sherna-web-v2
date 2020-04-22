@@ -16,8 +16,8 @@ class ReservationsTableSeeder extends Seeder
             'id' => 1,
             'user_id' => 1,
             'location_id' => 1,
-            'start' => Carbon::now(),
-            'end' => Carbon::now()->addHour(),
+            'start_at' => Carbon::now(),
+            'end_at' => Carbon::now()->addHour(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);

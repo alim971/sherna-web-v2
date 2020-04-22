@@ -14,7 +14,7 @@ class LocationStatusSeeder extends Seeder
     {
         \App\LocationStatus::updateOrInsert([
             'id' => 1,
-            'status' => 'Otvorene',
+            'name' => 'Otvorene',
             'language_id' => 1,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
@@ -22,7 +22,7 @@ class LocationStatusSeeder extends Seeder
 
         \App\LocationStatus::updateOrInsert([
             'id' => 1,
-            'status' => 'Open',
+            'name' => 'Open',
             'language_id' => 2,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
@@ -30,7 +30,7 @@ class LocationStatusSeeder extends Seeder
 
         \App\LocationStatus::updateOrInsert([
             'id' => 2,
-            'status' => 'Zatvorene',
+            'name' => 'Zatvorene',
             'language_id' => 1,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
@@ -38,7 +38,7 @@ class LocationStatusSeeder extends Seeder
 
         \App\LocationStatus::updateOrInsert([
             'id' => 2,
-            'status' => 'Closed',
+            'name' => 'Closed',
             'language_id' => 2,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
@@ -46,7 +46,7 @@ class LocationStatusSeeder extends Seeder
 
         \App\LocationStatus::updateOrInsert([
             'id' => 3,
-            'status' => 'Na kluc',
+            'name' => 'Na kluc',
             'language_id' => 1,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
@@ -54,7 +54,7 @@ class LocationStatusSeeder extends Seeder
 
         \App\LocationStatus::updateOrInsert([
             'id' => 3,
-            'status' => 'Key',
+            'name' => 'Key',
             'language_id' => 2,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
