@@ -13,8 +13,23 @@ class SettingSeeder extends Seeder
     {
         \App\Setting::updateOrInsert([
             'id' => 1,
-            'name' => 'duration',
+            'name' => 'Reservation Area',
+            'value' => 30.0,
+            'unit' => 'days',
+
+        ]);
+        \App\Setting::updateOrInsert([
+            'id' => 2,
+            'name' => 'Time for edit',
+            'value' => 15.0,
+            'unit' => 'minutes',
+
+        ]);
+        \App\Setting::updateOrInsert([
+            'id' => 3,
+            'name' => 'Maximal Duration',
             'value' => 8.0,
+            'unit' => 'hours',
         ]);
     }
 }

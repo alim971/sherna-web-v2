@@ -93,13 +93,13 @@
                 {{--<li><a href="{{action('Admin\ContestController@index')}}"><i class="fa fa-fw fa-sitemap"></i>--}}
                 {{--Contests</a></li>--}}
 
-                @if(Auth::user())
+                @if(Auth::user()->isSuperAdmin())
                     <li><a href="{{ route('settings.index') }}"><i class="fa fa-fw fa-cogs"></i> Settings</a>
                     </li>
                 @endif
 
 
-                @if(Auth::user())
+                @if(Auth::user()->isSuperAdmin())
                 <li>
                     {{--						<a href="{{route('log-viewer::logs.list')}}"><i--}}
                     {{--									class="fa fa-fw fa-history"></i> Logs</a>--}}
