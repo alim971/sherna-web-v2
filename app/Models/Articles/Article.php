@@ -61,6 +61,17 @@ class Article extends Model
 
     }
 
+    public function scopePublic( $query )
+    {
+        return $query->where(function ( $q ) {
+            $q->where('public', true);
+        });
+    }
+
+    public function user() {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
     public function getRouteKeyName()
     {
         return 'url';

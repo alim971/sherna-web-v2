@@ -23,7 +23,7 @@ class PageController extends Controller
      */
     public function standalone()
     {
-        $pages = Page::whereNotNull('special_code')->orderBy('order')->paginate();
+        $pages = Page::whereNotNull('special_code')->where('dropdown', false)->orderBy('order')->paginate();
         return view('admin.pages.index', ['pages' => $pages, 'type' => 'page']);
     }
 
@@ -51,6 +51,10 @@ class PageController extends Controller
             $page = Page::where('id', $id)->firstOrFail();
         } else if($type == 'subpage') {
             $page = SubPage::where('id', $id)->firstOrFail();
+        }
+        if(!isset($page->text)) {
+            flash('Editation not allowed')->error();
+           return redirect()->back();
         }
         return view('admin.pages.edit', ['page' => $page, 'type' => $type]);
 

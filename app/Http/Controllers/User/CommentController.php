@@ -49,7 +49,7 @@ class CommentController extends Controller
 
         $article->comments()->save($comment);
         $comment->save();
-        return redirect(route('article.show', ['article' => $article]));
+        return redirect(route('blog.show', ['article' => $article]));
     }
 
     public function replyStore(Request $request)
@@ -61,7 +61,8 @@ class CommentController extends Controller
         $article = Article::find($request->get('article_id'));
         $article->comments()->save($reply);
         $reply->save();
-        return back();
+        return redirect(route('blog.show', ['article' => $article]));
+
 
     }
 

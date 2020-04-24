@@ -46,5 +46,5 @@
         </div>
     </form>
 
-@include('article.partials.summernote')
+@include('client.blog.partials.summernote')
 

@@ -7,19 +7,14 @@
     <script src="{{asset('assets_admin/js/datetimepicker/js/bootstrap-datetimepicker.js')}}"></script>
     @include('assets.datepicker_locale')
     <script type="text/javascript">
-        @auth
-            var durationforedit = 999999;
-            var reservationarea = 999999;
-        @else
-            var durationforedit = {{\App\Setting::where('name', 'duration')}};
-            var reservationarea = {{\App\Setting::where('name', 'duration')}};
-        @endauth
         function initDatePickers() {
+            var edit = {{ \App\Setting::where('name', 'Reservation Area')->first()->value}};
+        }
             var formDate = $(".form_datetime").datetimepicker({
                 language      : '{{Session::get('lang')}}',
                 format        : "dd.mm.yyyy - hh:ii",
                 autoclose     : true,
-                startDate     : moment().add(durationforedit, 'm').format('YYYY-MM-DD HH:mm'),
+                startDate     : moment().add(edit, 'm').format('YYYY-MM-DD HH:mm'),
                 endDate       : moment().add(reservationarea, 'd').format('YYYY-MM-DD HH:mm'),
                 todayBtn      : true,
                 todayHighlight: false,
@@ -32,7 +27,7 @@
                 language      : '{{Session::get('lang')}}',
                 format        : "dd.mm.yyyy - hh:ii",
                 autoclose     : true,
-                startDate     : moment().add(durationforedit * 2, 'm').format('YYYY-MM-DD HH:mm'),
+                startDate     : moment().add(edit * 2, 'm').format('YYYY-MM-DD HH:mm'),
                 todayBtn      : true,
                 todayHighlight: false,
                 pickerPosition: "bottom-right",

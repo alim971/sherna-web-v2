@@ -70,7 +70,7 @@
 @endsection
 
 @push('scripts')
-    @include('article.partials.tinymce_partial')
+    @include('client.blog.partials.tinymce_partial')
     @include('navigation.partials.scripts.dropdown')
     @include('navigation.partials.scripts.delete')
 @endpush

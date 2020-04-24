@@ -3,13 +3,10 @@
     <script src="{{asset('gentellela/fullcalendar-locale.js')}}"></script>
 
     <script>
-        var reservationarea              = '10';//Settings;
-        var durationforedit              = '10'; //Settings;
-        var maxeventduration             = '8'; //Settings
         var myReservationColor           = '{{config('calendar.my-reservation.color')}}';
         var myReservationBorderColor     = '{{config('calendar.my-reservation.border-color')}}';
         var myReservationBackgroundColor = '{{config('calendar.my-reservation.background-color')}}';
-
+        var admin                        = {{\Auth::check() && \Auth::user()->isAdmin()}};
         $(document).ready(function () {
             $.ajaxSetup({
                 headers: {
@@ -26,6 +23,8 @@
             $('.form_datetime').val(start.format('DD.MM.YYYY HH:mm:00'));
             $('.to_datetime').val(end.format('DD.MM.YYYY HH:mm:00'));
             $('#location_id').val($('[name="location"]:checked').val());
+            $('#note').val('');
+            $('#visitors_count').val('1');
             $('#createReservationModal').modal('show');
 
         }
@@ -127,6 +126,7 @@
                 defaultDate    : moment(new Date()).format('YYYY-MM-DD'),
                 defaultView    : 'agendaWeek',
                 editable       : canCreate,
+                eventDurationEditable : canCreate,
                 displayEventTime: true,
                 eventRender: function (event, element, view) {
                     if (event.allDay === 'true') {
@@ -148,7 +148,7 @@
                     var future_date_today = moment(now).add(durationforedit, 'm');
                     var future_date       = moment(now).add(reservationarea, 'days');
 
-                    if (start.isAfter(future_date_today.format('YYYY-MM-DD HH:mm')) && end.isBefore(future_date.format('YYYY-MM-DD'))) {
+                    if ((admin && start.isAfter(now.add(10, 'm').format('YYYY-MM-DD HH:mm'))) || start.isAfter(future_date_today.format('YYYY-MM-DD HH:mm')) && end.isBefore(future_date.format('YYYY-MM-DD'))) {
                         createEvent(start, end);
                     }
                     else {
@@ -217,7 +217,7 @@
                     var dropStart = dropLocation.start;
                     dropStart     = dropStart.subtract(2, 'h');
 
-                    return dropStart.isAfter(future_date_today.format('YYYY-MM-DD HH:mm')) && dropStart.isBefore(future_date.format('YYYY-MM-DD'));
+                    return (admin && dropStart.isAfter(now.add(10, 'm').format('YYYY-MM-DD HH:mm'))) ||  dropStart.isAfter(future_date_today.format('YYYY-MM-DD HH:mm')) && dropStart.isBefore(future_date.format('YYYY-MM-DD'));
                 }
             });
 

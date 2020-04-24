@@ -25,7 +25,7 @@
 {{--                        <li>--}}
 {{--                            <div class="text-center">--}}
 {{--                                <a href="#">--}}
-{{--                                    <strong>{{$futureReservation->ownerEmail()}} {{date('d.m.Y H:i',strtotime($futureReservation->start))}}</strong>--}}
+{{--                                    <strong>{{$futureReservation->ownerEmail()}} {{date('d.m.Y H:i',strtotime($futureReservation->start_at))}}</strong>--}}
 {{--                                </a>--}}
 {{--                            </div>--}}
 {{--                        </li>--}}

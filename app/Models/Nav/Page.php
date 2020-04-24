@@ -37,6 +37,13 @@ class Page extends LanguageModel
         return $this->hasOne(PageText::class, 'nav_page_id', 'id');
     }
 
+    public function scopePublic( $query )
+    {
+        return $query->where(function ( $q ) {
+            $q->where('public', true);
+        });
+    }
+
     public function getRouteKeyName()
     {
         return 'url';

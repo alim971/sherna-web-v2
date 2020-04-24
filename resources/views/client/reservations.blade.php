@@ -54,9 +54,9 @@
 													</li>
 													<li class="twPc-ArrangeSizeFit">
 														<a href="#"
-														   title="{{date('d.m.Y H:i',strtotime($activeReservation->start))}}">
+														   title="{{date('d.m.Y H:i',strtotime($activeReservation->start_at))}}">
 															<span class="twPc-StatLabel twPc-block">{{trans('reservations.from_date')}}</span>
-															<span class="twPc-StatValue">{{date('d.m.Y H:i',strtotime($activeReservation->start))}}</span>
+															<span class="twPc-StatValue">{{date('d.m.Y H:i',strtotime($activeReservation->start_at))}}</span>
 														</a>
 													</li>
 													<li class="twPc-ArrangeSizeFit">
@@ -107,14 +107,14 @@
 						<tbody>
 						@foreach($reservations as $reservation)
 							<tr data-reservation-id="{{$reservation->id}}">
-								<td>{{date('d.m.Y H:i',strtotime($reservation->start))}}</td>
+								<td>{{date('d.m.Y H:i',strtotime($reservation->start_at))}}</td>
 								<td class="end-date">{{date('d.m.Y H:i',strtotime($reservation->end))}}</td>
 								<td>{{$reservation->location->name}}</td>
 								<td>{{$reservation->canceled_at == null ? '-' : date('d.m.Y H:i',strtotime($reservation->canceled_at))}}</td>
 								<td>
 									<a class="btn btn-primary" href="{{action('Client\ClientController@getReservationICS',$reservation->id)}}"><i
 												class="fa fa-calendar"></i></a>
-									@if(date('Y-m-d H:i:s',strtotime($reservation->start,strtotime('- '.config('calendar.duration-for-edit').' minutes'))) > date('Y-m-d H:i:s'))
+									@if(date('Y-m-d H:i:s',strtotime($reservation->start_at,strtotime('- '.config('calendar.duration-for-edit').' minutes'))) > date('Y-m-d H:i:s'))
 										<a class="btn btn-danger btn-delete"
 										   href="{{action('Client\ClientController@getDeleteEvent',$reservation->id)}}">{{trans('reservation-modal.delete')}}</a>
 									@endif
