@@ -17,8 +17,13 @@ class CreateAnotherArticlesTable extends Migration
         Schema::create('articles', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('url')->unique();
+            $table->uuid('user_id');
+            $table->boolean('public')->default(false);
             $table->nullableTimestamps();
             $table->softDeletes();
+
+            $table->foreign('user_id')->references('id')
+                ->on('users');
         });
 
         Schema::create('articles_text', function (Blueprint $table) {
@@ -32,7 +37,7 @@ class CreateAnotherArticlesTable extends Migration
             $table->unsignedInteger('language_id')->default('1');
 
             $table->foreign('language_id')->references('id')->on('languages')
-                ->onDelete('cascade');;
+                ->onDelete('cascade');
             $table->foreign('article_id')->references('id')
                 ->on('articles')->onDelete('cascade');
             $table->unique(['article_id', 'language_id']);

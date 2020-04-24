@@ -28,12 +28,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         //
-        \View::composer('base', function ($view) {
-            //TODO: GET FROM DATABASE
-            $view->with('nav_pages', Page::all()->sortBy('order'));
-            $view->with('nav_subpages', SubPage::all()->sortBy('order'));
-            $view->with('languages', Language::all());
-            $view->with('active_lang', Session::get('lang'));
-        });
+//        \View::composer('layouts.client', function ($view) {
+//            //TODO: GET FROM DATABASE
+//            $view->with('nav_pages', Page::all()->sortBy('order'));
+//            $view->with('languages', Language::all());
+//        });
     }
 }

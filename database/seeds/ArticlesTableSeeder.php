@@ -1,6 +1,6 @@
 <?php
 
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -15,7 +15,9 @@ class ArticlesTableSeeder extends Seeder
     {
         \App\Article::updateOrInsert([
             'id' => 1,
+            'user_id' => 30542,
             'url' => 'uvod',
+            'public' => true,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
             ]);
@@ -42,6 +44,35 @@ systému v Laravel frameworku</strong>. Toto je úvodní článek, načtený z d
             'updated_at' => Carbon::now(),
             'language_id' => 2,
         ]);
+
+        \App\ArticleCategory::updateOrInsert([
+            'id' => 1,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+
+        \App\ArticleCategoryDetail::updateOrInsert([
+            'id' => 1,
+            'category_id' => 1,
+            'name' => 'Hry',
+            'language_id' => 1,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+
+        \App\ArticleCategoryDetail::updateOrInsert([
+            'id' => 2,
+            'category_id' => 1,
+            'name' => 'Games',
+            'language_id' => 2,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+
+        $article = \App\Article::first();
+        $category = \App\ArticleCategory::first();
+        $article->categories()->attach($category);
+        $article->save();
 //
 //        \App\ArticleText::updateOrInsert([
 //            'id' => 1,

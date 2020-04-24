@@ -21,7 +21,7 @@ class Article extends Model
         'title', 'url', 'description', 'content',
     ];
 
-    protected $cascadeDeletes = ['allTexts', 'comments'];
+    protected $cascadeDeletes = ['texts', 'comments'];
 
     public $timestamps = true;
 
@@ -44,30 +44,32 @@ class Article extends Model
     }
 
     /**
-     * Has One relation using where query
-     * Every article has only one text of given language
-     *
-     * @param Language $lang which language you want the text
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function textsOfLang(Language $lang)
-    {
-        return $this->hasOne(ArticleText::class, )
-                    ->where('language_id', $lang->id)
-                    ->withoutGlobalScope(LanguageScope::class);
-    }
-
-    /**
      * Has Many relation
      * Query without global LanguageScope
      * Every article has text for every language
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function allTexts()
+    public function texts()
     {
-        return $this->hasMany(ArticleText::class, )
+        return $this->hasMany(ArticleText::class)
             ->withoutGlobalScope(LanguageScope::class);
+    }
+
+    public function categories() {
+        return $this->belongsToMany(ArticleCategory::class, 'article_category', 'article_id', 'category_id' );
+
+    }
+
+    public function scopePublic( $query )
+    {
+        return $query->where(function ( $q ) {
+            $q->where('public', true);
+        });
+    }
+
+    public function user() {
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     public function getRouteKeyName()

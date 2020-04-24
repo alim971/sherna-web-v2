@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PageText extends LanguageModel
 {
-    use SoftDeletes;
 
     /**
      * The table associated with the model.
@@ -21,6 +20,12 @@ class PageText extends LanguageModel
 
     public function page()
     {
-        return $this->belongsTo(Page::class, 'nav_page_id');
+        return $this->belongsTo(Page::class, 'nav_page_id', 'id');
     }
+
+    public function getRouteKeyName()
+    {
+        return 'url';
+    }
+
 }

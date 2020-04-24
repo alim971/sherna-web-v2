@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -10,8 +11,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, SoftDeletes;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'uid', 'name', 'surname', 'email', 'image', 'role',
+        'banned'
+    ];
 
     /**
      * Vytvoř instanci Eloquent modelu.
@@ -28,32 +38,7 @@ class User extends Authenticatable
 //        });
     }
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name', 'email', 'password', 'role',
-    ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
 
     public function role()
     {
@@ -67,6 +52,18 @@ class User extends Authenticatable
     public function assignRoleName(string $name) {
         $role = Role::where('name', $name)->first();
         $this->assignRole($role);
+    }
+
+    public function isSuperAdmin() {
+        return strtolower($this->role->name) == "super_admin";
+    }
+
+    public function isAdmin() {
+        return $this->isSuperAdmin() || strtolower($this->role->name) == "admin";
+    }
+
+    public function reservations() {
+        return $this->hasMany(Reservation::class);
     }
 
 //    /**

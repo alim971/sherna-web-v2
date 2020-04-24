@@ -11,28 +11,31 @@
         @method('PUT')
         <div>
             <ul class="nav nav-tabs" style="margin-bottom: 3%">
-                @foreach($texts as $text)
-                    <li class="{{($text->language->id==1 ? "active":"")}}">
-                        <a href="#{{$text->language->id}}" data-toggle="tab">{{$text->language->name}}</a>
+                @foreach(\App\Language::all() as $language)
+                    <li class="{{($language->id==$article->text->language->id ? "active":"")}}">
+                        <a href="#{{$language->id}}" data-toggle="tab">{{$language->name}}</a>
                     </li>
                 @endforeach
             </ul>
             <div class="tab-content">
-                @foreach($texts as $text)
-                    <div class="tab-pane fade {{($text->language->id==1 ? "active":"")}} in" id="{{$text->language->id}}">
+                @foreach(\App\Language::all() as $language)
+                    @php
+                    $text = $article->text->ofLang($language)->first();
+                    @endphp
+                    <div class="tab-pane fade {{($language->id==$article->text->language->id ? "active":"")}} in" id="{{$language->id}}">
                         <div class="form-group">
                             <label for="title">Nadpis</label>
-                            <input type="text" name="title-{{$text->language->id}}" id="title-{{$text->language->id}}" class="form-control" value="{{$text->title ?: old('title-' . $text->language->id) }}" required minlength="3" maxlength="80" />
+                            <input type="text" name="title-{{$language->id}}" id="title-{{$language->id}}" class="form-control" value="{{$text->title ?: old('title-' . $language->id) }}" required minlength="3" maxlength="80" />
                         </div>
 
                         <div class="form-group">
                             <label for="description">Popisek článku</label>
-                            <textarea name="description-{{$text->language->id}}" id="description-{{$text->language->id}}" rows="4" class="form-control" required minlength="25" maxlength="255">{{$text->description ?: old('description-'. $text->language->id) }}</textarea>
+                            <textarea name="description-{{$language->id}}" id="description-{{$language->id}}" rows="4" class="form-control" required minlength="25" maxlength="255">{{$text->description ?: old('description-'. $language->id) }}</textarea>
                         </div>
 
                         <div class="form-group">
                             <label for="content">Obsah článku</label>
-                            <textarea name="content-{{$text->language->id}}" id="content-{{$text->language->id}}" class="form-control editor" rows="8">{{$text->content ?: old('content-' . $text->language->id) }}</textarea>
+                            <textarea name="content-{{$language->id}}" id="content-{{$language->id}}" class="form-control editor" rows="8">{{$text->content ?: old('content-' . $language->id) }}</textarea>
                         </div>
                     </div>
                 @endforeach
@@ -44,5 +47,5 @@
 @endsection
 
 @push('scripts')
-    @include('article.partials.tinymce_partial')
+    @include('client.blog.partials.tinymce_partial')
 @endpush

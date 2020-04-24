@@ -18,7 +18,7 @@ class ContactController extends Controller
      */
     public function show()
     {
-        return view('contact.show');
+        return view('client.contact.show');
     }
 
     /**
@@ -29,7 +29,7 @@ class ContactController extends Controller
      */
     public function send(ContactRequest $request)
     {
-        Mail::to(env('MAIL_TO'))->sendNow(new ContactMessage($request->input('email'), $request->input('message')));
+        Mail::to(env('MAIL_TO'))->send(new ContactMessage($request->input('email'), $request->input('message')));
 
         return redirect()->route('contact.show');
     }

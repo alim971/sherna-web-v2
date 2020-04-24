@@ -47,5 +47,5 @@
 @endsection
 
 @push('scripts')
-    @include('article.partials.tinymce_partial')
+    @include('client.blog.partials.tinymce_partial')
 @endpush

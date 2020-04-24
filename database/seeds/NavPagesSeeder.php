@@ -17,7 +17,7 @@ class NavPagesSeeder extends Seeder
             'name'   => 'O Sherne',
             'language_id' => 1,
             'order' => 1,
-            'public' => false,
+            'public' => true,
             'dropdown' => true
         ]);
         \App\Nav\Page::updateOrInsert([
@@ -26,99 +26,142 @@ class NavPagesSeeder extends Seeder
             'name'   => 'About Sherna',
             'language_id' => 2,
             'order' => 1,
-            'public' => false,
+            'public' => true,
             'dropdown' => true
         ]);
+
         \App\Nav\Page::updateOrInsert([
             'id' => 2,
-            'url'   => 'admin/user',
-            'name'   => 'Uzivatelia',
+            'url'   => 'home',
+            'name'   => 'Domov',
             'language_id' => 1,
             'order' => 2,
-            'public' => false,
-            'dropdown' => false
+            'public' => true,
+            'dropdown' => false,
+            'special_code' => 'home'
         ]);
         \App\Nav\Page::updateOrInsert([
             'id' => 2,
-            'url'   => 'admin/user',
-            'name'   => 'Users',
+            'url'   => 'home',
+            'name'   => 'Home',
             'language_id' => 2,
             'order' => 2,
-            'public' => false,
-            'dropdown' => false
+            'public' => true,
+            'dropdown' => false,
+            'special_code' => 'home'
         ]);
+
         \App\Nav\Page::updateOrInsert([
             'id' => 3,
-            'url'   => 'admin/role',
-            'name'   => 'Rola',
-            'language_id' => 1,
-            'order' => 3,
-            'public' => false,
-            'dropdown' => false
-        ]);
-        \App\Nav\Page::updateOrInsert([
-            'id' => 3,
-            'url'   => 'admin/role',
-            'name'   => 'Role',
-            'language_id' => 2,
-            'order' => 3,
-            'public' => false,
-            'dropdown' => false
-        ]);
-        \App\Nav\Page::updateOrInsert([
-            'id' => 4,
-            'url'   => 'admin/permission',
-            'name'   => 'Prava',
-            'language_id' => 1,
-            'order' => 4,
-            'public' => false,
-            'dropdown' => false
-        ]);
-        \App\Nav\Page::updateOrInsert([
-            'id' => 4,
-            'url'   => 'admin/permission',
-            'name'   => 'Permissions',
-            'language_id' => 2,
-            'order' => 4,
-            'public' => false,
-            'dropdown' => false
-        ]);
-        \App\Nav\Page::updateOrInsert([
-            'id' => 5,
-            'url'   => 'rezervace',
+            'url'   => 'reservation',
             'name'   => 'Rezervace',
             'language_id' => 1,
-            'order' => 5,
-            'public' => false,
-            'dropdown' => false
+            'order' => 3,
+            'public' => true,
+            'dropdown' => false,
+            'special_code' => 'reservation'
         ]);
         \App\Nav\Page::updateOrInsert([
-            'id' => 5,
+            'id' => 3,
             'url'   => 'reservation',
             'name'   => 'Reservation',
             'language_id' => 2,
-            'order' => 5,
-            'public' => false,
-            'dropdown' => false
+            'order' => 3,
+            'public' => true,
+            'dropdown' => false,
+            'special_code' => 'reservation'
+        ]);
+
+        \App\Nav\Page::updateOrInsert([
+            'id' => 4,
+            'url'   => 'inventory',
+            'name'   => 'Vybaveni',
+            'language_id' => 1,
+            'order' => 4,
+            'public' => true,
+            'dropdown' => false,
+            'special_code' => 'inventory'
         ]);
         \App\Nav\Page::updateOrInsert([
-            'id' => 6,
-            'url'   => 'article',
+            'id' => 4,
+            'url'   => 'inventory',
+            'name'   => 'Inventory',
+            'language_id' => 2,
+            'order' => 4,
+            'public' => true,
+            'dropdown' => false,
+            'special_code' => 'inventory'
+        ]);
+
+        \App\Nav\Page::updateOrInsert([
+            'id' => 5,
+            'url'   => 'blog',
             'name'   => 'Blog',
             'language_id' => 1,
-            'order' => 6,
-            'public' => false,
-            'dropdown' => true
+            'order' => 4,
+            'public' => true,
+            'dropdown' => true,
+            'special_code' => 'blog'
         ]);
         \App\Nav\Page::updateOrInsert([
-            'id' => 6,
-            'url'   => 'article',
+            'id' => 5,
+            'url'   => 'blog',
             'name'   => 'Blog',
             'language_id' => 2,
-            'order' => 6,
-            'public' => false,
-            'dropdown' => true
+            'order' => 4,
+            'public' => true,
+            'dropdown' => true,
+            'special_code' => 'blog'
         ]);
+
+        \App\Nav\PageText::updateOrInsert([
+            'id' => 1,
+            'title'   => 'Rezervace',
+            'nav_page_id' => 3,
+            'language_id' => 1,
+            'content' => 'Reservace exapmle'
+        ]);
+
+        \App\Nav\PageText::updateOrInsert([
+            'id' => 2,
+            'title'   => 'Reservation',
+            'nav_page_id' => 3,
+            'language_id' => 2,
+            'content' => 'Reservation exapmle'
+        ]);
+
+        \App\Nav\PageText::updateOrInsert([
+            'id' => 3,
+            'title'   => 'Domov',
+            'nav_page_id' => 2,
+            'language_id' => 1,
+            'content' => 'Vitajte exapmle'
+        ]);
+
+        \App\Nav\PageText::updateOrInsert([
+            'id' => 4,
+            'title'   => 'Home',
+            'nav_page_id' => 2,
+            'language_id' => 2,
+            'content' => 'Welcome exapmle'
+        ]);
+
+        \App\Nav\PageText::updateOrInsert([
+            'id' => 5,
+            'title'   => 'Vybavenie',
+            'nav_page_id' => 4,
+            'language_id' => 1,
+            'content' => 'Vitajte exapmle'
+        ]);
+
+        \App\Nav\PageText::updateOrInsert([
+            'id' => 6,
+            'title'   => 'Inventory',
+            'nav_page_id' => 4,
+            'language_id' => 2,
+            'content' => 'Welcome exapmle'
+        ]);
+
         \App\Nav\SubPage::updateOrInsert([
             'id' => 1,
             'url'   => 'clenove',
@@ -126,34 +169,16 @@ class NavPagesSeeder extends Seeder
             'nav_page_id' => 1,
             'language_id' => 1,
             'order' => 1,
-            'public' => false,
+            'public' => true,
         ]);
         \App\Nav\SubPage::updateOrInsert([
-            'id' => 2,
-            'url'   => 'vyrocni-spravy',
-            'name'   => 'Vyrocni spravy',
+            'id' => 1,
+            'url'   => 'clenove',
+            'name'   => 'Members',
             'nav_page_id' => 1,
-            'language_id' => 1,
-            'order' => 2,
-            'public' => false,
-        ]);
-        \App\Nav\SubPage::updateOrInsert([
-            'id' => 3,
-            'url'   => '',
-            'name'   => 'Novinky',
-            'nav_page_id' => 6,
-            'language_id' => 1,
-            'order' => 1,
-            'public' => false,
-        ]);
-        \App\Nav\SubPage::updateOrInsert([
-            'id' => 3,
-            'url'   => '',
-            'name'   => 'News',
-            'nav_page_id' => 6,
             'language_id' => 2,
-            'order' => 1,
-            'public' => false,
+            'order' => 2,
+            'public' => true,
         ]);
         \App\Nav\SubPageText::updateOrInsert([
             'id' => 1,
@@ -165,24 +190,78 @@ class NavPagesSeeder extends Seeder
         \App\Nav\SubPageText::updateOrInsert([
             'id' => 2,
             'title'   => 'Vyrocne spravy',
-            'nav_subpage_id' => 2,
-            'language_id' => 1,
+            'nav_subpage_id' => 1,
+            'language_id' => 2,
             'content' => '2 Example example 2'
         ]);
 
-        \App\Nav\PageText::updateOrInsert([
-            'id' => 1,
-            'title'   => 'Rezervacia',
-            'nav_page_id' => 2,
-            'language_id' => 1,
-            'content' => '2 Example example 2'
-        ]);
-        \App\Nav\PageText::updateOrInsert([
+        \App\Nav\SubPage::updateOrInsert([
             'id' => 2,
-            'title'   => 'Reservation',
-            'nav_page_id' => 2,
-            'language_id' => 2,
-            'content' => 'En EN En Example example En'
+            'url'   => '',
+            'name'   => 'Novinky',
+            'nav_page_id' => 5,
+            'language_id' => 1,
+            'order' => 1,
+            'public' => true,
         ]);
+        \App\Nav\SubPage::updateOrInsert([
+            'id' => 2,
+            'url'   => '',
+            'name'   => 'News',
+            'nav_page_id' => 5,
+            'language_id' => 2,
+            'order' => 1,
+            'public' => true,
+        ]);
+
+        \App\Nav\SubPage::updateOrInsert([
+            'id' => 3,
+            'url'   => 'categories',
+            'name'   => 'Kategorie',
+            'nav_page_id' => 5,
+            'language_id' => 1,
+            'order' => 2,
+            'public' => true,
+        ]);
+        \App\Nav\SubPage::updateOrInsert([
+            'id' => 3,
+            'url'   => 'categories',
+            'name'   => 'Categories',
+            'nav_page_id' => 5,
+            'language_id' => 2,
+            'order' => 2,
+            'public' => true,
+        ]);
+
+        \App\Nav\SubPageText::updateOrInsert([
+            'id' => 3,
+            'title'   => 'Novinky',
+            'nav_subpage_id' => 2,
+            'language_id' => 1,
+            'content' => 'Nove clanky'
+        ]);
+        \App\Nav\SubPageText::updateOrInsert([
+            'id' => 4,
+            'title'   => 'News',
+            'nav_subpage_id' => 2,
+            'language_id' => 2,
+            'content' => 'New articles'
+        ]);
+
+        \App\Nav\SubPageText::updateOrInsert([
+            'id' => 5,
+            'title'   => 'Kategorie',
+            'nav_subpage_id' => 3,
+            'language_id' => 1,
+            'content' => 'Vsetky kategorie'
+        ]);
+        \App\Nav\SubPageText::updateOrInsert([
+            'id' => 6,
+            'title'   => 'Vyrocne spravy',
+            'nav_subpage_id' => 3,
+            'language_id' => 2,
+            'content' => 'All categories'
+        ]);
+
     }
 }
