@@ -31,7 +31,7 @@
 						</thead>
 						<tbody>
 						@forelse($reservations as $reservation)
-							<tr class="{{$reservation->end->isPast() ? 'success':''}}">
+							<tr class="{{$reservation->end_at->isPast() ? 'success':''}}">
 								<th>{{ $reservations->total() - ($loop->index) - ($reservations->perPage() * ($reservations->currentPage() - 1))}}</th>
 								<td>{{ $reservation->user->name }}</td>
 								<td>
@@ -43,8 +43,8 @@
 {{--									@endif--}}
 								</td>
 								<td>{{ $reservation->location->name }}</td>
-                                <td>{{ $reservation->start->isoFormat('LLL') }}</td>
-                                <td>{{ $reservation->end->isoFormat('LLL') }}</td>
+                                <td>{{ $reservation->start_at->isoFormat('LLL') }}</td>
+                                <td>{{ $reservation->end_at->isoFormat('LLL') }}</td>
 								<td>
 									@if($reservation->deleted_at !=null)
 										{{ $reservation->deleted_at }}

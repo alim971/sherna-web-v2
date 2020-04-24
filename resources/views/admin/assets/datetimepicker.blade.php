@@ -8,16 +8,19 @@
     @include('assets.datepicker_locale')
 
     <script type="text/javascript">
+        var edit = {{ \App\Setting::where('name', 'Reservation Area')->first()->value}};
         var formDate = $(".form_datetime").datetimepicker({
             language      : '{{Session::get('lang')}}',
             format        : "dd.mm.yyyy hh:ii:00",
             autoclose     : true,
-            startDate     : moment().add(durationforedit, 'm').format('YYYY-MM-DD HH:mm'),
+            startDate     : moment().add(edit, 'm').format('YYYY-MM-DD HH:mm'),
+            endDate       : moment().add(reservationarea, 'd').format('YYYY-MM-DD HH:mm'),
             todayBtn      : true,
             todayHighlight: false,
             fontAwesome   : true,
             pickerPosition: "bottom-left",
-            minuteStep    : 15
+            minuteStep    : 15,
+
         });
 
 
@@ -25,7 +28,7 @@
             language      : '{{Session::get('lang')}}',
             format        : "dd.mm.yyyy hh:ii:00",
             autoclose     : true,
-            startDate     : moment().add(durationforedit * 2, 'm').format('YYYY-MM-DD HH:mm'),
+            startDate     : moment().add(edit * 2, 'm').format('YYYY-MM-DD HH:mm'),
             todayBtn      : true,
             todayHighlight: false,
             fontAwesome   : true,

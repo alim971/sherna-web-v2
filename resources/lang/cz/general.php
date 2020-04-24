@@ -9,6 +9,14 @@
 return [
 	'yes'     => 'Ano',
 	'no'      => 'Ne',
+    'adding'  => [
+        'article'    => 'Vytvor novy clanok',
+        'category'   => 'Vytvor novu kategoriu',
+    ],
+    'empty'   => [
+        'article' => 'Nikdo zatím nevytvořil žádný článek.',
+        'category'=> 'Nikdo zatím nevytvořil žádnu kategoriu.',
+    ],
 	'banner'  => [
 		'title' => 'Vítejte na strankách SHerny',
 	],
@@ -16,6 +24,7 @@ return [
 		'about-project' => 'O projektu',
 		'foto'          => 'Fotogalerie',
 		'login'         => 'Přihlásit přes IS',
+        'contact'       => 'Kontaktuj nas'
 	],
 	'footer'  => [
 		'text' => 'SHerna je projekt pod klubem Silicon Hill, který sídlí na kolejích Strahov. V současné době je
@@ -31,9 +40,15 @@ return [
 	'opened'  => 'otevřeno',
 	'closed'  => 'zavřeno',
 	'on_key'  => 'na klíč',
-	
+
 	'partners'            => 'Partneři',
 	'future_reservations' => 'Máš aktivní rezervaci. Aby si mohl vytvořit novou rezervaci nesmíš mít žádnou aktivní.',
 	'no_is_service'       => 'Pro vytvoření rezervace musíš mít přidanou službu v ISu viz Provozní řád čl. 3 bod 2.',
 	'ban'                 => 'Tvůj účet byl z nějakého důvodu zakázán. Nyní nemůžeš vytvořit rezervaci. Pro více informací nás kontaktuj na sherna@siliconhill.cz.',
+    'contact' =>[
+        'email'           =>  'Vasa emailova adresa',
+        'year'            =>  'Aktualny rok(antispam)',
+        'send'            =>  'Odoslat',
+        'message'         =>  'Vasa zprava',
+    ],
 ];

@@ -69,8 +69,7 @@ class ArticleController extends Controller
         $article->url = $request->input('url');
         $article->public = $request->get('public') ? 1 : 0;
         $categories = $this->getCategories($request->get('tags'));
-        $this->setTimestampsToNow($article);
-        $article->user_id = 1;//Auth::user();
+        $article->user()->associate(Auth::user());
         $article->save();
         $article->categories()->attach($categories);
         return $article;
@@ -92,17 +91,11 @@ class ArticleController extends Controller
         $articleText->title = $request->input('name-' . $lang->id);
         $articleText->description = $request->input('description-' . $lang->id);
         $articleText->content = $request->input('content-' . $lang->id);
-        $this->setTimestampsToNow($articleText);
 //        $articleText->article_id = $article->id;
 //        $articleText->url = $article->url;
         $articleText->page()->associate($article);
         $articleText->language()->associate($lang);
         $articleText->save();
-    }
-
-    private function setTimestampsToNow($model) {
-        $model->created_at = Carbon::now();
-        $model->updated_at = Carbon::now();
     }
 
     /**

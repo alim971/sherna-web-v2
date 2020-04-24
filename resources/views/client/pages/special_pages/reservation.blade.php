@@ -23,7 +23,7 @@
     <div class="row">
         <div class="col-md-6 col-md-offset-3 text-center">
             @if(Auth::check())
-                @if(!Auth::user()->isAdmin && Auth::user()->reservations()->futureActiveReservations()->count() > 0)
+                @if(!Auth::user()->isAdmin() && Auth::user()->reservations()->futureActiveReservations()->count() > 0)
                     <span class="text-danger"><b>{{trans('general.future_reservations')}}</b></span>
                 @else
                     <a href="#" data-toggle="modal" data-target="#createReservationModal"
@@ -59,6 +59,7 @@
      aria-labelledby="createReservationModalLabel">
     <div class="modal-dialog" role="document">
         <form id="createModalForm" action="{{ route('reservation.store') }}" class="" method="post">
+            @csrf
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"
@@ -104,8 +105,15 @@
                             <div class="form-group">
                                 <label for="visitors_count"
                                        class="control-label">{{trans('reservation-modal.visitors_count')}}</label>
-                                <input type="number" class="form-control" name="visitors_count"
+                                <input type="number" min="1" class="form-control" name="visitors_count"
                                        id="visitors_count">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="vr"
+                                       class="control-label">VR</label>
+                                <input type="checkbox" class="form-control js-switch" name="vr"
+                                       id="vr">
                             </div>
 
                             <div class="form-group">
@@ -179,8 +187,15 @@
                             <div class="form-group">
                                 <label for="u_visitors_count"
                                        class="control-label">{{trans('reservation-modal.visitors_count')}}</label>
-                                <input type="number" class="form-control" name="visitors_count"
+                                <input type="number" min="1" class="form-control" name="visitors_count"
                                        id="u_visitors_count">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="u_vr"
+                                       class="control-label">VR</label>
+                                <input type="checkbox" class="form-control js-switch" name="vr"
+                                       id="u_vr">
                             </div>
 
                             <div class="form-group">

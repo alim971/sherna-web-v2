@@ -54,4 +54,8 @@ class Location extends LanguageModel
             $q->where('opened', true);
         });
     }
+
+    public function consoles() {
+        return $this->hasMany(Console::class, 'location_id', 'id');
+    }
 }

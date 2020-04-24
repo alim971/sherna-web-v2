@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Article;
+use App\ArticleCategory;
 use App\ArticleText;
 use App\Http\Controllers\Controller;
+use App\Nav\Page;
+use App\Nav\SubPage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\View\Factory;
 use Illuminate\View\View;
 
@@ -23,7 +28,9 @@ class BlogController extends Controller
         //TODO IF blog categories contains $url
         //TODO show newest articles, use ArticleService, eg. ArticleService.getCategory($url).getLatest(
 
-        return view('blog.' . $url);
+//        $article = Article::where('url', $url)->public()->firstOrFail();
+        $article = Article::where('url', $url)->firstOrFail();
+        return view('client.blog.show', ['article' => $article]);
     }
 
     /**
@@ -33,9 +40,32 @@ class BlogController extends Controller
      */
     public function index()
     {
+        if(!Page::where('special_code', 'blog')->firstOrFail()->public) {
+            abort(404);
+        }
         //TODO show newest articles, use ArticleService, eg. ArticleService.getLatest(10);
-        $articles = ArticleText::latest()->paginate();
-        return view('article.index', ['articles' => $articles]);
+        $articles = Article::latest()->paginate();
+        return view('client.blog.index', ['articles' => $articles]);
         //return view('blog.index');
     }
+
+    /**
+     * Show the about page that was requested
+     *
+     * @return Factory|View requested view
+     */
+    public function categories()
+    {
+//        if(!SubPage::where('url', 'categories')->firstOrFail()->public) {
+//            abort(404);
+//        }
+        if(!Page::where('special_code', 'blog')->firstOrFail()->public) {
+            abort(404);
+        }
+        $categories = ArticleCategory::paginate();
+        //TODO show newest articles, use ArticleService, eg. ArticleService.getLatest(10);
+        return view('client.blog.categories', ['categories' => $categories]);
+        //return view('blog.index');
+    }
+
 }

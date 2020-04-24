@@ -1,6 +1,6 @@
 <?php
 
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -15,8 +15,9 @@ class ArticlesTableSeeder extends Seeder
     {
         \App\Article::updateOrInsert([
             'id' => 1,
-            'user_id' => 1,
+            'user_id' => 30542,
             'url' => 'uvod',
+            'public' => true,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
             ]);

@@ -19,7 +19,7 @@
                         <tr>
                             <th>UID</th>
                             <th>level</th>
-                            @if(Auth::user()->isSuperAdmin())
+                            @if(\Auth::check() && \Auth::user()->isSuperAdmin())
                                 <th></th>
                             @endif
                         </tr>
@@ -29,10 +29,10 @@
                             <tr>
                                 <td>{{$admin->uid}} {{$admin->user!=null ? '('.$admin->user->surname.' '.$admin->user->name.')' : ''}}</td>
                                 <td>{{$admin->role}}</td>
-                                @if(Auth::user()->isSuperAdmin())
+                                @if(\Auth::check() \Auth::user()->isSuperAdmin())
                                     <td>
                                         <form action="{{action('Admin\AdminsController@delete',$admin->id)}}" class="inline" method="post">
-                                            {!! csrf_field() !!}
+                                            @csrf
                                             <button class="btn btn-danger" type="submit"><i class="fa fa-trash"></i></button>
                                         </form>
                                     </td>

@@ -26,6 +26,17 @@ Route::middleware('authenticate')->group(function () {
         Route::get('/{path}', 'Admin\DocumentController@delete')->name('document.delete');;
     });
 
+    Route::get('/oauth', 'Auth\LoginController@oAuthCallback')->name('oauth');
+    Route::get('/login', 'Auth\LoginController@login')->name('login');
+    Route::get('/authorize', 'Auth\LoginController@getAuthorize')->name('authorize');
+
+    Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
+
+    Route::post('/user', 'Auth\LoginController@postUserData')->name('user.data');
+
+
+    Route::get('admin', 'Admin\AdminController')->name('admin.index');
+
     Route::resource('admin/game', 'Admin\GameController');
     Route::resource('admin/console', 'Admin\ConsoleController');
     Route::resource('admin/console/type', 'Admin\ConsoleTypeController');
@@ -36,7 +47,7 @@ Route::middleware('authenticate')->group(function () {
         'as' => 'inventory',
     ]);
 
-    Route::get('', 'User\PagesController@home');
+    Route::get('', 'User\PagesController@home')->name('index');
 
     Route::get('admin/page/standalone', 'Admin\PageController@standalone')
         ->name('page.standalone');
@@ -132,11 +143,11 @@ Route::middleware('authenticate')->group(function () {
     Route::get('contact', 'ContactController@show')->name('contact.show');
     Route::post('contact', 'ContactController@send')->name('contact.send');
 
-    Auth::routes();
 
     Route::get('/about/{page}', 'User\AboutController@show');
     Route::get('/o-nas/{page}', 'User\AboutController@show');
     Route::get('/blog', 'User\BlogController@index')->name('blog');
-    Route::get('/blog/{article}', 'User\BlogController@show')->where('article', '(.*)');
+    Route::get('/blog/categories', 'User\BlogController@categories')->name('blog.categories');
+    Route::get('/blog/{article}', 'User\BlogController@show')->name('blog.show');//->where('article', '(.*)');
     Route::get('/lang/{code}', 'User\LanguageController')->name('language');
 });

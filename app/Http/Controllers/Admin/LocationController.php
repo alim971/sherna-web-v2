@@ -49,8 +49,8 @@ class LocationController extends Controller
         foreach (Language::all() as $lang) {
             $loc = new Location();
             $loc->id = $next_id;
-            $location->location_uid = $uid;
-            $location->reader_uid = $reader;
+            $loc->location_uid = $uid;
+            $loc->reader_uid = $reader;
             $loc->name = $request->input('name-' . $lang->id);
             $loc->status()->associate($status);
             $loc->language()->associate($lang);
@@ -108,7 +108,7 @@ class LocationController extends Controller
             $location->save();
         }
 
-        flash("Successfully updated.")->error();
+        flash("Successfully updated.")->success();
         return redirect()->route('location.index');
     }
 

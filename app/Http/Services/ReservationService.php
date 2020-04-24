@@ -10,7 +10,7 @@ use App\Permission;
 use App\Reservation;
 use App\Setting;
 use App\User;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class ReservationService
@@ -97,21 +97,23 @@ class ReservationService
     }
 
     private function overlap($reservation) {
-        $start = $reservation->start;
-        $end = $reservation->end;
-        $rangeCount = Reservation::where('location_id', $reservation->location_id)->where(function ($query) use ($start, $end) {
+        $start = $reservation->start_at;
+        $end = $reservation->end_at;
+        $rangeCount = Reservation::where('location_id', $reservation->location_id)
+            ->where('id', '!=', $reservation->id)
+            ->where(function ($query) use ($start, $end) {
             $query->where(function ($query) use ($start, $end) {
-                $query->where('start', '<=', $start)
-                    ->where('end', '>', $start);
+                $query->where('start_at', '<=', $start)
+                    ->where('end_at', '>', $start);
             })->orWhere(function ($query) use ($start, $end) {
-                $query->where('start', '<', $end)
-                    ->where('end', '>=', $end);
+                $query->where('start_at', '<', $end)
+                    ->where('end_at', '>=', $end);
             })->orWhere(function ($query) use ($start, $end) {
-                $query->where('start', '>=', $start)
-                    ->where('end', '<=', $end);
+                $query->where('start_at', '>=', $start)
+                    ->where('end_at', '<=', $end);
             })->orWhere(function ($query) use ($start, $end) {
-                $query->where('start', '<=', $start)
-                    ->where('end', '>=', $end);
+                $query->where('start_at', '<=', $start)
+                    ->where('end_at', '>=', $end);
             });
         })->count();
         if($rangeCount > 0) {
@@ -132,8 +134,8 @@ class ReservationService
         $location = Location::where('id' , $request->get('location_id'))->firstOrFail();
         $reservation->location()->associate($location);
         $reservation->visitors_count = $request->get('visitors_count', 1);
-        $reservation->start = Carbon::createFromFormat('d.m.Y - H:i', $request->get('start'));
-        $reservation->end = Carbon::createFromFormat('d.m.Y - H:i', $request->get('end'));
+        $reservation->start_at = Carbon::createFromFormat('d.m.Y  H:i:s', $request->get('from_date'));
+        $reservation->end_at = Carbon::createFromFormat('d.m.Y  H:i:s', $request->get('to_date'));
         $reservation->vr = $request->get('vr', false) ? 1 : 0;
         return $reservation;
     }
@@ -146,7 +148,7 @@ class ReservationService
             return false;
         }
         if($reservation->getOriginal('start')->minusMinutes(15)->isPast()) {
-            if($reservation->start != $reservation->getOriginal('start')) {
+            if($reservation->start_at != $reservation->getOriginal('start')) {
                 return false;
             }
             if($reservation->location_id != $reservation->getOriginal('location_id')) {

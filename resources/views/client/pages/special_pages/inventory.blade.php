@@ -13,7 +13,7 @@
                     {{trans('general.content.games')}}
                 </h2>
                 <hr>
-                @foreach(\App\Console::all() as $console)
+                @foreach($location->consoles as $console)
                     <h3 data-toggle="collapse" data-parent="#inventory-items" class="collapsed"
                         href="#collapse{{$console->id}}-{{$location->id}}" aria-expanded="true"
                         aria-controls="collapse{{$console->id}}">

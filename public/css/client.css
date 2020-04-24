@@ -16502,6 +16502,13 @@ body {
   min-height: 100%;
   position: relative;
 }
+.comment-radius {
+  border-radius: 15px;
+}
+.comment {
+  padding: 10px 20px 10px 5px;
+  background: #d2ffcf;
+}
 footer {
   background-color: #65d26e;
   color: white;

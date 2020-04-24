@@ -17,7 +17,7 @@ class NavPagesSeeder extends Seeder
             'name'   => 'O Sherne',
             'language_id' => 1,
             'order' => 1,
-            'public' => false,
+            'public' => true,
             'dropdown' => true
         ]);
         \App\Nav\Page::updateOrInsert([
@@ -26,7 +26,7 @@ class NavPagesSeeder extends Seeder
             'name'   => 'About Sherna',
             'language_id' => 2,
             'order' => 1,
-            'public' => false,
+            'public' => true,
             'dropdown' => true
         ]);
 
@@ -57,7 +57,7 @@ class NavPagesSeeder extends Seeder
             'name'   => 'Rezervace',
             'language_id' => 1,
             'order' => 3,
-            'public' => false,
+            'public' => true,
             'dropdown' => false,
             'special_code' => 'reservation'
         ]);
@@ -67,7 +67,7 @@ class NavPagesSeeder extends Seeder
             'name'   => 'Reservation',
             'language_id' => 2,
             'order' => 3,
-            'public' => false,
+            'public' => true,
             'dropdown' => false,
             'special_code' => 'reservation'
         ]);
@@ -78,7 +78,7 @@ class NavPagesSeeder extends Seeder
             'name'   => 'Vybaveni',
             'language_id' => 1,
             'order' => 4,
-            'public' => false,
+            'public' => true,
             'dropdown' => false,
             'special_code' => 'inventory'
         ]);
@@ -88,9 +88,30 @@ class NavPagesSeeder extends Seeder
             'name'   => 'Inventory',
             'language_id' => 2,
             'order' => 4,
-            'public' => false,
+            'public' => true,
             'dropdown' => false,
             'special_code' => 'inventory'
+        ]);
+
+        \App\Nav\Page::updateOrInsert([
+            'id' => 5,
+            'url'   => 'blog',
+            'name'   => 'Blog',
+            'language_id' => 1,
+            'order' => 4,
+            'public' => true,
+            'dropdown' => true,
+            'special_code' => 'blog'
+        ]);
+        \App\Nav\Page::updateOrInsert([
+            'id' => 5,
+            'url'   => 'blog',
+            'name'   => 'Blog',
+            'language_id' => 2,
+            'order' => 4,
+            'public' => true,
+            'dropdown' => true,
+            'special_code' => 'blog'
         ]);
 
         \App\Nav\PageText::updateOrInsert([
@@ -148,7 +169,7 @@ class NavPagesSeeder extends Seeder
             'nav_page_id' => 1,
             'language_id' => 1,
             'order' => 1,
-            'public' => false,
+            'public' => true,
         ]);
         \App\Nav\SubPage::updateOrInsert([
             'id' => 1,
@@ -157,7 +178,7 @@ class NavPagesSeeder extends Seeder
             'nav_page_id' => 1,
             'language_id' => 2,
             'order' => 2,
-            'public' => false,
+            'public' => true,
         ]);
         \App\Nav\SubPageText::updateOrInsert([
             'id' => 1,
@@ -172,6 +193,74 @@ class NavPagesSeeder extends Seeder
             'nav_subpage_id' => 1,
             'language_id' => 2,
             'content' => '2 Example example 2'
+        ]);
+
+        \App\Nav\SubPage::updateOrInsert([
+            'id' => 2,
+            'url'   => '',
+            'name'   => 'Novinky',
+            'nav_page_id' => 5,
+            'language_id' => 1,
+            'order' => 1,
+            'public' => true,
+        ]);
+        \App\Nav\SubPage::updateOrInsert([
+            'id' => 2,
+            'url'   => '',
+            'name'   => 'News',
+            'nav_page_id' => 5,
+            'language_id' => 2,
+            'order' => 1,
+            'public' => true,
+        ]);
+
+        \App\Nav\SubPage::updateOrInsert([
+            'id' => 3,
+            'url'   => 'categories',
+            'name'   => 'Kategorie',
+            'nav_page_id' => 5,
+            'language_id' => 1,
+            'order' => 2,
+            'public' => true,
+        ]);
+        \App\Nav\SubPage::updateOrInsert([
+            'id' => 3,
+            'url'   => 'categories',
+            'name'   => 'Categories',
+            'nav_page_id' => 5,
+            'language_id' => 2,
+            'order' => 2,
+            'public' => true,
+        ]);
+
+        \App\Nav\SubPageText::updateOrInsert([
+            'id' => 3,
+            'title'   => 'Novinky',
+            'nav_subpage_id' => 2,
+            'language_id' => 1,
+            'content' => 'Nove clanky'
+        ]);
+        \App\Nav\SubPageText::updateOrInsert([
+            'id' => 4,
+            'title'   => 'News',
+            'nav_subpage_id' => 2,
+            'language_id' => 2,
+            'content' => 'New articles'
+        ]);
+
+        \App\Nav\SubPageText::updateOrInsert([
+            'id' => 5,
+            'title'   => 'Kategorie',
+            'nav_subpage_id' => 3,
+            'language_id' => 1,
+            'content' => 'Vsetky kategorie'
+        ]);
+        \App\Nav\SubPageText::updateOrInsert([
+            'id' => 6,
+            'title'   => 'Vyrocne spravy',
+            'nav_subpage_id' => 3,
+            'language_id' => 2,
+            'content' => 'All categories'
         ]);
 
     }

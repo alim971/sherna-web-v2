@@ -1,6 +1,6 @@
 <?php
 
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Seeder;
 
 class LocationSeeder extends Seeder

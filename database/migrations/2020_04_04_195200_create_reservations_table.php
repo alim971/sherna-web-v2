@@ -18,8 +18,8 @@ class CreateReservationsTable extends Migration
             $table->unsignedInteger('location_id');
             $table->uuid('user_id');
             $table->unsignedInteger('visitors_count')->nullable();
-            $table->dateTime('start');
-            $table->dateTime('end');
+            $table->dateTime('start_at');
+            $table->dateTime('end_at');
             $table->dateTime('entered_at')->nullable();
             $table->boolean('vr')->default(false);
             $table->string('note')->nullable();
