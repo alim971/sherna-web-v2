@@ -16499,7 +16499,6 @@ body {
   padding-top: 50px;
 }
 #body-container {
-  min-height: 100%;
   position: relative;
 }
 .comment-radius {

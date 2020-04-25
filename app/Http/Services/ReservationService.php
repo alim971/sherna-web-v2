@@ -74,23 +74,24 @@ class ReservationService
     }
 
     private function validateForUser( $user, Reservation $reservation) {
-        $closed = LocationStatus::where('status', 'Closed')->withoutGlobalScope(LanguageScope::class)->firstOrFail()
-            ->id;
-        if($user->reservations) {
+        $maxReservations = $reservation->exists ? 1 : 0;
+        if($user->reservations()->futureReservations()->count() > $maxReservations) {
             return false;
-        } else if($reservation->duration() > Setting::where('name', 'duration')) {
+        } else if($reservation->duration() > Setting::where('name', 'Maximal Duration')->first()->value) {
             return false;
         } else if($reservation->duration() <= 0) {
             return false;
-        } else if($reservation->location->status->id == $closed) {
+        } else if($reservation->start_at->isAfter(Carbon::now()->addDays(Setting::where('name', 'Reservation Area')->first()->value))){
+            return false;
+        } else if(!$reservation->location->status->opened) {
             return false;
         } else if($reservation->vr) {
             $permission = Permission::where('name', 'VR');
             if(!$user->role->hasPermission($permission))
                 return false;
-        } else if($this->overlap($reservation > 0)) {
+        } else if($this->overlap($reservation) > 0) {
             return false;
-        } else if($reservation->visitors_count < 0) {
+        } else if($reservation->visitors_count <= 0) {
             return false;
         }
         return true;
@@ -147,7 +148,7 @@ class ReservationService
         if(!$validation) {
             return false;
         }
-        if($reservation->getOriginal('start')->minusMinutes(15)->isPast()) {
+        if($reservation->getOriginal('start_at')->addMinutes(-15)->isPast()) {
             if($reservation->start_at != $reservation->getOriginal('start')) {
                 return false;
             }

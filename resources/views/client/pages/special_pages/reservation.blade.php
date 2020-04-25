@@ -83,7 +83,7 @@
                                            type="text">
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="to_date" autocomplete="off"
+                                    <label for="to_date"
                                            class="control-label">{{trans('reservation-modal.to_date')}}
                                         <span
                                             class="text-danger">*</span></label>
