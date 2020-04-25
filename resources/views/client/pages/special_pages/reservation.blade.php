@@ -246,10 +246,10 @@
 
             </div>
             <div class="modal-footer">
-                <form id="deleteReservationForm" style="display: inline" class="form-inline">
+                <form id="deleteReservationForm" style="display: inline" class="form-inline" method="POST">
                     @csrf
                     @method('DELETE')
-                    <button id="deleteReservation" type="button"
+                    <button id="deleteReservation" type="submit"
                             class="btn btn-danger hidden">{{trans('reservation-modal.delete')}}</button>
                 </form>
                 <button type="button" id="updateReservation"  class="btn btn-info hidden"
