@@ -129,7 +129,9 @@ Route::middleware('authenticate')->group(function () {
 
     Route::post('reservations', 'User\ReservationController@getReservations')
         ->name('getReservations');
-    Route::resource('reservation', 'User\ReservationController');
+    Route::resource('reservation', 'User\ReservationController', ['only'=> [
+        'index', 'store', 'update', 'destroy'
+    ]]);
 
 
 //Route::resource('comment', 'CommentController');
