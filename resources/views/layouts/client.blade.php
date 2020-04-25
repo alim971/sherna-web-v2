@@ -65,9 +65,9 @@
 
 <div id="body-container">
 	<div id="flashes">
-		@include('client.partials.flash')
 	</div>
 	<div id="js-flashes"></div>
+    @include('flash::message')
 
 	@include('client.partials.navbar')
 

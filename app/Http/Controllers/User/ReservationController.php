@@ -38,7 +38,9 @@ class ReservationController extends Controller
         return Response::json($reservations);
     }
 
-
+    public function index() {
+        return redirect()->route('pages.show', ['page' => 'reservation']);
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -49,7 +51,12 @@ class ReservationController extends Controller
     public function store(Request $request)
     {
 
-        $this->reservationService->makeReservation($request, Auth::user());
+        $validation = $this->reservationService->makeReservation($request, Auth::user());
+        if(!is_string($validation)) {
+            flash(trans('reservations.success_added'))->success();
+        } else {
+            flash(trans($validation));
+        }
 
         return redirect()->back();
     }
@@ -65,7 +72,12 @@ class ReservationController extends Controller
      */
     public function update(Request $request, Reservation $reservation)
     {
-        $this->reservationService->updateReservation($request, $reservation,  Auth::user());
+        $validation = $this->reservationService->updateReservation($request, $reservation,  Auth::user());
+        if(!is_string($validation)) {
+            flash(trans('reservations.success_updated'))->success();
+        } else {
+            flash(trans($validation))->error();
+        }
         return redirect()->back();
 
     }
@@ -78,7 +90,11 @@ class ReservationController extends Controller
      */
     public function destroy(Reservation $reservation)
     {
-        $this->reservationService->deleteReservation($reservation ,Auth::user());
+        if($this->reservationService->deleteReservation($reservation ,Auth::user())) {
+            flash(trans('reservations.success_deleted'))->success();
+        } else {
+            flash(trans('general.unsuccessful'))->error();
+        }
         return redirect()->back();
 
 

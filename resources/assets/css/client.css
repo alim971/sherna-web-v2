@@ -3,7 +3,7 @@ html,
 body {
   margin: 0;
   height: 100%;
-  padding-top: 50px;
+  padding-top: 30px;
 }
 #body-container {
   position: relative;
@@ -423,10 +423,8 @@ ul.twPc-Arrange {
   z-index: 1055;
 }
 .alert {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 9000;
+  text-align: center;
+  margin: 0 50px;
 }
 div.speech-container {
   top: 20px;

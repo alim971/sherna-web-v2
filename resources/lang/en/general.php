@@ -47,5 +47,8 @@ return [
         'send'            =>  'Send',
         'message'         =>  'Your message',
 
-    ]
+    ],
+    'unsuccessful'        =>  'Action could not be completed',
+    'successful'          =>  'Action successfully completed',
+
 ];

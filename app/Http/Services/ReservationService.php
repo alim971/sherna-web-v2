@@ -26,26 +26,28 @@ class ReservationService
 
     public function makeReservation($request, $user) {
         $reservation = $this->createReservation($request, $user);
-        if($this->validate($user, $reservation)) {
+        $validation = $this->validate($user, $reservation);
+        if(!is_string($validation)) {
             $reservation->save();
         } else {
-            return false;
+            return $validation;
         }
         return true;
     }
 
     public function updateReservation($request, Reservation $reservation, User $user) {
         $this->update($request, $reservation);
-        if($this->validate($user, $reservation, true)) {
+        $validation = $this->validate($user, $reservation, true);
+        if(!is_string($validation)) {
                 $reservation->save();
         } else {
-            return false;
+            return $validation;
         }
         return true;
     }
 
     public function deleteReservation(Reservation $reservation, User $user) {
-        if($this->validate($user, $reservation)) {
+        if(!is_string($this->validate($user, $reservation, true))) {
             $reservation->delete();
         } else {
             return false;
@@ -64,11 +66,14 @@ class ReservationService
 
     private function validateForAdmin(Reservation $reservation) {
         if($reservation->duration() <= 0) {
-            return false;
+            return trans('reservations.too_short');
         } else if($this->overlap($reservation) > 0) {
-            return false;
+            return trans('reservations.overlap');
         } else if($reservation->visitors_count < 0) {
-            return false;
+            return trans('reservations.minimal_visitor');
+        } else if($reservation->start_at->isBefore(Carbon::now()
+            ->addMinutes(Setting::where('name', 'Time for edit')->first()->value))) {
+            return trans('reservations.in_past');
         }
         return true;
     }
@@ -76,23 +81,19 @@ class ReservationService
     private function validateForUser( $user, Reservation $reservation) {
         $maxReservations = $reservation->exists ? 1 : 0;
         if($user->reservations()->futureReservations()->count() > $maxReservations) {
-            return false;
+            return trans('reservations.too_many');
         } else if($reservation->duration() > Setting::where('name', 'Maximal Duration')->first()->value) {
-            return false;
-        } else if($reservation->duration() <= 0) {
-            return false;
+            return trans('reservations.too_long');
         } else if($reservation->start_at->isAfter(Carbon::now()->addDays(Setting::where('name', 'Reservation Area')->first()->value))){
-            return false;
+            return trans('reservations.too_far');
         } else if(!$reservation->location->status->opened) {
-            return false;
+            return trans('reservations.closed');
         } else if($reservation->vr) {
             $permission = Permission::where('name', 'VR');
             if(!$user->role->hasPermission($permission))
-                return false;
-        } else if($this->overlap($reservation) > 0) {
-            return false;
-        } else if($reservation->visitors_count <= 0) {
-            return false;
+                return trans('reservations.vr');
+        } else {
+            return $this->validateForAdmin($reservation);
         }
         return true;
     }
@@ -145,15 +146,15 @@ class ReservationService
     {
 
         $validation = $this->validateForUser($user, $reservation);
-        if(!$validation) {
-            return false;
+        if(is_string($validation)) {
+            return $validation;
         }
         if($reservation->getOriginal('start_at')->addMinutes(-15)->isPast()) {
             if($reservation->start_at != $reservation->getOriginal('start')) {
-                return false;
+                return trans('reservations.change_start');
             }
             if($reservation->location_id != $reservation->getOriginal('location_id')) {
-                return false;
+                return trans('reservations.change_location');
             }
         }
         return true;

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class PagesController extends Controller
 {
     public function show($pageUrl, $subpageUrl= null) {
+//        flash('aaaa')->success();
         if(!$subpageUrl) {
             return $this->showPageText($pageUrl);
         } else {

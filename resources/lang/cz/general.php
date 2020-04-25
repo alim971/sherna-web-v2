@@ -51,4 +51,7 @@ return [
         'send'            =>  'Odoslat',
         'message'         =>  'Vasa zprava',
     ],
+    'unsuccessful'        =>  'Akcia sa nezdarila',
+    'successful'          =>  'Akcia provedena',
+
 ];
