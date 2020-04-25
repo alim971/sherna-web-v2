@@ -3,10 +3,10 @@
     <script src="{{asset('gentellela/fullcalendar-locale.js')}}"></script>
 
     <script>
-        var myReservationColor           = '{{config('calendar.my-reservation.color')}}';
+        var myReservationColor           = ""//'{{config('calendar.my-reservation.color')}}';
         var myReservationBorderColor     = '{{config('calendar.my-reservation.border-color')}}';
         var myReservationBackgroundColor = '{{config('calendar.my-reservation.background-color')}}';
-        var admin                        = {{\Auth::check() && \Auth::user()->isAdmin()}};
+        var admin                        = {{(\Auth::check() && \Auth::user()->isAdmin()) ? 1 : 0}};
         $(document).ready(function () {
             $.ajaxSetup({
                 headers: {
@@ -74,8 +74,12 @@
                 revertFunc();
                 return;
             }
-            update(event);
-            $("#updateReservationBtn").click()
+            App.helpers.alert.confirm(App.trans('sure-update'), App.trans('sure-update-text'), 'warning', function () {
+                update(event);
+                $("#updateReservationBtn").click();
+            }, function () {
+                revertFunc();
+            })
         }
 
 
@@ -103,7 +107,7 @@
         }
 
         function initCalendar() {
-            var canCreate=  {{Auth::check() && !Auth::user()->banned ? 'true' : 'false' }};
+            var canCreate=  {{Auth::check() && (Auth::user()->isAdmin() || !Auth::user()->banned && Auth::user()->reservations()->futureReservations()->count() == 0) ? 'true' : 'false' }};
             var calendar = $('#calendar').fullCalendar({
                 header         : {
                     left  : 'prev,next',
@@ -133,6 +137,14 @@
                         event.allDay = true;
                     } else {
                         event.allDay = false;
+                    }
+                    if (event.own) {
+                        // event.textColor       = myReservationColor;
+                        // event.borderColor     = myReservationBorderColor;
+                        // event.backgroundColor = myReservationBackgroundColor;
+                        element.css('background-color', myReservationBackgroundColor)
+                        element.css('border-color', myReservationBorderColor)
+                        element.css('text-color', myReservationColor)
                     }
                 },
                 selectable: canCreate,
@@ -174,8 +186,10 @@
                     }
                 ],
                 eventClick     : function (event) {
-                    $('#showReservationModal').modal('show');
-                    $('#showReservationModal').on('shown.bs.modal', function (e) {
+                    $('#updateReservation').addClass('hidden');
+                    $('#updateReservation').unbind();
+                    $('#deleteReservation').addClass('hidden');
+                    $('#deleteReservation').unbind();
                         $('#showReservationModalLabel').text(event.title);
                         $('#start').text(event.start.format("DD.MM.YYYY HH:mm"));
                         $('#end').text(event.end.format("DD.MM.YYYY HH:mm"));
@@ -199,9 +213,10 @@
                                 $('#updateReservationModal').modal('show');
                             });
                         }
-                    });
-                    return true;
-                },
+                    $('#showReservationModal').modal('show');
+
+                }
+                ,
                 eventResize    : function (event, delta, revertFunc) {
                     updateEvent(event, revertFunc);
                 },
