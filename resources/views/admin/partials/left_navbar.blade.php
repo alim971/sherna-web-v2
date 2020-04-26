@@ -99,12 +99,12 @@
 {{--                @endif--}}
 
 
-{{--                @if(Auth::user()->isSuperAdmin())--}}
+                @if(Auth::user()->isSuperAdmin())
                 <li>
-                    {{--						<a href="{{route('log-viewer::logs.list')}}"><i--}}
-                    {{--									class="fa fa-fw fa-history"></i> Logs</a>--}}
+                    						<a href="{{route('log-viewer::logs.list')}}"><i
+                    									class="fa fa-fw fa-history"></i> Logs</a>
                 </li>
-{{--                @endif--}}
+                @endif
             </ul>
         </div>
 
