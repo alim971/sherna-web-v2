@@ -12,7 +12,7 @@
 ## Installation
 
 Please check the official laravel installation guide for server requirements before you start. [Official Documentation](https://laravel.com/docs/5.4/installation#installation)
-I personally recommend this package of server+db, easy to setup and use. https://www.apachefriends.org/index.html
+I personally recommend [this](https://www.apachefriends.org/index.html) package of server+db, easy to setup and use. 
 
 ### Steps
 
