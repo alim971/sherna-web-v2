@@ -28,7 +28,7 @@
 									<label for="user"
 										   class="control-label">User UID</label>
 									<input type="text" class="form-control" name="tenant_uid"
-										   id="user" value="{{old('user',Auth::user())}}">
+										   id="user" value="{{old('user',Auth::user()->id)}}">
 								</div>
 							@endif
 
