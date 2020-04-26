@@ -6,7 +6,7 @@
  */
 ?>
 
-@extends('log-viewer::bootstrap-3._master')
+@extends('layouts.admin')
 
 @section('content')
     <h1 class="page-header">@lang('Log') [{{ $log->date }}]</h1>
