@@ -9,13 +9,13 @@
 namespace OAuth\OAuth2\Service;
 
 
-use OAuth\OAuth2\Token\StdOAuth2Token;
-use OAuth\Common\Http\Exception\TokenResponseException;
-use OAuth\Common\Http\Uri\Uri;
 use OAuth\Common\Consumer\CredentialsInterface;
 use OAuth\Common\Http\Client\ClientInterface;
-use OAuth\Common\Storage\TokenStorageInterface;
+use OAuth\Common\Http\Exception\TokenResponseException;
+use OAuth\Common\Http\Uri\Uri;
 use OAuth\Common\Http\Uri\UriInterface;
+use OAuth\Common\Storage\TokenStorageInterface;
+use OAuth\OAuth2\Token\StdOAuth2Token;
 
 
 class IS extends AbstractService
@@ -26,7 +26,8 @@ class IS extends AbstractService
         TokenStorageInterface $storage,
         $scopes = array(),
         UriInterface $baseApiUri = null
-    ) {
+    )
+    {
         parent::__construct($credentials, $httpClient, $storage, $scopes, $baseApiUri);
 
         if (null === $baseApiUri) {
@@ -39,7 +40,7 @@ class IS extends AbstractService
      */
     public function getAuthorizationEndpoint()
     {
-        return new Uri(env('IS_BASE_URL').'oauth/authorize');
+        return new Uri(env('IS_BASE_URL') . 'oauth/authorize');
     }
 
     /**
@@ -47,7 +48,7 @@ class IS extends AbstractService
      */
     public function getAccessTokenEndpoint()
     {
-        return new Uri(env('IS_BASE_URL').'oauth/token');
+        return new Uri(env('IS_BASE_URL') . 'oauth/token');
     }
 
     /**

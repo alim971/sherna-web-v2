@@ -1,10 +1,14 @@
 <?php
 
-namespace App;
+namespace App\Models\Articles;
 
 use App\Http\Scopes\LanguageScope;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Comments\Comment;
+use App\User;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Article extends Model
@@ -12,6 +16,7 @@ class Article extends Model
 
     use SoftDeletes, CascadeSoftDeletes;
 
+    public $timestamps = true;
     /**
      * Pole vlastností, které nejsou chráněné před mass assignment útokem.
      *
@@ -20,11 +25,7 @@ class Article extends Model
     protected $fillable = [
         'title', 'url', 'description', 'content',
     ];
-
     protected $cascadeDeletes = ['texts', 'comments'];
-
-    public $timestamps = true;
-
     protected $dates = ['deleted_at'];
 
     public function comments()
@@ -36,7 +37,7 @@ class Article extends Model
      * Has One relation using global LanguageScope
      * Every article has only one text of current language
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return HasOne
      */
     public function text()
     {
@@ -48,7 +49,7 @@ class Article extends Model
      * Query without global LanguageScope
      * Every article has text for every language
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function texts()
     {
@@ -56,19 +57,21 @@ class Article extends Model
             ->withoutGlobalScope(LanguageScope::class);
     }
 
-    public function categories() {
-        return $this->belongsToMany(ArticleCategory::class, 'article_category', 'article_id', 'category_id' );
+    public function categories()
+    {
+        return $this->belongsToMany(ArticleCategory::class, 'article_category', 'article_id', 'category_id');
 
     }
 
-    public function scopePublic( $query )
+    public function scopePublic($query)
     {
-        return $query->where(function ( $q ) {
+        return $query->where(function ($q) {
             $q->where('public', true);
         });
     }
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 

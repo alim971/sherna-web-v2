@@ -23,14 +23,14 @@
 
 					<div class="row">
 						<div class="col-md-12">
-{{--							@if(Auth::user()->isSuperAdmin())--}}
+							@if(Auth::user()->isSuperAdmin())
 								<div class="form-group">
 									<label for="user"
 										   class="control-label">User UID</label>
 									<input type="text" class="form-control" name="tenant_uid"
 										   id="user" value="{{old('user',Auth::user())}}">
 								</div>
-{{--							@endif--}}
+							@endif
 
 							<div class="form-group">
 								<div class="row">
@@ -54,7 +54,7 @@
 								<label for="visitors_count"
 									   class="control-label">Location</label>
 								<select name="location" id="" class="form-control">
-									@foreach(\App\Location::all() as $location)
+									@foreach(\App\Models\Locations\Location::all() as $location)
 										<option value="{{$location->id}}" {{old('location')==$location->id ? 'selected':''}}>{{$location->name}}</option>
 									@endforeach
 								</select>

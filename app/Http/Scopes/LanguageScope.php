@@ -3,7 +3,7 @@
 
 namespace App\Http\Scopes;
 
-use App\Language;
+use App\Models\Language\Language;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;

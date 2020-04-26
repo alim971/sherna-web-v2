@@ -5,12 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Scopes\LanguageScope;
 use App\Http\Services\PageService;
-use App\Language;
-use App\Nav\Page;
-use App\Nav\PageText;
-use App\Nav\SubPage;
-use App\Nav\SubPageText;
+use App\Models\Language\Language;
+use App\Models\Navigation\Page;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Session;
 
 class NavigationController extends Controller
@@ -25,7 +23,7 @@ class NavigationController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -36,7 +34,7 @@ class NavigationController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -53,8 +51,8 @@ class NavigationController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -65,8 +63,8 @@ class NavigationController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return Response
      */
     public function public(int $id)
     {
@@ -78,25 +76,25 @@ class NavigationController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return Response
      */
     public function edit($id)
     {
         $page = Page::where('id', $id)->firstOrFail();
-        if($this->pageService->isSpecialPage($page)) {
+        if ($this->pageService->isSpecialPage($page)) {
             flash('Edition not allowed.')->error();
             return redirect()->back();
         }
 
-            foreach (Language::all() as $lang) {
+        foreach (Language::all() as $lang) {
             $subpagesOfLang = $page->subpages()->ofLang($lang)->get();
-            if(!Session::exists('subpages-' . $lang->id)) {
+            if (!Session::exists('subpages-' . $lang->id)) {
                 Session::flash('subpages-' . $lang->id, $subpagesOfLang);
                 Session::flash('page_id', $page->id);
             }
         }
-        if(Session::get('page_id') == $page->id) {
+        if (Session::get('page_id') == $page->id) {
             Session::reflash();
         }
         return view('admin.navigation.edit', ['navigation' => $page]);
@@ -105,9 +103,9 @@ class NavigationController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param int $id
+     * @return Response
      */
     public function update(Request $request, $id)
     {
@@ -119,12 +117,12 @@ class NavigationController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return Response
      */
     public function destroy($id)
     {
-        if($this->pageService->deletePage($id)) {
+        if ($this->pageService->deletePage($id)) {
             flash('Page was successfully deleted.')->success();
         } else {
             flash('Page deletion was unsuccessful.')->error();
@@ -134,7 +132,8 @@ class NavigationController extends Controller
         return redirect()->route('navigation.index');
     }
 
-    public function reorder() {
+    public function reorder()
+    {
         $url = $_POST['url'];
         $newIndex = $_POST['newIndex'];
         $pages = Page::withoutGlobalScope(LanguageScope::class)->where('url', $url)->get();
@@ -142,16 +141,17 @@ class NavigationController extends Controller
         flash('Navigations were successfully reordered')->success();
     }
 
-    private function reorderNavigation($pages, $newIndex) {
+    private function reorderNavigation($pages, $newIndex)
+    {
         $oldIndex = $pages[0]->order;
         foreach ($pages as $page) {
             $page->order = $newIndex;
             $page->save();
         }
         foreach (Page::withoutGlobalScope(LanguageScope::class)->where('url', '!=', $pages[0]->url)->get() as $page) {
-            if($page->order < $oldIndex && $page->order >= $newIndex) {
+            if ($page->order < $oldIndex && $page->order >= $newIndex) {
                 $page->order += 1;
-            } else if($page->order > $oldIndex && $page->order <= $newIndex) {
+            } else if ($page->order > $oldIndex && $page->order <= $newIndex) {
                 $page->order -= 1;
             }
             $page->save();

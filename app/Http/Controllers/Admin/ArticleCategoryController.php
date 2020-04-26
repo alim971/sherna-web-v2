@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\ArticleCategory;
-use App\ArticleCategoryDetail;
 use App\Http\Controllers\Controller;
 use App\Http\JSON\AutocompleteModel;
-use App\Language;
+use App\Models\Articles\ArticleCategory;
+use App\Models\Articles\ArticleCategoryDetail;
+use App\Models\Language\Language;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class ArticleCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -25,7 +27,7 @@ class ArticleCategoryController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -35,8 +37,8 @@ class ArticleCategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -58,8 +60,8 @@ class ArticleCategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\ArticleCategory  $category
-     * @return \Illuminate\Http\Response
+     * @param ArticleCategory $category
+     * @return Response
      */
     public function edit(ArticleCategory $category)
     {
@@ -69,9 +71,9 @@ class ArticleCategoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\ArticleCategory  $articleCategory
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param ArticleCategory $articleCategory
+     * @return Response
      */
     public function update(Request $request, ArticleCategory $category)
     {
@@ -88,14 +90,14 @@ class ArticleCategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\ArticleCategory  $category
-     * @return \Illuminate\Http\Response
+     * @param ArticleCategory $category
+     * @return Response
      */
     public function destroy(ArticleCategory $category)
     {
         try {
             $category->delete();
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             flash("Deletion of category was not successful.")->error();
             return redirect()->back();
         }
@@ -104,11 +106,13 @@ class ArticleCategoryController extends Controller
         return redirect()->route('category.index');
     }
 
-    public function auto() {
+    public function auto()
+    {
         return $this->autocomplete($_GET['term']);
     }
 
-    private function autocomplete(string $term) {
+    private function autocomplete(string $term)
+    {
 
         $categories = ArticleCategoryDetail::where('name', 'like', "%$term%")
             ->get()->pluck('name');

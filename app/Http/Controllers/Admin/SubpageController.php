@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Scopes\LanguageScope;
-use App\Language;
-use App\Nav\Page;
-use App\Nav\SubPage;
-use App\Nav\SubPageText;
+use App\Models\Language\Language;
+use App\Models\Navigation\SubPage;
+use App\Models\Navigation\SubPageText;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Session;
 
 class SubpageController extends Controller
@@ -36,15 +35,15 @@ class SubpageController extends Controller
         return view('admin.navigation.subpages.create', [
             'url' => \request()->get('url'),
             'order' => \request()->get('order'),
-            'name' => [ 1 => \request()->get('name-1'), 2 => \request()->get('name-2')]
+            'name' => [1 => \request()->get('name-1'), 2 => \request()->get('name-2')]
         ])->render();
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -78,14 +77,14 @@ class SubpageController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return Response
      */
     public function edit($url)
     {
         $subpages = collect();
         foreach (Language::all() as $language) {
-            foreach (Session::get('subpages-'. $language->id) as &$sub) {
+            foreach (Session::get('subpages-' . $language->id) as &$sub) {
                 if ($sub->url == $url) {
                     $subpages[] = $sub;
                 }
@@ -95,17 +94,17 @@ class SubpageController extends Controller
         return view('admin.navigation.subpages.edit', ['subpages' => $subpages,
             'url' => \request()->get('url'),
             'order' => \request()->get('order'),
-            'name' => [ 1 => \request()->get('name-1'), 2 => \request()->get('name-2')]])
-            ->render();;
+            'name' => [1 => \request()->get('name-1'), 2 => \request()->get('name-2')]])
+            ->render();
 
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param int $id
+     * @return Response
      */
     public function update(Request $request, $url)
     {
@@ -128,17 +127,17 @@ class SubpageController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  string  $url
-     * @return \Illuminate\Http\Response
+     * @param string $url
+     * @return Response
      */
     public function destroy($url)
     {
         foreach (Language::all() as $language) {
             $subs = Session::get('subpages-' . $language->id);
             if (($index = array_search($url, $subs->pluck('url')->toArray())) !== false) {
-                if(count($subs) != 1) {
+                if (count($subs) != 1) {
                     foreach ($subs as $sub) {
-                        if($sub->order > $subs[$index]->order) {
+                        if ($sub->order > $subs[$index]->order) {
                             $sub->order -= 1;
                         }
                     }
@@ -153,11 +152,12 @@ class SubpageController extends Controller
         Session::reflash();
     }
 
-    public function reorder() {
+    public function reorder()
+    {
         $url = $_POST['url'];
         $oldIndex = $_POST['oldIndex'];
         $newIndex = $_POST['newIndex'];
-        $this->reorderNavigation( $url, $oldIndex + 1, $newIndex + 1);
+        $this->reorderNavigation($url, $oldIndex + 1, $newIndex + 1);
 //            flash('Navigations were successfully reordered')->success();
 //        } else {
 //            flash('Navigations were not reordered')->error();
@@ -166,16 +166,17 @@ class SubpageController extends Controller
         Session::reflash();
     }
 
-    private function reorderNavigation($url, $oldIndex, $newIndex) {
+    private function reorderNavigation($url, $oldIndex, $newIndex)
+    {
         foreach (Language::all() as $language) {
             foreach (Session::get('subpages-' . $language->id, collect()) as &$sub) {
                 if ($sub->url == $url) {
-                    if($sub->order != $oldIndex)
+                    if ($sub->order != $oldIndex)
                         return false;
                     $sub->order = $newIndex;
-                } else if($sub->order < $oldIndex && $sub->order >= $newIndex) {
+                } else if ($sub->order < $oldIndex && $sub->order >= $newIndex) {
                     $sub->order += 1;
-                } else if($sub->order > $oldIndex && $sub->order <= $newIndex) {
+                } else if ($sub->order > $oldIndex && $sub->order <= $newIndex) {
                     $sub->order -= 1;
                 }
             }

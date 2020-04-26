@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Services\UserService;
-use App\Role;
+use App\Models\Roles\Role;
 use App\User;
-use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class UserController extends Controller
 {
@@ -19,7 +19,7 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -33,7 +33,8 @@ class UserController extends Controller
         return view('admin.users.index', ['users' => $users, 'filters' => $filters]);
     }
 
-    public function indexFilter() {
+    public function indexFilter()
+    {
         $filters = [
             'name' => request()->get('name'),
             'surname' => request()->get('surname'),
@@ -48,8 +49,8 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\User  $user
-     * @return \Illuminate\Http\Response
+     * @param User $user
+     * @return Response
      */
     public function edit(User $user)
     {
@@ -60,12 +61,12 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\User  $user
-     * @return \Illuminate\Http\Response
+     * @param User $user
+     * @return Response
      */
     public function ban(User $user)
     {
-        if($this->userService->changeBanStatus($user)) {
+        if ($this->userService->changeBanStatus($user)) {
             flash('User was ' . ($user->banned ? 'banned.' : 'unbanned'))->success();
         } else {
             flash('Action was not completed.')->error();
@@ -74,9 +75,10 @@ class UserController extends Controller
         return redirect()->back();
     }
 
-    public function updateRole(User $user) {
+    public function updateRole(User $user)
+    {
         $role = Role::find(request()->get('role'));
-        if($this->userService->changeUserRole($user, $role)) {
+        if ($this->userService->changeUserRole($user, $role)) {
             flash('User role was successfully changed.')->success();
         } else {
             flash('Action was not completed.')->error();
@@ -85,11 +87,13 @@ class UserController extends Controller
         return redirect()->back();
     }
 
-    public function auto() {
+    public function auto()
+    {
         return $this->autocomplete($_GET['term']);
     }
 
-    private function autocomplete(string $term) {
+    private function autocomplete(string $term)
+    {
 
         $categories = User::where('name', 'like', "%$term%")
             ->orWhere('id', 'like', "%$term%")

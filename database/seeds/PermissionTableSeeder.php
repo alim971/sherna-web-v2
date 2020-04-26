@@ -1,7 +1,7 @@
 <?php
 
-use App\Permission;
-use App\Role;
+use App\Models\Permissions\Permission;
+use App\Models\Roles\Role;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Route;
 

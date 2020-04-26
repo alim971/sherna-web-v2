@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use File;
 use Illuminate\Http\Request;
 
 class DocumentController extends Controller
 {
     public function index()
     {
-        $docs = \File::allFiles(public_path('docs'));
+        $docs = File::allFiles(public_path('docs'));
 
         return view('admin.doc.index', ['docs' => $docs]);
     }
@@ -30,7 +31,7 @@ class DocumentController extends Controller
 
     public function delete($path)
     {
-        \File::delete(public_path('docs/' . $path));
+        File::delete(public_path('docs/' . $path));
 
         flash()->success('Súbor úspešne zmazaný.');
 

@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\InventoryCategory;
-use App\Language;
+use App\Models\Inventory\InventoryCategory;
+use App\Models\Language\Language;
+use DB;
 use Illuminate\Http\Request;
 
 class InventoryCategoryController extends Controller
@@ -22,27 +23,27 @@ class InventoryCategoryController extends Controller
         return view('admin.inventory.category.create');
     }
 
-    public function edit( $id )
+    public function edit($id)
     {
         $inventoryCategory = InventoryCategory::where('id', $id)->first();
 
         return view('admin.inventory.category.edit', ['inventoryCategory' => $inventoryCategory]);
     }
 
-    public function store( Request $request )
+    public function store(Request $request)
     {
         $rules = [];
         foreach (Language::all() as $language) {
             $rules['name-' . $language->id] = 'required|string|max:255';
         }
         $this->validate($request, $rules);
-        $next_id = \DB::table('inventory_categories')->max('id') + 1;
+        $next_id = DB::table('inventory_categories')->max('id') + 1;
         foreach (Language::all() as $language) {
-           $category = new InventoryCategory();
-           $category->id = $next_id;
-           $category->name = $request->get('name-' . $language->id);
-           $category->language()->associate($language);
-           $category->save();
+            $category = new InventoryCategory();
+            $category->id = $next_id;
+            $category->name = $request->get('name-' . $language->id);
+            $category->language()->associate($language);
+            $category->save();
         }
 
         flash()->success('Inventory category successfully created');
@@ -50,7 +51,7 @@ class InventoryCategoryController extends Controller
         return redirect()->route('inventory.category.index');
     }
 
-    public function update( $id, Request $request )
+    public function update($id, Request $request)
     {
         $rules = [];
         foreach (Language::all() as $language) {
@@ -70,7 +71,7 @@ class InventoryCategoryController extends Controller
 
     }
 
-    public function destroy( $id )
+    public function destroy($id)
     {
         foreach (Language::all() as $language) {
             $inventoryCategory = InventoryCategory::ofLang($language)->where('id', $id)->first();

@@ -85,9 +85,9 @@
         var durationforedit              =  "9999999";
         var maxeventduration             =  "9999999";
     @else
-        var reservationarea              =  "{{\App\Setting::where('name', 'Reservation Area')->first()->value}}";
-        var durationforedit              = "{{\App\Setting::where('name', 'Time for edit')->first()->value}}";
-        var maxeventduration             = "{{\App\Setting::where('name', 'Maximal Duration')->first()->value}}";
+        var reservationarea              =  "{{\App\Models\Settings\Setting::where('name', 'Reservation Area')->first()->value}}";
+        var durationforedit              = "{{\App\Models\Settings\Setting::where('name', 'Time for edit')->first()->value}}";
+        var maxeventduration             = "{{\App\Models\Settings\Setting::where('name', 'Maximal Duration')->first()->value}}";
     @endif
 </script>
 

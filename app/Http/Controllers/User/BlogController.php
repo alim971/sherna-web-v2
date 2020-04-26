@@ -2,14 +2,10 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Article;
-use App\ArticleCategory;
-use App\ArticleText;
 use App\Http\Controllers\Controller;
-use App\Nav\Page;
-use App\Nav\SubPage;
-use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
+use App\Models\Articles\Article;
+use App\Models\Articles\ArticleCategory;
+use App\Models\Navigation\Page;
 use Illuminate\View\Factory;
 use Illuminate\View\View;
 
@@ -20,7 +16,7 @@ class BlogController extends Controller
     /**
      * Show the about blog category requested
      *
-     * @param string $url   part of url with the name of the category
+     * @param string $url part of url with the name of the category
      * @return Factory|View requested view
      */
     public function show(string $url)
@@ -40,7 +36,7 @@ class BlogController extends Controller
      */
     public function index()
     {
-        if(!Page::where('special_code', 'blog')->firstOrFail()->public) {
+        if (!Page::where('special_code', 'blog')->firstOrFail()->public) {
             abort(404);
         }
         //TODO show newest articles, use ArticleService, eg. ArticleService.getLatest(10);
@@ -59,7 +55,7 @@ class BlogController extends Controller
 //        if(!SubPage::where('url', 'categories')->firstOrFail()->public) {
 //            abort(404);
 //        }
-        if(!Page::where('special_code', 'blog')->firstOrFail()->public) {
+        if (!Page::where('special_code', 'blog')->firstOrFail()->public) {
             abort(404);
         }
         $categories = ArticleCategory::paginate();

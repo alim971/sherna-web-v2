@@ -9,14 +9,14 @@ use Illuminate\Support\Facades\Storage;
 
 class ImageController extends Controller
 {
-    public function getImage( $name )
+    public function getImage($name)
     {
         $disk = Storage::disk('local');
 
         return $disk->get('/summer_images/' . $name);
     }
 
-    public function saveImage( Request $request )
+    public function saveImage(Request $request)
     {
         $disk = Storage::disk('local');
         if ($_FILES['file']['name']) {

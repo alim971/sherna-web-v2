@@ -3,17 +3,20 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Language;
-use App\Location;
-use App\LocationStatus;
+use App\Models\Language\Language;
+use App\Models\Locations\Location;
+use App\Models\Locations\LocationStatus;
+use DB;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class LocationController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -26,7 +29,7 @@ class LocationController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -37,12 +40,12 @@ class LocationController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
     public function store(Request $request)
     {
-        $next_id = \DB::table('locations')->max('id') + 1;
+        $next_id = DB::table('locations')->max('id') + 1;
         $status = LocationStatus::where('id', $request->input('status'))->firstOrFail();
         $uid = $request->input('location_id');
         $reader = $request->input('reader_uid');
@@ -64,7 +67,7 @@ class LocationController extends Controller
      * Display the specified resource.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show(int $id)
     {
@@ -78,7 +81,7 @@ class LocationController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit(int $id)
     {
@@ -90,9 +93,9 @@ class LocationController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(Request $request, int $id)
     {
@@ -116,7 +119,7 @@ class LocationController extends Controller
      * Remove the specified resource from storage.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy(int $id)
     {
@@ -124,7 +127,7 @@ class LocationController extends Controller
             try {
                 $location = Location::where('id', $id)->ofLang($lang)->firstOrFail();
                 $location->delete();
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 flash("Deletion was unsuccessful.")->error();
                 return redirect()->back();
             }

@@ -50,16 +50,16 @@
 
 
                         <ul class="nav nav-tabs" style="margin-bottom: 3%">
-                            @foreach(\App\Language::all() as $language)
+                            @foreach(\App\Models\Language\Language::all() as $language)
                                 <li class="{{($language->id==$navigation->language->id ? "active":"")}}">
                                     <a href="#{{$language->id}}" data-toggle="tab">{{$language->name}}</a>
                                 </li>
                             @endforeach
                         </ul>
                         <div id="myTabContent" class="tab-content">
-                            @foreach(\App\Language::all() as $language)
+                            @foreach(\App\Models\Language\Language::all() as $language)
                                 @php
-                                    $nav = \App\Nav\Page::where('id', $navigation->id)->ofLang($language)->first();
+                                    $nav = \App\Models\Navigation\Page::where('id', $navigation->id)->ofLang($language)->first();
                                 @endphp
                                 <div class=" tab-pane fade {{($language->id==$navigation->language->id ? "active":"")}} in" id="{{$language->id}}">
                                     <div class="form-group">

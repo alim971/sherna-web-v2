@@ -5,29 +5,31 @@ namespace App\Http\Services;
 
 
 use App\Http\Scopes\LanguageScope;
-use App\Language;
-use App\Nav\Page;
-use App\Nav\PageText;
-use App\Nav\SubPage;
-use App\Nav\SubPageText;
+use App\Models\Language\Language;
+use App\Models\Navigation\Page;
+use App\Models\Navigation\PageText;
+use App\Models\Navigation\SubPage;
+use App\Models\Navigation\SubPageText;
+use DB;
+use Exception;
 use Illuminate\Support\Facades\Session;
 
 class PageService
 {
     public function storeWholePage($request, $id = null)
     {
-        $next_id = \DB::table('nav_pages')->max('id') + 1;
+        $next_id = DB::table('nav_pages')->max('id') + 1;
         foreach (Language::all() as $lang) {
             if (isset($id)) {
                 $page = Page::where('id', $id)->ofLang($lang)->firstOrFail();
-                if($this->isSpecialPage($page)) {
+                if ($this->isSpecialPage($page)) {
                     return false;
                 }
             } else {
                 $page = $this->setNewPage($request, $next_id, $lang);
             }
             $this->storePage($request, $page, $lang);
-            if($page->dropdown) {
+            if ($page->dropdown) {
                 $this->storeSubPage($page, $lang);
             } else {
                 $this->savePageText($request, $page, $lang);
@@ -36,103 +38,16 @@ class PageService
         return true;
     }
 
-    public function storeText($request, $page)
+    public function isSpecialPage($page)
     {
-        foreach (Language::all() as $language) {
-            $this->setText($request, $page, $language);
-        }
-    }
-
-    public function setPagePublic(int $id) {
-
-        foreach (Language::all() as $language) {
-            $page = Page::where('id', $id)->ofLang($language)->firstOrFail();
-            if($this->isSpecialPage($page) && $page->special_code == 'home') {
-                return false;
-            }
-            $page->public = !$page->public;
-            $page->save();
-            foreach ($page->subpages()->ofLang($language)->get() as $subpage) {
-                $this->changeSubpagePublic($subpage);
-            }
-        }
-    }
-
-    public function setSubpagePublic(int $id) {
-        foreach (Language::all() as $language) {
-            $page = SubPage::where('id', $id)->ofLang($language)->firstOrFail();
-            $this->changeSubpagePublic($page);
-        }
-    }
-
-    public function deletePage(int $id) {
-        foreach (Language::all() as $lang) {
-            try {
-                $page = Page::where('id', $id)->ofLang($lang)->firstOrFail();
-                if($this->isSpecialPage($page)) {
-                    return false;
-                }
-                $order = $page->order;
-                $page->delete();
-
-                foreach (Page::ofLang($lang)->get() as $pa) {
-                    if($pa->order > $order) {
-                        $pa->order -= 1;
-                        $pa->save();
-                    }
-                }
-            } catch (\Exception $exception) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public function deleteSubPage(int $id) {
-        foreach (Language::all() as $lang) {
-            try {
-                $page = SubPage::where('id', $id)->ofLang($lang)->firstOrFail();
-                $order = $page->order;
-                $page->delete();
-
-                foreach (SubPage::ofLang($lang)->get() as $pa) {
-                    if($pa->order > $order) {
-                        $pa->order -= 1;
-                        $pa->save();
-                    }
-                }
-            } catch (\Exception $exception) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public function isSpecialPage($page) {
         return isset($page->special_code);
-    }
-
-    private function changeSubpagePublic(Subpage $page) {
-        $page->public = !$page->public;
-        $page->save();
-    }
-
-    private function setText($request, $page, Language $lang) {
-        if($page->text()->ofLang($lang)->first() != null) {
-            $text = $page->text()->ofLang($lang)->firstOrFail();
-        } else {
-           return false;
-
-        }
-        $text->content = $request->get('content-' . $lang->id);
-        $text->save();
     }
 
     private function setNewPage($request, $id, Language $lang)
     {
         $page = new Page();
         $page->id = $id;
-        $page->url = $request->get('url');;
+        $page->url = $request->get('url');
         $page->language()->associate($lang);
         return $page;
     }
@@ -146,17 +61,18 @@ class PageService
         $page->save();
     }
 
-    private function storeSubPage(Page $page, Language $lang) {
+    private function storeSubPage(Page $page, Language $lang)
+    {
         $subpages = Session::get('subpages-' . $lang->id);
         $origSubpages = $page->subpages()->ofLang($lang)->get();
         foreach ($origSubpages->diff($subpages) as $toDelete) {
             $toDelete->delete();
         }
-        $next_id = \DB::table('nav_subpages')->max('id') + 1;
-        if($subpages != null) {
+        $next_id = DB::table('nav_subpages')->max('id') + 1;
+        if ($subpages != null) {
             foreach ($subpages as $subpage) {
                 $check = SubPage::withoutGlobalScope(LanguageScope::class)->where('url', $subpage->url)->first();
-                if($check) {
+                if ($check) {
                     $subpage->id = $check->id;
                 } else {
                     $subpage->id = $next_id;
@@ -170,19 +86,21 @@ class PageService
                 $this->storeSubText($text, $subpage);
             }
         }
-        if($page->text()->ofLang($lang)->first() != null) {
+        if ($page->text()->ofLang($lang)->first() != null) {
             $page->text()->ofLang($lang)->delete();
         }
     }
 
-    private function storeSubText(SubPageText $text, SubPage $subpage) {
+    private function storeSubText(SubPageText $text, SubPage $subpage)
+    {
         $text->page()->associate($subpage);
         $text->save();
     }
 
-    private function savePageText($request, Page $page, Language $lang) {
+    private function savePageText($request, Page $page, Language $lang)
+    {
 
-        if($page->text()->ofLang($lang)->first() != null) {
+        if ($page->text()->ofLang($lang)->first() != null) {
             $text = $page->text()->ofLang($lang)->firstOrFail();
         } else {
             $text = new PageText();
@@ -196,6 +114,100 @@ class PageService
         foreach ($page->subpages()->ofLang($lang)->get() as $subpage) {
             $subpage->delete();
         }
+    }
+
+    public function storeText($request, $page)
+    {
+        foreach (Language::all() as $language) {
+            $this->setText($request, $page, $language);
+        }
+    }
+
+    private function setText($request, $page, Language $lang)
+    {
+        if ($page->text()->ofLang($lang)->first() != null) {
+            $text = $page->text()->ofLang($lang)->firstOrFail();
+        } else {
+            return false;
+
+        }
+        $text->content = $request->get('content-' . $lang->id);
+        $text->save();
+    }
+
+    public function setPagePublic(int $id)
+    {
+
+        foreach (Language::all() as $language) {
+            $page = Page::where('id', $id)->ofLang($language)->firstOrFail();
+            if ($this->isSpecialPage($page) && $page->special_code == 'home') {
+                return false;
+            }
+            $page->public = !$page->public;
+            $page->save();
+            foreach ($page->subpages()->ofLang($language)->get() as $subpage) {
+                $this->changeSubpagePublic($subpage);
+            }
+        }
+    }
+
+    private function changeSubpagePublic(Subpage $page)
+    {
+        $page->public = !$page->public;
+        $page->save();
+    }
+
+    public function setSubpagePublic(int $id)
+    {
+        foreach (Language::all() as $language) {
+            $page = SubPage::where('id', $id)->ofLang($language)->firstOrFail();
+            $this->changeSubpagePublic($page);
+        }
+    }
+
+    public function deletePage(int $id)
+    {
+        foreach (Language::all() as $lang) {
+            try {
+                $page = Page::where('id', $id)->ofLang($lang)->firstOrFail();
+                if ($this->isSpecialPage($page)) {
+                    return false;
+                }
+                $order = $page->order;
+                $page->delete();
+
+                foreach (Page::ofLang($lang)->get() as $pa) {
+                    if ($pa->order > $order) {
+                        $pa->order -= 1;
+                        $pa->save();
+                    }
+                }
+            } catch (Exception $exception) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public function deleteSubPage(int $id)
+    {
+        foreach (Language::all() as $lang) {
+            try {
+                $page = SubPage::where('id', $id)->ofLang($lang)->firstOrFail();
+                $order = $page->order;
+                $page->delete();
+
+                foreach (SubPage::ofLang($lang)->get() as $pa) {
+                    if ($pa->order > $order) {
+                        $pa->order -= 1;
+                        $pa->save();
+                    }
+                }
+            } catch (Exception $exception) {
+                return false;
+            }
+        }
+        return true;
     }
 
 

@@ -17,9 +17,9 @@
 							<th>Name</th>
 							<th>Surname</th>
 							<th>Email</th>
-{{--							@if(Auth::user()->isSuperAdmin())--}}
+							@if(\Auth::user()->isSuperAdmin())
 								<th>Role</th>
-{{--							@endif--}}
+							@endif
 							<th></th>
 						</tr>
 						</thead>
@@ -43,7 +43,7 @@
                                 <td>
                                     <select name="role_id">
                                         <option selected value> -- none -- </option>
-                                        @foreach(\App\Role::all() as $role)
+                                        @foreach(\App\Models\Roles\Role::all() as $role)
                                             <option value="{{$role->id}}" {{ $role->id == $filters['role_id'] ? "selected" : "" }} >
                                                 {{$role->name}}
                                             </option>
@@ -75,7 +75,7 @@
 
 											<div class="form-group">
 												<select name="role" id="roles" class="form-control user_roles">
-                                                    @foreach(\App\Role::all() as $role)
+                                                    @foreach(\App\Models\Roles\Role::all() as $role)
                                                         <option value="{{$role->id}}" {{ $role->id == $user->role->id ? 'selected' : ''}}>
                                                             {{$role->name}}
                                                         </option>
