@@ -1,3 +1,4 @@
+@extends('layouts.admin')
 
 <?php /** @var  Illuminate\Pagination\LengthAwarePaginator  $rows */ ?>
 
