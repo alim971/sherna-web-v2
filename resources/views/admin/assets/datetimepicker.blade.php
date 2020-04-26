@@ -8,7 +8,7 @@
     @include('assets.datepicker_locale')
 
     <script type="text/javascript">
-        var edit = {{ \App\Setting::where('name', 'Reservation Area')->first()->value}};
+        var edit = {{ \App\Models\Settings\Setting::where('name', 'Reservation Area')->first()->value}};
         var formDate = $(".form_datetime").datetimepicker({
             language      : '{{Session::get('lang')}}',
             format        : "dd.mm.yyyy hh:ii:00",

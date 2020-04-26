@@ -2,8 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use App\Role;
+use App\Models\Roles\Role;
 use Closure;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class RolesAuth
@@ -11,14 +12,14 @@ class RolesAuth
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param Request $request
+     * @param Closure $next
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
         // get user role permissions
-        if(auth()->user()) {
+        if (auth()->user()) {
             $role = Role::findOrFail(auth()->user()->role_id);
         } else {
 //            $role = Role::where('name', 'guest')->first();
@@ -29,7 +30,7 @@ class RolesAuth
         $actionName = $request->route()->getActionname();
         // check if requested action is in permissions list
         foreach ($permissions as $permission) {
-            if(Str::contains($actionName, '@')) {
+            if (Str::contains($actionName, '@')) {
                 $req_action = $permission->controller . '@' . $permission->method;
             } else {
                 $req_action = $permission->method;

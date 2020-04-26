@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Services\ReservationService;
-use App\Reservation;
-use App\Setting;
-use App\User;
+use App\Models\Settings\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class SettingController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -26,9 +24,9 @@ class SettingController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Setting  $setting
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Setting $setting
+     * @return Response
      */
     public function update(Request $request)
     {

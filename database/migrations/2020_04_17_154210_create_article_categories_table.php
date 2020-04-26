@@ -22,7 +22,7 @@ class CreateArticleCategoriesTable extends Migration
         Schema::create('article_categories_details', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('category_id');
-            $table->string('name')->unique();
+            $table->string('name');
             $table->timestamps();
             $table->unsignedInteger('language_id')->default('1');
 

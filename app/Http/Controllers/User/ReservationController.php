@@ -4,9 +4,8 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Services\ReservationService;
-use App\Reservation;
-use App\Setting;
-use Illuminate\Support\Carbon;
+use App\Models\Reservations\Reservation;
+use App\Models\Settings\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
@@ -19,7 +18,7 @@ class ReservationController extends Controller
         $this->reservationService = $reservationService;
     }
 
-    public function getReservations( Request $request )
+    public function getReservations(Request $request)
     {
         $reservations = Reservation::where('location_id', $request->get('location'))->get(['id', 'start_at', 'end_at', 'visitors_count', 'location_id', 'note', 'user_id']);
         foreach ($reservations as $reservation) {
@@ -38,42 +37,42 @@ class ReservationController extends Controller
         return Response::json($reservations);
     }
 
-    public function index() {
+    public function index()
+    {
         return redirect()->route('pages.show', ['page' => 'reservation']);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
 
         $validation = $this->reservationService->makeReservation($request, Auth::user());
-        if(!is_string($validation)) {
-            flash(trans('reservations.success_added'))->success();
+        if (!is_string($validation)) {
+            flash(trans('reservations.success_added'))->error();
         } else {
-            flash(trans($validation));
+            flash(trans($validation))->error();
         }
 
         return redirect()->back();
     }
 
 
-
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Reservation  $reservation
+     * @param Request $request
+     * @param Reservation $reservation
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Reservation $reservation)
     {
-        $validation = $this->reservationService->updateReservation($request, $reservation,  Auth::user());
-        if(!is_string($validation)) {
+        $validation = $this->reservationService->updateReservation($request, $reservation, Auth::user());
+        if (!is_string($validation)) {
             flash(trans('reservations.success_updated'))->success();
         } else {
             flash(trans($validation))->error();
@@ -85,12 +84,12 @@ class ReservationController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Reservation  $reservation
+     * @param Reservation $reservation
      * @return \Illuminate\Http\Response
      */
     public function destroy(Reservation $reservation)
     {
-        if($this->reservationService->deleteReservation($reservation ,Auth::user())) {
+        if ($this->reservationService->deleteReservation($reservation, Auth::user())) {
             flash(trans('reservations.success_deleted'))->success();
         } else {
             flash(trans('general.unsuccessful'))->error();

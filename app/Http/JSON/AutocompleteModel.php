@@ -8,7 +8,6 @@ class AutocompleteModel
 {
 
 
-
     public function __construct($label, $value)
     {
         $this->label = $label;
@@ -16,7 +15,8 @@ class AutocompleteModel
     }
 
 
-    public function getJSON() {
+    public function getJSON()
+    {
         return json_encode($this);
     }
 }

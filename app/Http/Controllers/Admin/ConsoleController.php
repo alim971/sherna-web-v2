@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Console;
-use App\ConsoleType;
+use App\Models\Consoles\Console;
+use App\Models\Consoles\ConsoleType;
 use Illuminate\Http\Request;
 
 class ConsoleController extends Controller
@@ -14,7 +14,7 @@ class ConsoleController extends Controller
         $consoles = Console::paginate(15);
         $consoleTypes = ConsoleType::get();
 
-        return view('admin.consoles.index',['consoles' => $consoles, 'consoleTypes' => $consoleTypes]);
+        return view('admin.consoles.index', ['consoles' => $consoles, 'consoleTypes' => $consoleTypes]);
     }
 
     public function create()
@@ -25,15 +25,15 @@ class ConsoleController extends Controller
     public function edit(Console $console)
     {
 
-        return view('admin.consoles.edit',['console' => $console]);
+        return view('admin.consoles.edit', ['console' => $console]);
     }
 
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name'            => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'console_type_id' => 'required',
-            'location_id'     => 'required',
+            'location_id' => 'required',
         ]);
 
         Console::create($request->all());
@@ -46,9 +46,9 @@ class ConsoleController extends Controller
     public function update(Console $console, Request $request)
     {
         $this->validate($request, [
-            'name'            => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'console_type_id' => 'required',
-            'location_id'     => 'required',
+            'location_id' => 'required',
         ]);
 
         $console->update($request->all());

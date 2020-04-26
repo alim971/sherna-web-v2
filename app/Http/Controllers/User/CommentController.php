@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
-use App\Article;
-use App\Comment;
 use App\Http\Controllers\Controller;
+use App\Models\Articles\Article;
+use App\Models\Comments\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class CommentController extends Controller
 {
@@ -15,31 +16,12 @@ class CommentController extends Controller
         return $this->middleware('auth');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
     public function store(Request $request, Article $article)
     {
@@ -67,21 +49,10 @@ class CommentController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Comment  $comment
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Comment $comment)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Comment  $comment
-     * @return \Illuminate\Http\Response
+     * @param Comment $comment
+     * @return Response
      */
     public function edit(Comment $comment)
     {
@@ -91,9 +62,9 @@ class CommentController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Comment  $comment
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Comment $comment
+     * @return Response
      */
     public function update(Request $request, Comment $comment)
     {
@@ -103,8 +74,8 @@ class CommentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Comment  $comment
-     * @return \Illuminate\Http\Response
+     * @param Comment $comment
+     * @return Response
      */
     public function destroy(Comment $comment)
     {

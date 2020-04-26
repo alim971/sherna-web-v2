@@ -2,19 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Article;
-use App\ArticleCategory;
-use App\ArticleCategoryDetail;
-use App\ArticleText;
 use App\Http\Controllers\Controller;
-use App\Http\JSON\AutocompleteModel;
 use App\Http\Requests\Article\StoreRequest;
 use App\Http\Requests\Article\UpdateRequest;
-use App\Language;
-use Illuminate\Http\Request;
+use App\Models\Articles\Article;
+use App\Models\Articles\ArticleCategory;
+use App\Models\Articles\ArticleCategoryDetail;
+use App\Models\Articles\ArticleText;
+use App\Models\Language\Language;
+use Exception;
 use Illuminate\Http\Response;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class ArticleController extends Controller
 {
@@ -41,7 +40,17 @@ class ArticleController extends Controller
     public function create()
     {
         //
-        return view('admin.blog.articles.create');
+        return view('admin.blog.articles.create', ['category' => null]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return Response
+     */
+    public function createWithCategory(string $category)
+    {
+        return view('admin.blog.articles.create', ['category' => $category . ' ']);
     }
 
     /**
@@ -49,7 +58,7 @@ class ArticleController extends Controller
      *
      * @param StoreRequest $request
      * @return Response
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     public function store(StoreRequest $request)
     {
@@ -64,7 +73,8 @@ class ArticleController extends Controller
         return redirect()->route('article.index');
     }
 
-    private function saveArticle(StoreRequest $request) {
+    private function saveArticle(StoreRequest $request)
+    {
         $article = new Article();
         $article->url = $request->input('url');
         $article->public = $request->get('public') ? 1 : 0;
@@ -75,18 +85,39 @@ class ArticleController extends Controller
         return $article;
     }
 
-    private function getCategories($categories) {
-        $tags = explode(' ',trim($categories));
+    private function getCategories($categories)
+    {
+        $tags = explode(' ', trim($categories));
         $result = [];
         foreach ($tags as $tag) {
-            if($tag == '')
+            if ($tag == '')
                 continue;
-            $result[] = ArticleCategoryDetail::where('name', $tag)->first()->category_id;
+            $check = ArticleCategoryDetail::where('name', $tag)->first();
+            if($check) {
+                $result[] = $check->category_id;
+            } else {
+                $result[] = $this->createCategory($tag);
+            }
         }
         return $result;
     }
 
-    private function saveArticleText(StoreRequest $request, Article $article, Language $lang) {
+    private function createCategory(string $name) {
+        $category = new ArticleCategory();
+        $category->save();
+
+        foreach (Language::all() as $language) {
+            $detail = new ArticleCategoryDetail();
+            $detail->name = $name;
+            $detail->language()->associate($language);
+            $detail->category()->associate($category);
+            $detail->save();
+        }
+        return $category;
+}
+
+    private function saveArticleText(StoreRequest $request, Article $article, Language $lang)
+    {
         $articleText = new ArticleText();
         $articleText->title = $request->input('name-' . $lang->id);
         $articleText->description = $request->input('description-' . $lang->id);
@@ -128,7 +159,7 @@ class ArticleController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  UpdateRequest  $request
+     * @param UpdateRequest $request
      * @param Article $article
      * @return Response
      */
@@ -163,7 +194,7 @@ class ArticleController extends Controller
         //
         try {
             $article->delete();
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             flash("Deletion of article was not successful.")->error();
             return redirect()->back();
         }

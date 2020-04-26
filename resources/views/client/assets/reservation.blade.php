@@ -108,6 +108,7 @@
 
         function initCalendar() {
             var canCreate=  {{Auth::check() && (Auth::user()->isAdmin() || !Auth::user()->banned && Auth::user()->reservations()->futureReservations()->count() == 0) ? 'true' : 'false' }};
+            var canEditDuration =  {{Auth::check() && (Auth::user()->isAdmin() || !Auth::user()->banned)  ? 'true' : 'false' }};
             var calendar = $('#calendar').fullCalendar({
                 header         : {
                     left  : 'prev,next',
@@ -130,7 +131,7 @@
                 defaultDate    : moment(new Date()).format('YYYY-MM-DD'),
                 defaultView    : 'agendaWeek',
                 editable       : canCreate,
-                eventDurationEditable : canCreate,
+                eventDurationEditable : canEditDuration,
                 displayEventTime: true,
                 eventRender: function (event, element, view) {
                     if (event.allDay === 'true') {

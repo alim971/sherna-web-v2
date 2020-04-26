@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Permission;
+use App\Models\Permissions\Permission;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Artisan;
 
 class PermissionController extends Controller
@@ -12,7 +14,7 @@ class PermissionController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -24,8 +26,8 @@ class PermissionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Permission  $permission
-     * @return \Illuminate\Http\Response
+     * @param Permission $permission
+     * @return Response
      */
     public function edit(Permission $permission)
     {
@@ -35,9 +37,9 @@ class PermissionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Permission  $permission
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Permission $permission
+     * @return Response
      */
     public function update(Request $request, Permission $permission)
     {
@@ -54,14 +56,14 @@ class PermissionController extends Controller
     /**
      * Show the form for deleting the specified resource.
      *
-     * @param  \App\Permission  $permission
-     * @return \Illuminate\Http\Response
+     * @param Permission $permission
+     * @return Response
      */
     public function destroy(Permission $permission)
     {
         try {
             $permission->delete();
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             flash("Deletion of permission was not successful.")->error();
             return redirect()->back();
         }
@@ -71,7 +73,8 @@ class PermissionController extends Controller
     }
 
 
-    public function generate() {
+    public function generate()
+    {
         Artisan::call('db:seed', ['--class' => 'PermissionTableSeeder']);
 
         flash('Permissions successfully generated')->success();

@@ -1,12 +1,11 @@
 <?php
 
 
-namespace App;
+namespace App\Models\Extensions;
 
 use App\Http\Scopes\LanguageScope;
+use App\Models\Language\Language;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Session;
 
 class LanguageModel extends Model
 {
@@ -24,7 +23,7 @@ class LanguageModel extends Model
 
     public function scopeOfLang($query, Language $lang)
     {
-        return $query->where('language_id',  $lang->id)
+        return $query->where('language_id', $lang->id)
             ->withoutGlobalScope(LanguageScope::class);
     }
 }

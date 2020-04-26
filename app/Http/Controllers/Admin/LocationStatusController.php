@@ -3,16 +3,19 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Language;
-use App\LocationStatus;
+use App\Models\Language\Language;
+use App\Models\Locations\LocationStatus;
+use DB;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class LocationStatusController extends Controller
 {
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -22,8 +25,8 @@ class LocationStatusController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -33,7 +36,7 @@ class LocationStatusController extends Controller
             'opened' => 'required',
         ]);
 
-        $next_id = \DB::table('location_statuses')->max('id') + 1;
+        $next_id = DB::table('location_statuses')->max('id') + 1;
         $opened = $request->input('opened');
         foreach (Language::all() as $lang) {
             $status = new LocationStatus();
@@ -51,7 +54,7 @@ class LocationStatusController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit($id)
     {
@@ -64,9 +67,9 @@ class LocationStatusController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(Request $request, int $id)
     {
@@ -100,7 +103,7 @@ class LocationStatusController extends Controller
             try {
                 $status = LocationStatus::where('id', $id)->ofLang($lang)->firstOrFail();
                 $status->delete();
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 flash()->message('Location status not deleted')->error();
                 return redirect()->back();
             }
@@ -113,7 +116,7 @@ class LocationStatusController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {

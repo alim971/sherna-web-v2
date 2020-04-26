@@ -1,8 +1,8 @@
 <?php
 
-namespace App;
+namespace App\Models\Articles;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Extensions\LanguageModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ArticleText extends LanguageModel

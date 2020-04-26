@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\ConsoleType;
 use App\Http\Controllers\Controller;
+use App\Models\Consoles\ConsoleType;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class ConsoleTypeController extends Controller
 {
@@ -12,7 +13,7 @@ class ConsoleTypeController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -22,8 +23,8 @@ class ConsoleTypeController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -41,8 +42,8 @@ class ConsoleTypeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\ConsoleType  $consoleType
-     * @return \Illuminate\Http\Response
+     * @param ConsoleType $consoleType
+     * @return Response
      */
     public function edit(ConsoleType $type)
     {
@@ -53,9 +54,9 @@ class ConsoleTypeController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\ConsoleType  $consoleType
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param ConsoleType $consoleType
+     * @return Response
      */
     public function update(Request $request, ConsoleType $type)
     {
@@ -69,8 +70,8 @@ class ConsoleTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\ConsoleType  $consoleType
-     * @return \Illuminate\Http\Response
+     * @param ConsoleType $consoleType
+     * @return Response
      */
     public function destroy(ConsoleType $type)
     {

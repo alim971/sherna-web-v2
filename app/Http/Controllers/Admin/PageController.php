@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Services\PageService;
-use App\Nav\Page;
-use App\Nav\SubPage;
+use App\Models\Navigation\Page;
+use App\Models\Navigation\SubPage;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class PageController extends Controller
 {
@@ -19,7 +20,7 @@ class PageController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function standalone()
     {
@@ -42,19 +43,19 @@ class PageController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return Response
      */
     public function edit($id, $type)
     {
-        if($type == 'page') {
+        if ($type == 'page') {
             $page = Page::where('id', $id)->firstOrFail();
-        } else if($type == 'subpage') {
+        } else if ($type == 'subpage') {
             $page = SubPage::where('id', $id)->firstOrFail();
         }
-        if(!isset($page->text)) {
+        if (!isset($page->text)) {
             flash('Editation not allowed')->error();
-           return redirect()->back();
+            return redirect()->back();
         }
         return view('admin.pages.edit', ['page' => $page, 'type' => $type]);
 
@@ -63,15 +64,15 @@ class PageController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param int $id
+     * @return Response
      */
     public function update(Request $request, $id, $type)
     {
-        if($type == 'page') {
+        if ($type == 'page') {
             $page = Page::where('id', $id)->firstOrFail();
-        } else if($type == 'subpage') {
+        } else if ($type == 'subpage') {
             $page = SubPage::where('id', $id)->firstOrFail();
         }
         $this->pageService->storeText($request, $page);
@@ -83,26 +84,27 @@ class PageController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return Response
      */
     public function destroy(int $id, string $type)
     {
-        if($type == 'page') {
+        if ($type == 'page') {
             $this->pageService->deletePage($id);
 
-        } else if($type == 'subpage') {
+        } else if ($type == 'subpage') {
             $this->pageService->deleteSubPage($id);
         }
         return redirect()->back();
 
     }
 
-    public function public(int $id, string $type) {
-        if($type == 'page') {
+    public function public(int $id, string $type)
+    {
+        if ($type == 'page') {
             $this->pageService->setPagePublic($id);
 
-        } else if($type == 'subpage') {
+        } else if ($type == 'subpage') {
             $this->pageService->setSubpagePublic($id);
         }
         return redirect()->back();

@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-md-6 col-md-offset-3 col-xs-12">
             <div class="row">
-                @foreach(\App\Location::get() as $location)
+                @foreach(\App\Models\Locations\Location::get() as $location)
                     <div class="col-md-6 col-xs-6 text-center">
                         <p class="location_radio">
                                 <input id="location{{$location->id}}" type="radio" name="location"
@@ -25,6 +25,8 @@
             @if(Auth::check())
                 @if(!Auth::user()->isAdmin() && Auth::user()->reservations()->futureActiveReservations()->count() > 0)
                     <span class="text-danger"><b>{{trans('general.future_reservations')}}</b></span>
+                @elseif(Auth::user()->banned)
+                    <span class="text-danger"><b>{{trans('general.ban')}}</b></span>
                 @else
                     <a href="#" data-toggle="modal" data-target="#createReservationModal"
                        class="btn btn-default">{{trans('reservation-modal.title')}}</a>
@@ -96,7 +98,7 @@
                                 <label for="location_id"
                                        class="control-label">{{trans('reservations.location')}}</label>
                                 <select name="location_id" id="location_id" class="form-control">
-                                    @foreach(\App\Location::opened()->get() as $location)
+                                    @foreach(\App\Models\Locations\Location::opened()->get() as $location)
                                         <option value="{{$location->id}}" {{old('location')==$location->id ? 'selected':''}}>{{$location->name}}</option>
                                     @endforeach
                                 </select>
