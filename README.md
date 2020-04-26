@@ -12,6 +12,7 @@
 ## Installation
 
 Please check the official laravel installation guide for server requirements before you start. [Official Documentation](https://laravel.com/docs/5.4/installation#installation)
+I personally recommend [this](https://www.apachefriends.org/index.html) package of server+db, easy to setup and use. 
 
 ### Steps
 
@@ -62,7 +63,7 @@ You can now access the server at http://localhost:8000
     cp .env.example .env
     php artisan key:generate
     
-**Make sure you set the correct database connection information before running the migrations** [Environment variables](#environment-variables)
+**Make sure you set the correct database connection information before running the migrations**
 
     php artisan migrate --seed
     php artisan serve
