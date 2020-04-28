@@ -30,5 +30,7 @@ return [
     'vr'                  => 'Aby si mohl požádat o VR, musíš mít dokončený tréning',
     'change_start'        => 'Nemužeš zmenit začátek v prúběhu rezervace',
     'change_location'     => 'Nemužeš zmenit miestnost po začátku rezervace',
+    'login'               => 'Aby si mohl vytvaret rezervace, musis sa nejdrive prihlasit!'
+
 
 ];

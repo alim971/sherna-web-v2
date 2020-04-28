@@ -9,6 +9,12 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
+/**
+ * Notification class that is send when reservation is created in location that has access via key only
+ *
+ * Class OnKeyReservation
+ * @package App\Notifications
+ */
 class OnKeyReservation extends Notification
 {
     use Queueable;

@@ -6,17 +6,25 @@ use App\Http\Controllers\Controller;
 use App\Models\Language\Language;
 use App\Models\Locations\Location;
 use App\Models\Locations\LocationStatus;
-use DB;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\View\View;
 
+/**
+ * Class handling the CRUD operations on Location Model
+ *
+ * Class LocationController
+ * @package App\Http\Controllers\Admin
+ */
 class LocationController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the Location and Locations Statuses.
      *
-     * @return Response
+     * @return View view with paginated locations and location statuses
      */
     public function index()
     {
@@ -27,9 +35,9 @@ class LocationController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new Location.
      *
-     * @return Response
+     * @return View view with the create form for Location
      */
     public function create()
     {
@@ -38,10 +46,10 @@ class LocationController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created Location in database.
      *
-     * @param Request $request
-     * @return Response
+     * @param Request $request  request with all the data from creation form
+     * @return RedirectResponse redirect to index page
      */
     public function store(Request $request)
     {
@@ -60,28 +68,15 @@ class LocationController extends Controller
             $loc->save();
         }
 
+        flash('Location was successfully created')->success();
         return redirect()->route('location.index');
     }
 
     /**
-     * Display the specified resource.
+     * Show the form for editing the specified Location.
      *
-     * @param int $id
-     * @return Response
-     */
-    public function show(int $id)
-    {
-        $location = Location::where('id', $id)->firstOrFail();
-
-        return view('location.show', ['location' => $location]);
-
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return Response
+     * @param int $id   id of the specified Location to be edited
+     * @return View     view with the edition form
      */
     public function edit(int $id)
     {
@@ -91,11 +86,11 @@ class LocationController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified Location in storage.
      *
-     * @param Request $request
-     * @param int $id
-     * @return Response
+     * @param Request $request  request with all the data from edition form
+     * @param int $id           id of the specified Location to be updated
+     * @return RedirectResponse redirect to index page
      */
     public function update(Request $request, int $id)
     {
@@ -116,10 +111,10 @@ class LocationController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified Location from database
      *
-     * @param int $id
-     * @return Response
+     * @param int $id           id of the specified Location to be deleted
+     * @return RedirectResponse redirect to index page
      */
     public function destroy(int $id)
     {

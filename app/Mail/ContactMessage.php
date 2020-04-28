@@ -6,6 +6,12 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
+/**
+ * Class encapsulating email message from contact form
+ *
+ * Class ContactMessage
+ * @package App\Mail
+ */
 class ContactMessage extends Mailable
 {
     use Queueable, SerializesModels;

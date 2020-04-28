@@ -1,7 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('authenticate')->group(function () {
+Route::middleware('auth')->group(function () {
 
     Route::group(['prefix' => 'summernote'], function () {
         Route::get('/getImage/{name}', 'Admin\ImageController@getImage')->name('image.get');

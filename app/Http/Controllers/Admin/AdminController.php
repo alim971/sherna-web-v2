@@ -6,10 +6,16 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
+/**
+ * Class AdminController
+ * @package App\Http\Controllers\Admin
+ *
+ * Class to show the index page of administration
+ */
 class AdminController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Show the view for the base bage of administration
      *
      * @param Request $request
      * @return Response

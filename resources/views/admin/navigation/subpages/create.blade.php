@@ -12,10 +12,10 @@
             <input type="text" name="sub_url" id="sub_url" class="form-control" value="{{ old('sub_url') }}"/>
         </div>
 
-        <div class="form-group">
-            <label for="sub_order">Order</label>
-            <input type="number" min="1" name="sub_order" id="sub_order" class="form-control" value="{{ old('sub_order') }}"/>
-        </div>
+{{--        <div class="form-group">--}}
+{{--            <label for="sub_order">Order</label>--}}
+{{--            <input type="number" min="1" name="sub_order" id="sub_order" class="form-control" value="{{ old('sub_order') }}"/>--}}
+{{--        </div>--}}
         <div class="form-group">
             <label for="sub_public">Is public</label>
             <input type="checkbox" class="js-switch" name="sub_public" id="sub_public" class="form-control" {{( !empty(old('sub_public'))) ? "checked" : "" }} />

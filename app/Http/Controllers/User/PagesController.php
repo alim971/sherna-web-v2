@@ -6,10 +6,24 @@ use App\Http\Controllers\Controller;
 use App\Models\Navigation\Page;
 use App\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
+/**
+ * Class handling showing of the navigation/subnavigation pages and the home page
+ *
+ * Class PagesController
+ * @package App\Http\Controllers\User
+ */
 class PagesController extends Controller
 {
-    public function show($pageUrl, $subpageUrl = null)
+    /**
+     * Show the requested (sub)page
+     *
+     * @param string $pageUrl  url of the page
+     * @param null|string $subpageUrl url of the subpage, null if no subpage was requested
+     * @return View view of the requested (sub)page
+     */
+    public function show(string $pageUrl, string $subpageUrl = null)
     {
         if (!$subpageUrl) {
             return $this->showPageText($pageUrl);
@@ -45,6 +59,11 @@ class PagesController extends Controller
 
     }
 
+    /**
+     * Show the index home page of the application
+     *
+     * @return View return home page
+     */
     public function home()
     {
         if (env('APP_ENV') == 'local' && !Auth::check())
@@ -52,7 +71,6 @@ class PagesController extends Controller
         Auth::loginUsingId(User::where('id', env('SUPER_ADMINS'))->first()->id);
 
         $page = Page::where('special_code', 'home')->firstOrfail();
-//        $page->text->special_code = $page->special_code;
         return view('client.index', ['page' => $page->text]);
     }
 

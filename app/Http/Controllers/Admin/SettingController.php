@@ -4,15 +4,23 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Settings\Setting;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\View\View;
 
+/**
+ * Class handling the viewing and updating of Setting model
+ *
+ * Class SettingController
+ * @package App\Http\Controllers\Admin
+ */
 class SettingController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the settings.
      *
-     * @return Response
+     * @return View return view showing all the settings
      */
     public function index()
     {
@@ -22,11 +30,10 @@ class SettingController extends Controller
 
 
     /**
-     * Update the specified resource in storage.
+     * Update the all the Settings in storage.
      *
-     * @param Request $request
-     * @param Setting $setting
-     * @return Response
+     * @param Request $request  request containing all the data for the update
+     * @return RedirectResponse redirect to index page
      */
     public function update(Request $request)
     {

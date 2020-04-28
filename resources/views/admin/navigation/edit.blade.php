@@ -24,12 +24,12 @@
                     </div>
                     <div class="x_content">
 
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label" for="order">Order:</label>
-                            <div class="col-sm-10">
-                                <input name="order" id="order" type="number" min="1" value="{{ old('order', $navigation->order) }}" required/>
-                            </div>
-                        </div>
+{{--                        <div class="form-group">--}}
+{{--                            <label class="col-sm-2 control-label" for="order">Order:</label>--}}
+{{--                            <div class="col-sm-10">--}}
+{{--                                <input name="order" id="order" type="number" min="1" value="{{ old('order', $navigation->order) }}" required/>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
 
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="url">Is dropdown:</label>

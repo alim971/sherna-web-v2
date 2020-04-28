@@ -30,4 +30,6 @@ return [
     'vr'                  => 'To request VR, you must first finish the training for it',
     'change_start'        => 'You cannot change the start time once it has passed',
     'change_location'     => 'You cannot change the location once the start time has passed',
+    'login'               => 'To create a reservation, you must be logged in first!'
+
 ];

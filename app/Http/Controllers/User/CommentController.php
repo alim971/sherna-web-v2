@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\Articles\Article;
 use App\Models\Comments\Comment;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -13,15 +14,15 @@ class CommentController extends Controller
 
     public function __construct()
     {
-        return $this->middleware('auth');
+//        return $this->middleware('auth');
     }
 
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created top level Comment in storage.
      *
-     * @param Request $request
-     * @return Response
+     * @param Request $request  request with the comment data
+     * @return RedirectResponse redirect back to the article page
      */
     public function store(Request $request, Article $article)
     {
@@ -31,9 +32,16 @@ class CommentController extends Controller
 
         $article->comments()->save($comment);
         $comment->save();
-        return redirect(route('blog.show', ['article' => $article]));
+        return redirect()->back();//(route('blog.show', ['article' => $article]));
     }
 
+    /**
+     * Store a newly created reply level Comment in storage
+     * and associate it with the parent comment
+     *
+     * @param Request $request  request with the comment data
+     * @return RedirectResponse redirect back to the article page
+     */
     public function replyStore(Request $request)
     {
         $reply = new Comment();
@@ -43,7 +51,7 @@ class CommentController extends Controller
         $article = Article::find($request->get('article_id'));
         $article->comments()->save($reply);
         $reply->save();
-        return redirect(route('blog.show', ['article' => $article]));
+        return redirect()->back(); //(route('blog.show', ['article' => $article]));
 
 
     }

@@ -5,15 +5,23 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Permissions\Permission;
 use App\Models\Roles\Role;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\View\View;
 
+/**
+ * Class handling CRUD operations on Role Model
+ *
+ * Class RoleController
+ * @package App\Http\Controllers\Admin
+ */
 class RoleController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the Roles.
      *
-     * @return Response
+     * @return View return view with listing of all roles paginated
      */
     public function index()
     {
@@ -22,9 +30,9 @@ class RoleController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new Role.
      *
-     * @return Response
+     * @return View return view with the creation form
      */
     public function create()
     {
@@ -32,10 +40,10 @@ class RoleController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created Role in database.
      *
-     * @param Request $request
-     * @return Response
+     * @param Request $request  request containing all data from creation form
+     * @return RedirectResponse redirect to index page
      */
     public function store(Request $request)
     {
@@ -46,15 +54,17 @@ class RoleController extends Controller
 
         $role->permissions()->attach($request->get('permissions'));
 
+        flash('Role successfully added')->success();
+
         return redirect()->route('role.index');
     }
 
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified Role.
      *
-     * @param Role $role
-     * @return Response
+     * @param Role $role specified Role to be editted
+     * @return View      return view with edition form
      */
     public function edit(Role $role)
     {
@@ -63,11 +73,11 @@ class RoleController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified Role in storage.
      *
-     * @param Request $request
-     * @param Role $role
-     * @return Response
+     * @param Request $request  request with all the data from edition form
+     * @param Role $role        specified Role to be updated
+     * @return RedirectResponse redirect to index page
      */
     public function update(Request $request, Role $role)
     {
@@ -81,18 +91,24 @@ class RoleController extends Controller
         $role->permissions()->attach(array_diff($newPermissions, $rolePermissions));
         $role->update();
 
+        flash('Role successfully updated')->success();
+
         return redirect()->route('role.index');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified Role from database.
      *
-     * @param Role $role
-     * @return Response
+     * @param Role $role    specified Role to be deleted
+     * @return RedirectResponse redirect to index page
      */
     public function destroy(Role $role)
     {
-        $role->delete();
+        try {
+            $role->delete();
+        } catch (\Exception $ex) {
+            flash('Deletion of role was unsuccessful')->error();
+        }
 
         return redirect()->route('role.index');
     }

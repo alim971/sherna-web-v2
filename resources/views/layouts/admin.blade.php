@@ -43,11 +43,6 @@
     @stack('styles')
 </head>
 
-<?php
-$controller = str_replace('App\\Http\\Controllers\\', '', substr(Route::currentRouteAction(), 0, ( strpos(Route::currentRouteAction(), '@') )));
-$controllerMethod = str_replace('App\\Http\\Controllers\\', '', substr(Route::currentRouteAction(), ( strpos(Route::currentRouteAction(), '@') + 1 )));
-?>
-
 <body class="nav-md">
 <div class="nprogress-mask"></div>
 <div class="container body">

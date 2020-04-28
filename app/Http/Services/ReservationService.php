@@ -8,21 +8,42 @@ use App\Models\Permissions\Permission;
 use App\Models\Reservations\Reservation;
 use App\Models\Settings\Setting;
 use App\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Request;
 
 class ReservationService
 {
 
+    /**
+     * Get all the future or active reservations paginated
+     *
+     * @param int $perPage number of reservations shown per page
+     * @return Collection active or future reservations
+     */
     public function getReservation(int $perPage = 15)
     {
         return Reservation::latest()->paginate($perPage);
     }
 
+    /**
+     * Get all the reservations - even cancelled - paginated
+     *
+     * @param int $perPage number of reservations shown per page
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator all the reservations
+     */
     public function getAllReservation(int $perPage = 15)
     {
         return Reservation::withTrashed()->latest()->paginate($perPage);
     }
 
+    /**
+     * Create a new reservation if it contains valid data
+     *
+     * @param $request Request     request with all the data from creation form
+     * @param $user User    actually logged in user
+     * @return bool|string  return true if successful, error message otherwise
+     */
     public function makeReservation($request, $user)
     {
         $reservation = $this->createReservation($request, $user);
@@ -31,6 +52,44 @@ class ReservationService
             $reservation->save();
         } else {
             return $validation;
+        }
+        return true;
+    }
+
+    /**
+     * Update already existing specified reservation, if it contains valid data
+     *
+     * @param $request Request     request with all the data from creation form
+     * @param Reservation $reservation specified reservation to be updated
+     * @param $user User    actually logged in user
+     * @return bool|string  return true if successful, error message otherwise
+     */
+    public function updateReservation($request, Reservation $reservation, User $user)
+    {
+        $this->update($request, $reservation);
+        $validation = $this->validate($user, $reservation, true);
+        if (!is_string($validation)) {
+            $reservation->save();
+        } else {
+            return $validation;
+        }
+        return true;
+    }
+
+    /**
+     * Delete already existing specified reservation, if the user has the rights to do so
+     *
+     * @param Reservation $reservation specified reservation to be deleted
+     * @param $user User    actually logged in user
+     * @return bool|string  return true if successful, error message otherwise
+     */
+    public function deleteReservation(Reservation $reservation, User $user)
+    {
+        if (($user->role->hasPermissionByName('Reservation Manager')
+                || $user->id == $reservation->user->id) && $reservation->end_at->isAfter(Carbon::now())) {
+            $reservation->delete();
+        } else {
+            return false;
         }
         return true;
     }
@@ -79,7 +138,13 @@ class ReservationService
         return true;
     }
 
-    private function overlap($reservation)
+    /**
+     * Check if there are already existing reservations for the specified time and location
+     *
+     * @param Reservation $reservation
+     * @return bool
+     */
+    private function overlap(Reservation $reservation)
     {
         $start = $reservation->start_at;
         $end = $reservation->end_at;
@@ -148,26 +213,5 @@ class ReservationService
         return true;
     }
 
-    public function updateReservation($request, Reservation $reservation, User $user)
-    {
-        $this->update($request, $reservation);
-        $validation = $this->validate($user, $reservation, true);
-        if (!is_string($validation)) {
-            $reservation->save();
-        } else {
-            return $validation;
-        }
-        return true;
-    }
 
-    public function deleteReservation(Reservation $reservation, User $user)
-    {
-        if (($user->role->hasPermissionByName('Reservation Manager')
-                || $user->id == $reservation->user->id) && $reservation->end_at->isAfter(Carbon::now())) {
-            $reservation->delete();
-        } else {
-            return false;
-        }
-        return true;
-    }
 }

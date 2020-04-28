@@ -6,9 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Http\Services\PageService;
 use App\Models\Navigation\Page;
 use App\Models\Navigation\SubPage;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\View\View;
 
+/**
+ * Class handling the CRUD operations on Page and SubPage Text models
+ *
+ * Class PageController
+ * @package App\Http\Controllers\Admin
+ */
 class PageController extends Controller
 {
 
@@ -18,9 +26,11 @@ class PageController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the standalone pages and their texts, meaning pages that has to be considered special in navigation.
+     * These pages have set special_code in db model
+     * Example is Reservation, Home Page, Inventory..
      *
-     * @return Response
+     * @return View
      */
     public function standalone()
     {
@@ -28,12 +38,22 @@ class PageController extends Controller
         return view('admin.pages.index', ['pages' => $pages, 'type' => 'page']);
     }
 
+    /**
+     * Display a listing of the navigation pages and their texts, meaning pages that have no dropdowns
+     *
+     * @return Response
+     */
     public function navigation()
     {
         $pages = Page::where('dropdown', false)->whereNull('special_code')->orderBy('order')->paginate();
         return view('admin.pages.index', ['pages' => $pages, 'type' => 'page']);
     }
 
+    /**
+     * Display a listing of the subnavigation pages and their text, meaning pages that have parent Page
+     *
+     * @return Response
+     */
     public function subnavigation()
     {
         $pages = SubPage::orderBy('order')->paginate();
@@ -41,10 +61,11 @@ class PageController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified Page/Subpage.
      *
-     * @param int $id
-     * @return Response
+     * @param int $id       id of the specified Page/Subpage to be edited
+     * @param string $type  type of the page, whether it is Page or Subpage
+     * @return View|RedirectResponse return view of edition form, or redirect bac kto index page if edition is forbidden
      */
     public function edit($id, $type)
     {
@@ -62,11 +83,12 @@ class PageController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified Page/Supbage in storage.
      *
-     * @param Request $request
-     * @param int $id
-     * @return Response
+     * @param Request $request request with all the data from edition form
+     * @param int $id id of the specified Page/Subpage to be updated
+     * @param string $type type of the page, whether it is Page or Subpage
+     * @return View|RedirectResponse return view of edition form, or redirect back to index page if edition is forbidden
      */
     public function update(Request $request, $id, $type)
     {
@@ -82,10 +104,11 @@ class PageController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified Page/Supbage in storage.
      *
-     * @param int $id
-     * @return Response
+     * @param int $id id of the specified Page/Subpage to be deleted
+     * @param string $type type of the page, whether it is Page or Subpage
+     * @return RedirectResponse redirect to index page if edition is forbidden
      */
     public function destroy(int $id, string $type)
     {
@@ -98,7 +121,13 @@ class PageController extends Controller
         return redirect()->back();
 
     }
-
+    /**
+     * Make the specified Page/Supbage public/private
+     *
+     * @param int $id id of the specified Page/Subpage to be updated
+     * @param string $type type of the page, whether it is Page or Subpage
+     * @return RedirectResponse redirect to index page if edition is forbidden
+     */
     public function public(int $id, string $type)
     {
         if ($type == 'page') {

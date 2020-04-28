@@ -31,8 +31,9 @@
                     <a href="#" data-toggle="modal" data-target="#createReservationModal"
                        class="btn btn-default">{{trans('reservation-modal.title')}}</a>
                 @endif
-{{--            @else--}}
-{{--                <a href="{{action('Client\ClientController@getAuthorize')}}"--}}
+            @else
+                <span class="text-danger"><b>{{ trans('reservations.login') }}</b></span>
+{{--                <a href="{{ route('login') }}"--}}
 {{--                   class="btn btn-default">{{trans('reservation-modal.title')}}</a>--}}
             @endif
         </div>

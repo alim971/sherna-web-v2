@@ -5,17 +5,25 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Language\Language;
 use App\Models\Locations\LocationStatus;
-use DB;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\View\View;
 
+/**
+ * Class handling the CRUD operations on Location Status Model
+ *
+ * Class LocationStatusController
+ * @package App\Http\Controllers\Admin
+ */
 class LocationStatusController extends Controller
 {
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new Location Status.
      *
-     * @return Response
+     * @return View
      */
     public function create()
     {
@@ -23,10 +31,11 @@ class LocationStatusController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created Location Status in database.
      *
-     * @param Request $request
-     * @return Response
+     * @param Request $request request with all the data from creation form
+     * @return RedirectResponse redirect to index page
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request)
     {
@@ -51,10 +60,10 @@ class LocationStatusController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified Location Status.
      *
-     * @param int $id
-     * @return Response
+     * @param int $id   id of the specified Location Status to be edited
+     * @return View     view with the edition form
      */
     public function edit($id)
     {
@@ -65,11 +74,12 @@ class LocationStatusController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified Location Status in storage.
      *
-     * @param Request $request
-     * @param int $id
-     * @return Response
+     * @param Request $request request with all the data from edition form
+     * @param int $id id of the specified Location Status to be updated
+     * @return RedirectResponse redirect to index page
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function update(Request $request, int $id)
     {
@@ -92,130 +102,25 @@ class LocationStatusController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified Location Status from database
      *
-     * @param int $id
-     * @return void
+     * @param int $id id of the specified Location to be deleted
+     * @return RedirectResponse redirect to index page
      */
     public function destroy($id)
     {
-        foreach (Language::all() as $lang) {
-            try {
+        try {
+            foreach (Language::all() as $lang) {
+
                 $status = LocationStatus::where('id', $id)->ofLang($lang)->firstOrFail();
                 $status->delete();
-            } catch (Exception $exception) {
-                flash()->message('Location status not deleted')->error();
-                return redirect()->back();
             }
+            flash()->message('Location status deleted successfully')->success();
+        } catch (Exception $exception) {
+            flash()->message('Location status not deleted')->error();
         }
-        flash()->message('Location status deleted successfully')->success();
 
         return redirect()->route('location.index');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
-    public function index()
-    {
-        $statuses = LocationStatus::latest()->paginate();
-        return view('location_status.index', ['statuses' => $statuses]);
-    }
-
-//    /**
-//     * Show the form for creating a new resource.
-//     *
-//     * @return \Illuminate\Http\Response
-//     */
-//    public function create()
-//    {
-//        return view('location_status.create');
-//    }
-//
-//    /**
-//     * Store a newly created resource in storage.
-//     *
-//     * @param  \Illuminate\Http\Request  $request
-//     * @return \Illuminate\Http\Response
-//     */
-//    public function store(Request $request)
-//    {
-//        $next_id = \DB::table('location_statuses')->max('id') + 1;
-//        foreach (Language::all() as $lang) {
-//            $loc = new LocationStatus();
-//            $loc->id = $next_id;
-//            $loc->status = $request->input('status-' . $lang->id);
-//            $loc->language()->associate($lang);
-//            $loc->save();
-//        }
-//
-//        return redirect()->route('status.index');
-//    }
-//
-//    /**
-//     * Display the specified resource.
-//     *
-//     * @param int $id
-//     * @return \Illuminate\Http\Response
-//     */
-//    public function show(int $id)
-//    {
-//        $status = LocationStatus::where('id', $id)->firstOrFail();
-//        return view('location_status.show', ['status' => $status]);
-//
-//    }
-//
-//    /**
-//     * Show the form for editing the specified resource.
-//     *
-//     * @param int $id
-//     * @return \Illuminate\Http\Response
-//     */
-//    public function edit(int $id)
-//    {
-//        $status = LocationStatus::where('id', $id)->firstOrFail();
-//        return view('location_status.edit', ['status' => $status]);
-//
-//    }
-//
-//    /**
-//     * Update the specified resource in storage.
-//     *
-//     * @param \Illuminate\Http\Request $request
-//     * @param int $id
-//     * @return \Illuminate\Http\Response
-//     */
-//    public function update(Request $request, int $id)
-//    {
-//        foreach (Language::all() as $lang) {
-//            $loc =  LocationStatus::where('id', $id)->ofLang($lang)->firstOrFail();
-//            $loc->status = $request->input('status-' . $lang->id);
-//            $loc->save();
-//        }
-//
-//        return redirect()->route('status.index');
-//    }
-//
-//    /**
-//     * Remove the specified resource from storage.
-//     *
-//     * @param int $id
-//     * @return void
-//     */
-//    public function destroy(int $id)
-//    {
-//        foreach (Language::all() as $lang) {
-//            try {
-//                $status = \App\LocationStatus::where('id', $id)->ofLang($lang)->firstOrFail();
-//                $status->delete();
-//
-//            } catch (\Exception $exception) {
-//                return redirect()->back()->withErrors(["Nedošlo k odstránenie"]);
-//            }
-//        }
-//        return redirect()->route('status.index');
-//    }
-//}
 }
