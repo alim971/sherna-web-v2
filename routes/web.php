@@ -13,12 +13,11 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('authenticate')->group(function () {
+Route::group([], function () {
 
 
-    Route::get('/oauth', 'Auth\LoginController@oAuthCallback')->name('oauth');
+    Route::get('/oauth/{callBack}', 'Auth\LoginController@oAuthCallback')->name('oauth');
     Route::get('/login', 'Auth\LoginController@login')->name('login');
-    Route::get('/authorize', 'Auth\LoginController@getAuthorize')->name('authorize');
 
     Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 
@@ -34,7 +33,7 @@ Route::middleware('authenticate')->group(function () {
         'index', 'store', 'update', 'destroy'
     ]]);
 
-    Route::group(['prefix' => 'comment'], function () {
+    Route::group(['prefix' => 'comment', 'middleware' => 'auth'], function () {
         Route::post('/{article}', 'User\CommentController@store')->name('comment.store');
         Route::put('/{comment}', 'User\CommentController@update')->name('comment.update');
         Route::put('/{comment}', 'User\CommentController@destroy')->name('comment.destroy');

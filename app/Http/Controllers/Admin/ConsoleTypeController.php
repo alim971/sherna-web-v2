@@ -4,16 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Consoles\ConsoleType;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\View\View;
 
 class ConsoleTypeController extends Controller
 {
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new Console Type.
      *
-     * @return Response
+     * @return View
      */
     public function create()
     {
@@ -21,10 +23,10 @@ class ConsoleTypeController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created Console Type in database.
      *
-     * @param Request $request
-     * @return Response
+     * @param Request $request  request containing data from creation form
+     * @return RedirectResponse return index view of console and console types
      */
     public function store(Request $request)
     {
@@ -40,10 +42,10 @@ class ConsoleTypeController extends Controller
 
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified Console Type.
      *
-     * @param ConsoleType $consoleType
-     * @return Response
+     * @param ConsoleType $type  console type to be edited
+     * @return View              return view with edition form
      */
     public function edit(ConsoleType $type)
     {
@@ -52,11 +54,11 @@ class ConsoleTypeController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified Console Type in database.
      *
-     * @param Request $request
-     * @param ConsoleType $consoleType
-     * @return Response
+     * @param Request $request  request containing all the data from edition form
+     * @param ConsoleType $type Console type to be updated
+     * @return RedirectResponse return index view with consoles and console types
      */
     public function update(Request $request, ConsoleType $type)
     {
@@ -68,10 +70,10 @@ class ConsoleTypeController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified Console Type from storage.
      *
-     * @param ConsoleType $consoleType
-     * @return Response
+     * @param ConsoleType $type console type to be removed
+     * @return RedirectResponse return index view with consoles and console types
      */
     public function destroy(ConsoleType $type)
     {

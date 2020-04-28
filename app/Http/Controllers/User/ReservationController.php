@@ -6,18 +6,45 @@ use App\Http\Controllers\Controller;
 use App\Http\Services\ReservationService;
 use App\Models\Reservations\Reservation;
 use App\Models\Settings\Setting;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 
+/**
+ * Class hnadling the CRUD operations on Reservation model, from the user perspective
+ * Reservations are shown in javascript fullcalendar, can be added by clicking on the calendar, update
+ * by resizing or dropping it. See reservation blade and assets/reservation javascript scripts
+ *
+ * Class ReservationController
+ * @package App\Http\Controllers\User
+ */
 class ReservationController extends Controller
 {
 
+    /**
+     * ReservationController constructor declaring middleware that require logged in user to create/edit reservations,
+     * and initializing ReservationService
+     *
+     * @param ReservationService $reservationService
+     */
     public function __construct(ReservationService $reservationService)
     {
+        $this->middleware('auth', ['except' => ['getReservations']]);
         $this->reservationService = $reservationService;
     }
 
+    /**
+     * Getting all the reservations in the json format for fullcalendar to render
+     * Entity contains editable filed, which controls whether user can update/destroy that reservation
+     * (if its his own reservation, or user is reservation manager),
+     * owner field, which determine whether the user is the owner of the reservation,
+     * and start and end of the reservation in specified format,
+     *
+     * @param Request $request  request with location for which the reservations should be shown
+     * @return JsonResponse     all the reservations for the specified location in json format with few additional fields
+     */
     public function getReservations(Request $request)
     {
         $reservations = Reservation::where('location_id', $request->get('location'))->get(['id', 'start_at', 'end_at', 'visitors_count', 'location_id', 'note', 'user_id']);
@@ -37,23 +64,29 @@ class ReservationController extends Controller
         return Response::json($reservations);
     }
 
+    /**
+     * Show the index page of the reservation
+     *
+     * @return RedirectResponse redirect to index page of the reservation
+     */
     public function index()
     {
         return redirect()->route('pages.show', ['page' => 'reservation']);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created Reservation in database if it contains valid data.
+     * Setting notifications for success/error
      *
-     * @param Request $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request request with all the data from creation form for reservation
+     * @return RedirectResponse redirect to the index page
      */
     public function store(Request $request)
     {
 
         $validation = $this->reservationService->makeReservation($request, Auth::user());
         if (!is_string($validation)) {
-            flash(trans('reservations.success_added'))->error();
+            flash(trans('reservations.success_added'))->success();
         } else {
             flash(trans($validation))->error();
         }
@@ -63,11 +96,12 @@ class ReservationController extends Controller
 
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified resource in database if it contains valid data.
+     * Setting notifications for success/error
      *
-     * @param Request $request
-     * @param Reservation $reservation
-     * @return \Illuminate\Http\Response
+     * @param Request $request request with all the data from edition form for reservation
+     * @param Reservation $reservation specified Reservation to be updated
+     * @return RedirectResponse redirect to the index page
      */
     public function update(Request $request, Reservation $reservation)
     {
@@ -82,10 +116,11 @@ class ReservationController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified resource from database if the user has the rights to do so.
+     * Setting notifications for success/error
      *
-     * @param Reservation $reservation
-     * @return \Illuminate\Http\Response
+     * @param Reservation $reservation specified Reservation to be updated
+     * @return RedirectResponse redirect to the index page
      */
     public function destroy(Reservation $reservation)
     {

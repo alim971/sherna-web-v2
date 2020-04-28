@@ -9,20 +9,23 @@ use App\Models\Navigation\Page;
 use Illuminate\View\Factory;
 use Illuminate\View\View;
 
+/**
+ * Class handling request to show blog articles and categories
+ *
+ * Class BlogController
+ * @package App\Http\Controllers\User
+ */
 class BlogController extends Controller
 {
-    //Add Article Service
 
     /**
-     * Show the about blog category requested
+     * Show the blog article requested
      *
-     * @param string $url part of url with the name of the category
-     * @return Factory|View requested view
+     * @param string $url url  of the category
+     * @return View requested article
      */
     public function show(string $url)
     {
-        //TODO IF blog categories contains $url
-        //TODO show newest articles, use ArticleService, eg. ArticleService.getCategory($url).getLatest(
 
 //        $article = Article::where('url', $url)->public()->firstOrFail();
         $article = Article::where('url', $url)->firstOrFail();
@@ -30,38 +33,31 @@ class BlogController extends Controller
     }
 
     /**
-     * Show the about page that was requested
+     * Show all the public articles
      *
-     * @return Factory|View requested view
+     * @return View return index page with all the articles
      */
     public function index()
     {
         if (!Page::where('special_code', 'blog')->firstOrFail()->public) {
             abort(404);
         }
-        //TODO show newest articles, use ArticleService, eg. ArticleService.getLatest(10);
         $articles = Article::latest()->paginate();
         return view('client.blog.index', ['articles' => $articles]);
-        //return view('blog.index');
     }
 
     /**
-     * Show the about page that was requested
+     * Show all the categories, alongside their articles
      *
-     * @return Factory|View requested view
+     * @return View return index view with all the categories and theirs articles
      */
     public function categories()
     {
-//        if(!SubPage::where('url', 'categories')->firstOrFail()->public) {
-//            abort(404);
-//        }
         if (!Page::where('special_code', 'blog')->firstOrFail()->public) {
             abort(404);
         }
         $categories = ArticleCategory::paginate();
-        //TODO show newest articles, use ArticleService, eg. ArticleService.getLatest(10);
         return view('client.blog.categories', ['categories' => $categories]);
-        //return view('blog.index');
     }
 
 }

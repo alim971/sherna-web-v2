@@ -5,11 +5,24 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Inventory\InventoryCategory;
 use App\Models\Language\Language;
-use DB;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
+/**
+ * Class handling the CRUD operations on Inventory Category Model
+ *
+ * Class InventoryCategoryController
+ * @package App\Http\Controllers\Admin
+ */
 class InventoryCategoryController extends Controller
 {
+    /**
+     * Display a listing of the Inventory Categories
+     *
+     * @return View    index page listing all the inventory categories paginated
+     */
     public function index()
     {
         $inventoryCategories = InventoryCategory::paginate(20);
@@ -17,19 +30,37 @@ class InventoryCategoryController extends Controller
         return view('admin.inventory.category.index', ['inventoryCategories' => $inventoryCategories]);
     }
 
+    /**
+     * Show the form for creating a new Inventory Category
+     *
+     * @return View view with the create form for Inventory Category
+     */
     public function create()
     {
 
         return view('admin.inventory.category.create');
     }
 
-    public function edit($id)
+    /**
+     * Show the form for editing the Inventory Category
+     *
+     * @param int $id         id of the Inventory Category that will be edited
+     * @return View           view with edition form
+     */
+    public function edit(int $id)
     {
         $inventoryCategory = InventoryCategory::where('id', $id)->first();
 
         return view('admin.inventory.category.edit', ['inventoryCategory' => $inventoryCategory]);
     }
 
+    /**
+     * Store a newly created Inventory Category in database.
+     *
+     * @param Request $request          request with data from creation form
+     * @return RedirectResponse         redirect to index page
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function store(Request $request)
     {
         $rules = [];
@@ -51,7 +82,15 @@ class InventoryCategoryController extends Controller
         return redirect()->route('inventory.category.index');
     }
 
-    public function update($id, Request $request)
+    /**
+     * Updating the chosen Invnetory Category
+     *
+     * @param int $id           id of the Inventory Category that will be updated
+     * @param Request $request  request with all the data from edition form
+     * @return RedirectResponse index view of all the Inventory Categories
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function update(int $id, Request $request)
     {
         $rules = [];
         foreach (Language::all() as $language) {
@@ -71,14 +110,23 @@ class InventoryCategoryController extends Controller
 
     }
 
-    public function destroy($id)
+    /**
+     * Removing the chosen Inventory Category from the database
+     *
+     * @param int $id           id of the Inventory Category that will be deleted
+     * @return RedirectResponse index view of all the Inventory Categories
+     */
+    public function destroy(int $id)
     {
-        foreach (Language::all() as $language) {
-            $inventoryCategory = InventoryCategory::ofLang($language)->where('id', $id)->first();
-            $inventoryCategory->delete();
+        try {
+            foreach (Language::all() as $language) {
+                $inventoryCategory = InventoryCategory::ofLang($language)->where('id', $id)->first();
+                $inventoryCategory->delete();
+            }
+            flash()->success('Inventory category successfully deleted');
+        } catch (\Exception $ex) {
+            flash()->error('Deletion of Inventory category was unsuccessful');
         }
-
-        flash()->success('Inventory category successfully deleted');
 
         return redirect()->route('inventory.category.index');
     }

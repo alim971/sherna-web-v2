@@ -18,6 +18,12 @@ use OAuth\Common\Storage\TokenStorageInterface;
 use OAuth\OAuth2\Token\StdOAuth2Token;
 
 
+/**
+ * Simulating the OAuth2 Service of Silicon Hill, with all the endpoints for authentication
+ *
+ * Class IS
+ * @package OAuth\OAuth2\Service
+ */
 class IS extends AbstractService
 {
     public function __construct(

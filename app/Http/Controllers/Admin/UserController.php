@@ -6,20 +6,34 @@ use App\Http\Controllers\Controller;
 use App\Http\Services\UserService;
 use App\Models\Roles\Role;
 use App\User;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
+use Illuminate\View\View;
 
+/**
+ * Class handling viewing, editing and updating of the User Role model
+ * with filtering the data
+ *
+ * Class UserController
+ * @package App\Http\Controllers\Admin
+ */
 class UserController extends Controller
 {
 
+    /**
+     * UserController constructor initializing the UserService
+     * @param UserService $userService
+     */
     public function __construct(UserService $userService)
     {
         $this->userService = $userService;
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of all the users paginated.
      *
-     * @return Response
+     * @return View view showing all the users without filters
      */
     public function index()
     {
@@ -33,6 +47,12 @@ class UserController extends Controller
         return view('admin.users.index', ['users' => $users, 'filters' => $filters]);
     }
 
+    /**
+     * Display a listing of the users paginated, filtered by specified filters.
+     * Possible filters: name, surname, email, role
+     *
+     * @return View view showing all the users with specified filters
+     */
     public function indexFilter()
     {
         $filters = [
@@ -46,23 +66,12 @@ class UserController extends Controller
         return view('admin.users.index', ['users' => $users, 'filters' => $filters]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param User $user
-     * @return Response
-     */
-    public function edit(User $user)
-    {
-        return view('admin.users.edit', ['user' => $user]);
-    }
-
 
     /**
-     * Remove the specified resource from storage.
+     * (Un)Ban the specified User
      *
-     * @param User $user
-     * @return Response
+     * @param User $user         specified User to be (un)banned
+     * @return RedirectResponse  redirect back to index page - with or without filters
      */
     public function ban(User $user)
     {
@@ -75,6 +84,12 @@ class UserController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * Change the role of the specified User
+     *
+     * @param User $user         specified User to be updated
+     * @return RedirectResponse  redirect back to index page - with or without filters
+     */
     public function updateRole(User $user)
     {
         $role = Role::find(request()->get('role'));
@@ -87,11 +102,22 @@ class UserController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * Return the json data for autocomplete of users by specified search term
+     *
+     * @return JsonResponse  users meeting the search criteria as json
+     */
     public function auto()
     {
         return $this->autocomplete($_GET['term']);
     }
 
+    /**
+     * Return the json data for autocomplete of users by specified search term
+     *
+     * @param string $term  needle search term
+     * @return JsonResponse
+     */
     private function autocomplete(string $term)
     {
 

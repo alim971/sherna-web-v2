@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 class RolesAuth
 {
     /**
-     * Handle an incoming request.
+     * Handle an incoming request and determine if the user has permission to use this action
      *
      * @param Request $request
      * @param Closure $next

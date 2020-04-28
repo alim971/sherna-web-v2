@@ -7,13 +7,20 @@ use App\Models\Language\Language;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Session;
 
+/**
+ *
+ * Class handling the language change
+ *
+ * Class LanguageController
+ * @package App\Http\Controllers\User
+ */
 class LanguageController extends Controller
 {
     /**
-     * Change the language of the app
+     * Change the language of the app and set
      *
      * @param string $code code of the chosen language
-     * @return RedirectResponse
+     * @return RedirectResponse redirect back to previous page
      */
     public function __invoke($code)
     {
@@ -22,7 +29,7 @@ class LanguageController extends Controller
             abort(404);
         }
         Session::put('lang', $lang->code);
-        return back();
+        return redirect()->back();
     }
 
     /**

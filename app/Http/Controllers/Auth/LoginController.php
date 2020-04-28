@@ -5,38 +5,56 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use OAuth\Common\Consumer\Credentials;
 use OAuth\Common\Http\Uri\UriFactory;
 use OAuth\Common\Storage\Session;
-use OAuth\OAuth2\Service\IS;
 use OAuth\ServiceFactory;
 
+/**
+ * Class handling authorization using OAuth2 Service of SiliconHill system
+ * Used to login, logout, and also create a new users from the data from the SiliconHill system
+ *
+ * Class LoginController
+ * @package App\Http\Controllers\Auth
+ */
 class LoginController extends Controller
 {
+    /**
+     * After trying to login on this site, redirect to login at the Information System of Silicon Hill
+     *
+     * @return RedirectResponse redirect to login page of Silicon Hill
+     */
     public function login()
     {
         /**
          * Create a new instance of the URI class with the current URI, stripping the query string
          */
 //        Auth::attempt(['uid' => '30542', 'email' => 'admin@localhost']);
-        list($currentUri, $service) = $this->getISService();
+        $callBack = redirect()->back()->getTargetUrl();
+        list($currentUri, $service) = $this->getISService($callBack);
 
         $url = $service->getAuthorizationUri();
 
         return redirect()->to($url->getAbsoluteUri());
     }
 
+    /**
+     * Logout the user from the session
+     *
+     * @return RedirectResponse redirect back to the previous page
+     */
     public function logout()
     {
-        /**
-         * Create a new instance of the URI class with the current URI, stripping the query string
-         */
-        $uriFactory = new UriFactory();
-        $currentUri = $uriFactory->createFromSuperGlobalArray($_SERVER);
-        $currentUri->setQuery('');
+//        /**
+//         * Create a new instance of the URI class with the current URI, stripping the query string
+//         */
+//        $uriFactory = new UriFactory();
+//        $currentUri = $uriFactory->createFromSuperGlobalArray($_SERVER);
+//        $currentUri->setQuery('');
 
         // Session storage
         $storage = new Session();
@@ -45,11 +63,14 @@ class LoginController extends Controller
 
         Auth::logout();
 
-        return redirect()->route('index');
+        return redirect()->back();//route('index');
     }
 
     /**
-     * @param $result
+     * Login user with the data from the OAuth2 Server
+     * IF user is not yet in our db, create him with all the data
+     *
+     * @param $result array user data from the OAuth2 Server
      */
     private function controlLoginUser( $result )
     {
@@ -94,7 +115,7 @@ class LoginController extends Controller
     /**
      * @return array
      */
-    private function getISService()
+    private function getISService(string $callBack)
     {
         /**
          * Create a new instance of the URI class with the current URI, stripping the query string
@@ -107,7 +128,7 @@ class LoginController extends Controller
         $credentials = new Credentials(
             env('IS_OAUTH_ID'), //Application ID
             env('IS_OAUTH_SECRET'), // SECRET
-            route('oauth')
+            route('oauth', ['callBack' => $callBack])
         );
 
         // Session storage
@@ -120,12 +141,19 @@ class LoginController extends Controller
         return [$currentUri, $service];
     }
 
-    public function oAuthCallback()
+    /**
+     * Callback function which will be called and redirected after the login on OAuth2 server
+     * Redirecting to the last previous site before login
+     *
+     * @param string $callBack  url of the last previous site before trying to login
+     * @return RedirectResponse redirect to the last previous site before login
+     */
+    public function oAuthCallback(string $callBack)
     {
         if (empty($_GET['code'])) {
-            list($currentUri, $service) = $this->getISService();
+            list($currentUri, $service) = $this->getISService($callBack);
             // This was a callback request from is, get the token
-            $service->requestAccessToken('30542');
+            $service->requestAccessToken($_GET['code']);
 
             // Get UID, fullname and photo
             $result = json_decode($service->request('users/me.json'), true);
@@ -137,7 +165,7 @@ class LoginController extends Controller
 
             $this->controlLoginUser($result);
 
-            return redirect()->route('index');
+            return redirect()->to($callBack);
         }
     }
 

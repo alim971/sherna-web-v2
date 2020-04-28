@@ -2,12 +2,18 @@
 
 namespace App\Mail;
 
-use App\Reservation;
+use App\Models\Reservations\Reservation;
 use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
+/**
+ * Class encapsulating email message when reservation is created for location that has access via key
+ *
+ * Class OnKeyAdmin
+ * @package App\Mail
+ */
 class OnKeyAdmin extends Mailable
 {
     use Queueable, SerializesModels;

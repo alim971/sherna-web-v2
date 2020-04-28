@@ -7,34 +7,50 @@ use App\Http\Scopes\LanguageScope;
 use App\Http\Services\PageService;
 use App\Models\Language\Language;
 use App\Models\Navigation\Page;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Session;
+use Illuminate\View\View;
 
+/**
+ * Class handling CRUD operations on Page Model using PageService
+ *
+ * Subpages are stored in Session untill the whole Page is saved, after that they are saved too
+ *
+ * Class NavigationController
+ * @package App\Http\Controllers\Admin
+ */
 class NavigationController extends Controller
 {
 
 
+    /**
+     * Constructor initializing and associating page service
+     *
+     * NavigationController constructor.
+     * @param PageService $pageService
+     */
     public function __construct(PageService $pageService)
     {
         $this->pageService = $pageService;
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the navigation Pages
      *
-     * @return Response
+     * @return View view with paginated pages
      */
     public function index()
     {
-        $pages = Page::orderBy('order')->paginate();
+        $pages = Page::where('special_code', '!=', 'home')->orderBy('order')->paginate();
         return view('admin.navigation.index', ['navigations' => $pages]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new Page.
+     * To keep the data in Session after reloading the page, new Session flag is created and used
      *
-     * @return Response
+     * @return View view with the create form for Page
      */
     public function create()
     {
@@ -49,10 +65,11 @@ class NavigationController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created Page in storage.
+     * Stroing the subpages from Session.
      *
-     * @param Request $request
-     * @return Response
+     * @param Request $request  request with all the data from creation form
+     * @return RedirectResponse redirect to index page
      */
     public function store(Request $request)
     {
@@ -61,10 +78,10 @@ class NavigationController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Making the specified navigation Page public/private
      *
-     * @param int $id
-     * @return Response
+     * @param int $id           id of the specified navigation Page
+     * @return RedirectResponse redirect to index page
      */
     public function public(int $id)
     {
@@ -74,10 +91,12 @@ class NavigationController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified navigation Page.
      *
-     * @param int $id
-     * @return Response
+     * Subpages are stored in Sessions, reflashing to keep the data for one more redirect if the page_id is same
+     *
+     * @param int $id   id of the specified navigation Page to be edited
+     * @return View|RedirectResponse     view with the edition form or redirect back to index page if edition forbidden
      */
     public function edit($id)
     {
@@ -101,11 +120,11 @@ class NavigationController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified navigation Page in database.
      *
-     * @param Request $request
-     * @param int $id
-     * @return Response
+     * @param Request $request  request with all the data from edition form
+     * @param int $id           id of the specified navigation Page to be updated
+     * @return RedirectResponse redirect to index page
      */
     public function update(Request $request, $id)
     {
@@ -115,10 +134,10 @@ class NavigationController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified Navigatio Page from storage.
      *
-     * @param int $id
-     * @return Response
+     * @param int $id             id of the specified navigation Page to be deleted
+     * @return RedirectResponse   redirect to index page
      */
     public function destroy($id)
     {
@@ -132,6 +151,10 @@ class NavigationController extends Controller
         return redirect()->route('navigation.index');
     }
 
+    /**
+     * Handling the AJAX call from reordering the navpages.
+     * Changing the order of all affected pages
+     */
     public function reorder()
     {
         $url = $_POST['url'];
@@ -141,7 +164,13 @@ class NavigationController extends Controller
         flash('Navigations were successfully reordered')->success();
     }
 
-    private function reorderNavigation($pages, $newIndex)
+    /**
+     * Changing the order of all the affected pages
+     *
+     * @param $pages Page[]  all the pages
+     * @param $newIndex int  new value of index
+     */
+    private function reorderNavigation($pages, int $newIndex)
     {
         $oldIndex = $pages[0]->order;
         foreach ($pages as $page) {
