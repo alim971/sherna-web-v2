@@ -98,7 +98,9 @@ class PageController extends Controller
             $page = SubPage::where('id', $id)->firstOrFail();
         }
         $this->pageService->storeText($request, $page);
-
+        if($this->pageService->isSpecialPage($page)) {
+            return redirect()->route('page.standalone');
+        }
         return redirect()->route('page.' . ($type == 'page' ? 'navigation' : 'subnavigation'));
 
     }
