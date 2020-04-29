@@ -2,10 +2,9 @@
 
 namespace App\Providers;
 
-use App\Language;
-use App\Nav\Page;
-use App\Nav\SubPage;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Database\Schema\Builder;
+
 
 class AppServiceProvider extends ServiceProvider
 {
