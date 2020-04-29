@@ -26,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Builder::defaultStringLength(191);
         //
 //        \View::composer('layouts.client', function ($view) {
 //            //TODO: GET FROM DATABASE
