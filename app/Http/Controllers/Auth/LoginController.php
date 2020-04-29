@@ -152,7 +152,7 @@ class LoginController extends Controller
      */
     public function oAuthCallback(string $callBack = '')
     {
-        if (empty($_GET['code'])) {
+        if (!empty($_GET['code'])) {
             list($currentUri, $service) = $this->getISService($callBack);
             // This was a callback request from is, get the token
             $service->requestAccessToken($_GET['code']);
@@ -169,6 +169,7 @@ class LoginController extends Controller
 
             return redirect()->to(url('/') . '/' . $callBack);
         }
+        return redirect()->to(url('/'));
     }
 
     public function postUserData( Request $request )
