@@ -35,6 +35,8 @@ class LoginController extends Controller
          */
 //        Auth::attempt(['uid' => '30542', 'email' => 'admin@localhost']);
         $callBack = str_replace(url('/'), '', url()->previous());
+        $callBack = ltrim($callBack, '/');
+
         list($currentUri, $service) = $this->getISService($callBack);
 
         $url = $service->getAuthorizationUri();
@@ -148,7 +150,7 @@ class LoginController extends Controller
      * @param string $callBack  url of the last previous site before trying to login
      * @return RedirectResponse redirect to the last previous site before login
      */
-    public function oAuthCallback(string $callBack)
+    public function oAuthCallback(string $callBack = '')
     {
         if (empty($_GET['code'])) {
             list($currentUri, $service) = $this->getISService($callBack);
@@ -165,7 +167,7 @@ class LoginController extends Controller
 
             $this->controlLoginUser($result);
 
-            return redirect()->to($callBack);
+            return redirect()->to(url('/') . '/' . $callBack);
         }
     }
 

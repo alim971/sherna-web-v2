@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::group([], function () {
 
 
-    Route::get('/oauth/{callBack}', 'Auth\LoginController@oAuthCallback')->name('oauth');
+    Route::get('/oauth/{callBack?}', 'Auth\LoginController@oAuthCallback')->name('oauth');
     Route::get('/login', 'Auth\LoginController@login')->name('login');
 
     Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
