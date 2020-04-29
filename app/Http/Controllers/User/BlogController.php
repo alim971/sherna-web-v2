@@ -27,8 +27,8 @@ class BlogController extends Controller
     public function show(string $url)
     {
 
-//        $article = Article::where('url', $url)->public()->firstOrFail();
-        $article = Article::where('url', $url)->firstOrFail();
+        $article = Article::where('url', $url)->public()->firstOrFail();
+//        $article = Article::where('url', $url)->firstOrFail();
         return view('client.blog.show', ['article' => $article]);
     }
 
