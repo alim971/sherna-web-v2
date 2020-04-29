@@ -34,7 +34,8 @@ class LoginController extends Controller
          * Create a new instance of the URI class with the current URI, stripping the query string
          */
         if($type == 'admin') {
-            Auth::attempt(['id' => '30542', 'email' => 'admin@localhost']);
+            Auth::loginUsingId(User::where('id', env('SUPER_ADMINS'))->first()->id);
+//            Auth::attempt(['id' => '30542', 'email' => 'admin@localhost']);
         } else if($type == 'user') {
             $check = User::find(2);
             if(!$check) {
@@ -46,7 +47,8 @@ class LoginController extends Controller
                 $user->role_id = 1;
                 $user->save();
             }
-            Auth::attempt(['id' => '2', 'email' => 'user@localhost']);
+            Auth::loginUsingId(2);
+//            Auth::attempt(['id' => '2', 'email' => 'user@localhost']);
 
         }
 //        $callBack = str_replace(url('/'), '', url()->previous());
