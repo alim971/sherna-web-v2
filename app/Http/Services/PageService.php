@@ -31,14 +31,16 @@ class PageService
     {
         $next_id = DB::table('nav_pages')->max('id') + 1;
         $next_order = DB::table('nav_pages')->max('order') + 1;
-        $request->put('order', $next_order);
         foreach (Language::all() as $lang) {
             if (isset($id)) {
                 $page = Page::where('id', $id)->ofLang($lang)->firstOrFail();
+                $request->request->add(['order' => $page->order]);
+
                 if ($this->isSpecialPage($page)) {
                     return false;
                 }
             } else {
+                $request->request->add(['order' => $next_order]);
                 $page = $this->setNewPage($request, $next_id, $lang);
             }
             $this->storePage($request, $page, $lang);
