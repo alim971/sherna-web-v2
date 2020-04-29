@@ -42,7 +42,7 @@ class NavigationController extends Controller
      */
     public function index()
     {
-        $pages = Page::where('special_code', '!=', 'home')->orderBy('order')->paginate();
+        $pages = Page::where('url', '!=', 'home')->orderBy('order')->paginate();
         return view('admin.navigation.index', ['navigations' => $pages]);
     }
 
