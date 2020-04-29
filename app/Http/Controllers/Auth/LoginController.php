@@ -34,7 +34,7 @@ class LoginController extends Controller
          * Create a new instance of the URI class with the current URI, stripping the query string
          */
 //        Auth::attempt(['uid' => '30542', 'email' => 'admin@localhost']);
-        $callBack = redirect()->back()->getTargetUrl();
+        $callBack = str_replace(url('/'), '', url()->previous());
         list($currentUri, $service) = $this->getISService($callBack);
 
         $url = $service->getAuthorizationUri();
