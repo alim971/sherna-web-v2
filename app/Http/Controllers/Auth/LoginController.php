@@ -28,12 +28,27 @@ class LoginController extends Controller
      *
      * @return RedirectResponse redirect to login page of Silicon Hill
      */
-    public function login()
+    public function login($type)
     {
         /**
          * Create a new instance of the URI class with the current URI, stripping the query string
          */
-        Auth::attempt(['uid' => '30542', 'email' => 'admin@localhost']);
+        if($type == 'admin') {
+            Auth::attempt(['id' => '30542', 'email' => 'admin@localhost']);
+        } else if($type == 'user') {
+            $check = User::find(2);
+            if(!$check) {
+                $user = new User();
+                $user->id = 2;
+                $user->name = 'user';
+                $user->surname = 'user';
+                $user->email = 'user@localhost';
+                $user->role_id = 1;
+                $user->save();
+            }
+            Auth::attempt(['id' => '2', 'email' => 'user@localhost']);
+
+        }
 //        $callBack = str_replace(url('/'), '', url()->previous());
 //        $callBack = ltrim($callBack, '/');
 //
