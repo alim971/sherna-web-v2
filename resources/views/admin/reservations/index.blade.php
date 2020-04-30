@@ -31,6 +31,10 @@
 						</thead>
 						<tbody>
 						@forelse($reservations as $reservation)
+							@php
+								\Illuminate\Support\Facades\Log::alert($reservation);
+								\Illuminate\Support\Facades\Log::alert($reservation->end_at->isPast());
+							@endphp
 							<tr class="{{$reservation->end_at->isPast() || isset($reservation->deleted_at) ? 'success':''}}">
 								<th>{{ $reservations->total() - ($loop->index) - ($reservations->perPage() * ($reservations->currentPage() - 1))}}</th>
 								<td>{{ $reservation->user->name }}</td>
